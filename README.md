@@ -5,7 +5,7 @@ A plugin to write pytest collect output to either a [JSON](https://www.json.org/
 ## Install
 
 ```bash
-pip install git+https://github.com/charbonnierg/pytest-discover.git
+pip install pytest-discover
 ```
 
 ## Usage
