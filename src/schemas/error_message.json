@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://github.com/charbonnierg/pytest-discover/schemas/error_message.json",
+  "title": "Error Message",
+  "description": "An error message",
+  "type": "object",
+  "required": [
+    "event",
+    "when",
+    "filename",
+    "lineno",
+    "exception_type",
+    "exception_value"
+  ],
+  "properties": {
+    "event": {
+      "const": "ErrorMessage",
+      "description": "The event type"
+    },
+    "when": {
+      "enum": [
+        "config",
+        "collect",
+        "runtest"
+      ],
+      "description": "When the error message is emitted"
+    },
+    "filename": {
+      "type": "string",
+      "description": "The filename of the file where the error message is emitted"
+    },
+    "lineno": {
+      "type": "integer",
+      "description": "The line number of the file where the error message is emitted"
+    },
+    "exception_type": {
+      "type": "string",
+      "description": "The exception type"
+    },
+    "exception_value": {
+      "type": "string",
+      "description": "The exception value"
+    }
+  }
+}

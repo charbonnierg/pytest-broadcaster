@@ -28,12 +28,13 @@ dev-dependencies = [
 
 [tool.rye.scripts]
 bootstrap = { cmd = "rye sync --no-lock" }
-generate-models = { chain = ["_generate-models", "_format-models"] }
+generate-schemas = { cmd = "python generate-json-schemas.py" }
+generate-models = { chain = ["_generate-models", "_format-models", "generate-schemas"] }
 verify-models = { chain = ["_generate-models-check", "_format-models-check", "_generate-models-diff"] }
 # Internal tasks
-_generate-models = { cmd = "datamodel-codegen --input schemas/ --output src/pytest_discover/models --input-file-type jsonschema --disable-timestamp --output-model-type=dataclasses.dataclass --use-field-description --use-schema-description" }
+_generate-models = { cmd = "datamodel-codegen --input src/schemas/ --output src/pytest_discover/models --input-file-type jsonschema --disable-timestamp --output-model-type=dataclasses.dataclass --use-field-description --use-schema-description" }
 _format-models = { cmd = "rye fmt src/pytest_discover/models" }
-_generate-models-check = { cmd = "datamodel-codegen --input schemas/ --output check --input-file-type jsonschema --disable-timestamp --output-model-type=dataclasses.dataclass --use-field-description --use-schema-description" }
+_generate-models-check = { cmd = "datamodel-codegen --input src/schemas/ --output check --input-file-type jsonschema --disable-timestamp --output-model-type=dataclasses.dataclass --use-field-description --use-schema-description" }
 _format-models-check = { cmd = "rye fmt check" }
 _generate-models-diff = { cmd = "diff --exclude __pycache__ -r src/pytest_discover/models check" }
 

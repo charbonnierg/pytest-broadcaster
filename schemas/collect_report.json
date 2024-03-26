@@ -21,7 +21,60 @@
       "type": "array",
       "description": "The collected items",
       "items": {
-        "$ref": "test_item.json/#"
+        "title": "TestItem",
+        "description": "Pytest Test Item",
+        "type": "object",
+        "required": [
+          "node_id",
+          "name",
+          "doc",
+          "markers",
+          "parameters"
+        ],
+        "properties": {
+          "node_id": {
+            "type": "string",
+            "description": "Node ID"
+          },
+          "file": {
+            "type": "string",
+            "description": "File path"
+          },
+          "module": {
+            "type": "string",
+            "description": "Module name"
+          },
+          "parent": {
+            "type": "string",
+            "description": "Class name"
+          },
+          "function": {
+            "type": "string",
+            "description": "Function name"
+          },
+          "name": {
+            "type": "string",
+            "description": "Test Name"
+          },
+          "doc": {
+            "type": "string",
+            "description": "Test docstring"
+          },
+          "markers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Test markers"
+          },
+          "parameters": {
+            "type": "object",
+            "description": "Test parameters names and types",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
       }
     }
   }

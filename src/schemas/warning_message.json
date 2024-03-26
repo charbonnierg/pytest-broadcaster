@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://github.com/charbonnierg/pytest-discover/schemas/warning_message.json",
+  "title": "Warning Message",
+  "description": "A warning message",
+  "type": "object",
+  "required": [
+    "event",
+    "when",
+    "filename",
+    "lineno",
+    "message"
+  ],
+  "properties": {
+    "event": {
+      "const": "WarningMessage",
+      "description": "The event type"
+    },
+    "when": {
+      "enum": [
+        "config",
+        "collect",
+        "runtest"
+      ],
+      "description": "When the warning message is emitted"
+    },
+    "filename": {
+      "type": "string",
+      "description": "The filename of the file where the warning message is emitted"
+    },
+    "lineno": {
+      "type": "integer",
+      "description": "The line number of the file where the warning message is emitted"
+    },
+    "category": {
+      "type": "string",
+      "description": "The category of the warning message"
+    },
+    "message": {
+      "type": "string",
+      "description": "The warning message"
+    }
+  }
+}
