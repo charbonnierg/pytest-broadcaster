@@ -2,8 +2,10 @@
 name = "pytest-discover"
 description = "Pytest plugin to record discovered tests in a file"
 authors = [
-    { name = "Guillaume Charbonnier", email = "guillaume.charbonnier@araymond.com" }
+    { name = "Guillaume Charbonnier", email = "gu.charbon@gmail.com" }
 ]
+urls = {"Source" = "https://github.com/charbonnierg/pytest-discover", "Tracker" = "https://github.com/charbonnierg/pytest-discover/issues"}
+
 dependencies = ["pytest"]
 dynamic = ["version"]
 readme = "README.md"
