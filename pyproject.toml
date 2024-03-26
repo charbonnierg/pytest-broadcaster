@@ -22,6 +22,10 @@ fallback-version = "v0.0.0-dev"
 
 [tool.hatch.build.hooks.vcs]
 version-file = "src/pytest_discover/__about__.py"
+template = """# file generated with command: 'rye run version'
+# don't change, don't track in version control
+__version__ = version = {version!r}
+__version_tuple__ = version_tuple = {version_tuple!r}"""
 
 [tool.hatch.metadata]
 allow-direct-references = true
