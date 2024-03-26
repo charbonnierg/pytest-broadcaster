@@ -27,16 +27,31 @@ dev-dependencies = [
 ]
 
 [tool.rye.scripts]
+# Automate pre-commit
+pre = { chain = ["generate", "__format", "__lint", "__test", "__typecheck"] }
+# Automate CI
+ci = { chain = ["bootstrap", "diff", "__formatcheck", "__lint", "__test", "__typecheck"] }
+# Automate project install
 bootstrap = { cmd = "rye sync --no-lock" }
-generate-schemas = { cmd = "python generate-json-schemas.py" }
-generate-models = { chain = ["_generate-models", "_format-models", "generate-schemas"] }
-verify-models = { chain = ["_generate-models-check", "_format-models-check", "_generate-models-diff"] }
-# Internal tasks
-_generate-models = { cmd = "datamodel-codegen --input src/schemas/ --output src/pytest_discover/models --input-file-type jsonschema --disable-timestamp --output-model-type=dataclasses.dataclass --use-field-description --use-schema-description" }
-_format-models = { cmd = "rye fmt src/pytest_discover/models" }
-_generate-models-check = { cmd = "datamodel-codegen --input src/schemas/ --output check --input-file-type jsonschema --disable-timestamp --output-model-type=dataclasses.dataclass --use-field-description --use-schema-description" }
-_format-models-check = { cmd = "rye fmt check" }
-_generate-models-diff = { cmd = "diff --exclude __pycache__ -r src/pytest_discover/models check" }
+# Run code generation
+generate = { chain = ["__generate-models", "__format-models", "__generate-schemas"] }
+# Verify generated code is up-to-date
+diff = { chain = ["__generate-models-check", "__format-models-check", "__generate-models-diff"] }
+# Private tasks used for chaining
+__lint = { cmd = "rye lint" }
+__test = { cmd = "rye test" }
+__typecheck = { cmd = "pyright" }
+__format = { cmd = "rye fmt" }
+__formatcheck = { cmd = "rye fmt --check" }
+__generate-schemas = { cmd = "python scripts/generate-json-schemas.py" }
+__generate-models = { cmd = "datamodel-codegen --input src/schemas/ --output src/pytest_discover/models --input-file-type jsonschema --disable-timestamp --output-model-type=dataclasses.dataclass --use-field-description --use-schema-description" }
+__generate-models-check = { cmd = "datamodel-codegen --input src/schemas/ --output check --input-file-type jsonschema --disable-timestamp --output-model-type=dataclasses.dataclass --use-field-description --use-schema-description" }
+__generate-models-diff = { cmd = "diff --exclude __pycache__ -r src/pytest_discover/models check" }
+__format-models = { cmd = "rye fmt src/pytest_discover/models" }
+__format-models-check = { cmd = "rye fmt check" }
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
 
 [tool.pyright]
 pythonVersion = "3.8"

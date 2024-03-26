@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 from __future__ import annotations
 
 import json
@@ -11,7 +10,7 @@ from urllib.parse import urljoin
 REPOSITORY = "https://raw.githubusercontent.com/charbonnierg/pytest-discover"
 REFERENCE = "main"
 OUTPUT = "schemas"
-SOURCES = Path(__file__).parent.joinpath("src/schemas")
+SOURCES = Path(__file__).parent.parent.joinpath("src/schemas")
 
 
 def replace_refs_and_ids(schema: dict[str, Any], ref_prefix: str) -> None:
