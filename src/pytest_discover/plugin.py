@@ -3,12 +3,11 @@ from __future__ import annotations
 import json
 import warnings
 from dataclasses import asdict
-from typing import TYPE_CHECKING, Any, TextIO
+from typing import TYPE_CHECKING, Any, Literal, TextIO
 
 import pytest
 from _pytest.pathlib import Path  # pyright: ignore[reportPrivateImportUsage]
 from _pytest.terminal import TerminalReporter
-from typing_extensions import Literal
 
 from . import _fields as api
 from .models.collect_report import CollectReport
