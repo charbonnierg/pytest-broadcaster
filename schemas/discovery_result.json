@@ -1,5 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/discovery_result.json",
   "title": "Discovery Result",
   "description": "Pytest Discover Result",
   "type": "object",
@@ -40,6 +41,5 @@
         "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_item.json"
       }
     }
-  },
-  "$id": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/discovery_result.json"
+  }
 }

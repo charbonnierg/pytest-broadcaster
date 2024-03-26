@@ -1,5 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/session_start.json",
   "title": "Session Start",
   "description": "Pytest Session Start",
   "type": "object",
@@ -16,6 +17,5 @@
       "type": "string",
       "description": "The version of pytest that is running the tests"
     }
-  },
-  "$id": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/session_start.json"
+  }
 }

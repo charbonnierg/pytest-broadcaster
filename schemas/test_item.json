@@ -1,5 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_item.json",
   "title": "TestItem",
   "description": "Pytest Test Item",
   "type": "object",
@@ -53,6 +54,5 @@
         "type": "string"
       }
     }
-  },
-  "$id": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_item.json"
+  }
 }

@@ -1,5 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/discovery_event.json",
   "title": "Discovery Event",
   "description": "Pytest Discover Event",
   "type": "object",
@@ -19,6 +20,5 @@
     {
       "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/session_finish.json"
     }
-  ],
-  "$id": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/discovery_event.json"
+  ]
 }

@@ -1,5 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/collect_report.json",
   "title": "Collect Report",
   "description": "Pytest Collect Report",
   "type": "object",
@@ -23,6 +24,5 @@
         "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_item.json"
       }
     }
-  },
-  "$id": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/collect_report.json"
+  }
 }
