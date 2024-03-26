@@ -1,38 +1,42 @@
 from __future__ import annotations
 
+from dataclasses import dataclass, field
+
 import pytest
 
 from ._utils import (
-    parse_node_id,
-    get_test_doc,
-    get_test_args,
-    get_test_markers,
     format_mark,
+    get_test_args,
+    get_test_doc,
+    get_test_markers,
+    parse_node_id,
 )
 
 
-def field_id(item: pytest.Item) -> str:
-    return item.nodeid
+@dataclass
+class NodeID:
+    module: str | None
+    parent: str | None
+    func: str
+    params: str | None
+    name: str
+    value: str = field(repr=False)
+
+    def __str__(self) -> str:
+        return self.value
 
 
-def field_module(item: pytest.Item) -> str | None:
-    mod, _, _, _ = parse_node_id(item.nodeid)
-    return mod or None
-
-
-def field_class(item: pytest.Item) -> str | None:
-    _, cls, _, _ = parse_node_id(item.nodeid)
-    return cls or None
-
-
-def field_function(item: pytest.Item) -> str | None:
-    _, _, func, _ = parse_node_id(item.nodeid)
-    return func or None
-
-
-def field_name(item: pytest.Item) -> str:
-    _, _, func, params = parse_node_id(item.nodeid)
-    return "%s[%s]" % (func, params) if params else func
+def extract_node_id_infos(item: pytest.Item) -> NodeID:
+    mod, cls, func, params = parse_node_id(item.nodeid)
+    name = "%s[%s]" % (func, params) if params else func
+    return NodeID(
+        module=mod or None,
+        parent=cls or None,
+        func=func,
+        params=params or None,
+        name=name,
+        value=item.nodeid,
+    )
 
 
 def field_file(item: pytest.Item) -> str | None:
@@ -51,4 +55,4 @@ def field_markers(item: pytest.Item) -> list[str]:
 
 
 def field_parameters(item: pytest.Item) -> dict[str, str]:
-    return {k: str(v) for k, v in sorted(get_test_args(item).items())}
+    return {k: type(v).__name__ for k, v in sorted(get_test_args(item).items())}

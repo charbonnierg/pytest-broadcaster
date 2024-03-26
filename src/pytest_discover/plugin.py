@@ -1,26 +1,30 @@
 from __future__ import annotations
-from dataclasses import asdict
+
 import json
-from typing import TextIO
-from typing_extensions import Literal
 import warnings
-
-from _pytest.pathlib import Path  # pyright: ignore[reportPrivateImportUsage]
-from _pytest.terminal import TerminalReporter
-
-from .models.collect_report import CollectReport
-from .models.session_finish import SessionFinish
-from .models.session_start import SessionStart
-from .models.warning_message import WarningMessage
-from . import _fields as api
-
+from dataclasses import asdict
+from typing import Any, TextIO
 
 import pytest
+from _pytest.pathlib import Path  # pyright: ignore[reportPrivateImportUsage]
+from _pytest.terminal import TerminalReporter
+from typing_extensions import Literal
+
+from . import _fields as api
+from .models.collect_report import CollectReport
+from .models.discovery_result import DiscoveryResult
+from .models.error_message import ErrorMessage
+from .models.session_finish import SessionFinish
+from .models.session_start import SessionStart
+from .models.test_item import TestItem
+from .models.warning_message import WarningMessage
 
 __PLUGIN_ATTR__ = "_collect_log_plugin"
 
 
-def create_plugin(config: pytest.Config, filename: str) -> PytestDiscoverPlugin:
+def create_plugin(
+    config: pytest.Config, json_path: str | None, ndjson_path: str | None
+) -> PytestDiscoverPlugin:
     """Create and register a new pytest-discover plugin instance.
 
     Args:
@@ -31,7 +35,7 @@ def create_plugin(config: pytest.Config, filename: str) -> PytestDiscoverPlugin:
         The created and registered plugin instance.
     """
     # Create plugin instance.
-    plugin = PytestDiscoverPlugin(config, Path(filename))
+    plugin = PytestDiscoverPlugin(config, json_path, ndjson_path)
     # Open the plugin
     plugin.open()
     # Register the plugin with the plugin manager.
@@ -45,25 +49,33 @@ def create_plugin(config: pytest.Config, filename: str) -> PytestDiscoverPlugin:
 def pytest_addoption(parser: pytest.Parser) -> None:
     group = parser.getgroup("terminal reporting", "pytest-discover plugin options")
     group.addoption(
+        "--collect-report",
+        action="store",
+        metavar="path",
+        default=None,
+        help="Path to JSON file holding collected items.",
+    )
+    group.addoption(
         "--collect-log",
         action="store",
         metavar="path",
         default=None,
-        help="Path to line-based json objects of items collection.",
+        help="Path to NDJSON file holding collected items.",
     )
 
 
 # Perform initial plugin configuration, called once after command line options have been parsed.
 # Ref: https://docs.pytest.org/en/latest/reference/reference.html#pytest.hookspec.pytest_configure
 def pytest_configure(config: pytest.Config) -> None:
-    log_path = config.option.collect_log
-    if not log_path:
+    ndjson_path = config.option.collect_log
+    json_path = config.option.collect_report
+    if not (ndjson_path or json_path):
         return
     # Skip if workerinput is present, which means we are in a worker process.
     if hasattr(config, "workerinput"):
         return
     # Create and register the plugin.
-    plugin = create_plugin(config, log_path)
+    plugin = create_plugin(config, json_path, ndjson_path)
     # Store the plugin instance in the config object.
     setattr(config, __PLUGIN_ATTR__, plugin)
 
@@ -84,7 +96,8 @@ class PytestDiscoverPlugin:
     def __init__(
         self,
         config: pytest.Config,
-        filepath: Path,
+        json_filepath: str | None,
+        ndjson_filepath: str | None,
     ) -> None:
         """Initialize the plugin with the given configuration and file path.
 
@@ -93,27 +106,47 @@ class PytestDiscoverPlugin:
             filepath: The path to the output file.
         """
         self.config = config
-        self.filepath = filepath
+        self.json_filepath = Path(json_filepath) if json_filepath else None
+        self.ndjson_filepath = Path(ndjson_filepath) if ndjson_filepath else None
         self._file: TextIO | None = None
+        self._result = DiscoveryResult(
+            pytest_version=pytest.__version__,
+            exit_status=0,
+            warnings=[],
+            errors=[],
+            items=[],
+        )
 
     def open(self) -> None:
         """Open the output file for writing."""
+        if self.ndjson_filepath is None:
+            return
         if self._file is not None:
             raise RuntimeError("pytest-discover output file is already opened")
         # Ensure the directory exists.
-        self.filepath.parent.mkdir(parents=True, exist_ok=True)
+        self.ndjson_filepath.parent.mkdir(parents=True, exist_ok=True)
         # Open the text file in write mode.
-        self._file = self.filepath.open("wt", buffering=1, encoding="UTF-8")
+        self._file = self.ndjson_filepath.open("wt", buffering=1, encoding="UTF-8")
 
     def close(self) -> None:
-        """Close the output file."""
+        """Close the output file and write the result file."""
         if self._file is not None:
             self._file.close()
             self._file = None
+        if self.json_filepath is not None:
+            json_data = json.dumps(asdict(self._result), indent=2)
+            self.json_filepath.write_text(json_data)
 
     def _write_event(
-        self, data: CollectReport | SessionFinish | SessionStart | WarningMessage
+        self,
+        data: CollectReport
+        | SessionFinish
+        | SessionStart
+        | WarningMessage
+        | ErrorMessage,
     ) -> None:
+        if self.ndjson_filepath is None:
+            return
         if self._file is None:
             raise RuntimeError("pytest-discover output file is not open yet")
         json_data = json.dumps(asdict(data))
@@ -129,6 +162,7 @@ class PytestDiscoverPlugin:
     # Called after whole test run finished, right before returning the exit status to the system.
     # Ref: https://docs.pytest.org/en/latest/reference/reference.html#pytest.hookspec.pytest_sessionfinish
     def pytest_sessionfinish(self, exitstatus: int) -> None:
+        self._result.exit_status = exitstatus
         event = SessionFinish(exit_status=exitstatus)
         self._write_event(event)
 
@@ -150,33 +184,76 @@ class PytestDiscoverPlugin:
             message=repr(warning_message.message),
             when=when,  # type: ignore[arg-type]
         )
+        self._result.warnings.append(event)
         self._write_event(event)
+
+    # Collector encountered an error
+    # Ref: https://docs.pytest.org/en/latest/reference/reference.html#pytest.hookspec.pytest_exception_interact
+    def pytest_exception_interact(
+        self,
+        node: pytest.Item | pytest.Collector,
+        call: pytest.CallInfo[Any],
+        report: pytest.TestReport | pytest.CollectReport,
+    ) -> None:
+        # Skip if the report is not a test report.
+        if isinstance(report, pytest.TestReport):
+            return
+        assert call.excinfo, "exception info is missing"
+        msg = ErrorMessage(
+            when=call.when,  # type: ignore[arg-type]
+            filename=call.excinfo.tb.tb_frame.f_code.co_filename,
+            lineno=call.excinfo.tb.tb_lineno,
+            exception_type=call.excinfo.typename,
+            exception_value=call.excinfo.exconly(True),
+        )
+        self._result.errors.append(msg)
+        self._write_event(msg)
 
     # Collector finished collecting.
     # Ref: https://docs.pytest.org/en/latest/reference/reference.html#pytest.hookspec.pytest_collectreport
     def pytest_collectreport(self, report: pytest.CollectReport) -> None:
+        # TODO: Don't emit event when test collection fails
         if report.failed:
-            # TODO: Handle case when collect fails
             return
+        items: list[TestItem] = []
+        # Format all test items discovered
         for result in report.result:
             if not isinstance(result, pytest.Item):
                 continue
-            data = CollectReport(
-                node_id=api.field_id(result),
-                name=api.field_name(result),
+            node_id = api.extract_node_id_infos(result)
+            item = TestItem(
+                node_id=node_id.value,
+                name=node_id.name,
+                module=node_id.module,
+                parent=node_id.parent,
+                function=node_id.func,
+                file=api.field_file(result),
                 doc=api.field_doc(result),
                 markers=api.field_markers(result),
                 parameters=api.field_parameters(result),
-                module=api.field_module(result),
-                function=api.field_function(result),
-                parent=api.field_class(result),
-                file=api.field_file(result),
             )
-            self._write_event(data)
+            items.append(item)
+        # Don't emit event when no test are discovered
+        if not items:
+            return
+        # Generate a collect report event.
+        data = CollectReport(
+            items=items,
+            node_id=report.nodeid or None,
+        )
+        # Append items to the result object.
+        self._result.items.extend(items)
+        # Write the event to the output file.
+        self._write_event(data)
 
     # Add a section to terminal summary reporting.
     # Ref: https://docs.pytest.org/en/latest/reference/reference.html#pytest.hookspec.pytest_terminal_summary
     def pytest_terminal_summary(self, terminalreporter: TerminalReporter):
-        terminalreporter.write_sep(
-            "-", f"generated report log file: {self.filepath.as_posix()}"
-        )
+        if self.ndjson_filepath:
+            terminalreporter.write_sep(
+                "-", f"generated report log file: {self.ndjson_filepath.as_posix()}"
+            )
+        if self.json_filepath:
+            terminalreporter.write_sep(
+                "-", f"generated report file: {self.json_filepath.as_posix()}"
+            )

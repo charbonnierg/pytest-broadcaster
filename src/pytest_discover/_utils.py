@@ -5,18 +5,9 @@ from typing import Any
 
 import pytest
 
-
 __NODE_ID__ = re.compile(
     r"(?P<module>.+)\.py(?:::(?P<class>[^:]+)(?:::.+)?)?::(?P<function>[^\[]+)(?:\[(?P<params>.*)\])?"
 )
-
-
-class NodeID:
-    def __init__(self, module: str, cls: str | None, function: str, params: str | None):
-        self.module = module
-        self.cls = cls
-        self.function = function
-        self.params = params
 
 
 def parse_node_id(node_id: str) -> tuple[str, str, str, str]:

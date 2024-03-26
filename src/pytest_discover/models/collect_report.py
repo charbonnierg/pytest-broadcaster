@@ -4,7 +4,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, List, Optional
+from typing import List, Optional
+
+from . import test_item
 
 
 @dataclass
@@ -13,40 +15,12 @@ class CollectReport:
     Pytest Collect Report
     """
 
-    name: str
+    items: List[test_item.TestItem]
     """
-    Test Name
-    """
-    doc: str
-    """
-    Test docstring
-    """
-    markers: List[str]
-    """
-    Test markers
-    """
-    parameters: Dict[str, str]
-    """
-    Test parameters
+    The collected items
     """
     event: str = "CollectReport"
     node_id: Optional[str] = None
     """
-    Node ID
-    """
-    module: Optional[str] = None
-    """
-    Module name
-    """
-    parent: Optional[str] = None
-    """
-    Class name
-    """
-    function: Optional[str] = None
-    """
-    Function name
-    """
-    file: Optional[str] = None
-    """
-    File path
+    The node id of the collector (if any)
     """

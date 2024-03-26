@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/charbonnierg/pytest-discover/schemas/discovery_result.json",
+  "title": "Discovery Result",
+  "description": "Pytest Discover Result",
+  "type": "object",
+  "required": [
+    "pytest_version",
+    "items",
+    "warnings",
+    "errors",
+    "exit_status"
+  ],
+  "properties": {
+    "pytest_version": {
+      "type": "string",
+      "description": "The version of pytest that generated the report"
+    },
+    "exit_status": {
+      "type": "integer",
+      "description": "The exit status of the pytest run"
+    },
+    "errors": {
+      "type": "array",
+      "description": "Errors generated during the discovery process",
+      "items": {
+        "$ref": "error_message.json/#"
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "description": "Warnings generated during the discovery process",
+      "items": {
+        "$ref": "warning_message.json/#"
+      }
+    },
+    "items": {
+      "type": "array",
+      "description": "The collected items",
+      "items": {
+        "$ref": "test_item.json/#"
+      }
+    }
+  }
+}

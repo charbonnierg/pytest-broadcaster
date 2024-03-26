@@ -9,12 +9,12 @@
     "exit_status"
   ],
   "properties": {
+    "event": {
+      "const": "SessionFinish"
+    },
     "exit_status": {
       "type": "integer",
       "description": "The status which pytest will return to the system"
-    },
-    "event": {
-      "const": "SessionFinish"
     }
   }
 }
