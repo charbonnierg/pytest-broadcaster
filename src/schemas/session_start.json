@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "https://github.com/charbonnierg/pytest-discover/schemas/session_start.json",
+  "$id": "session_start.json",
   "title": "Session Start",
   "description": "Pytest Session Start",
   "type": "object",

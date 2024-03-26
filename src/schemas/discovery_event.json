@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "https://github.com/charbonnierg/pytest-discover/schemas/discovery_event.json",
+  "$id": "discovery_event.json",
   "title": "Discovery Event",
   "description": "Pytest Discover Event",
   "type": "object",

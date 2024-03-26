@@ -1,211 +1,24 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "https://github.com/charbonnierg/pytest-discover/schemas/discovery_event.json",
   "title": "Discovery Event",
   "description": "Pytest Discover Event",
   "type": "object",
   "oneOf": [
     {
-      "title": "Collect Report",
-      "description": "Pytest Collect Report",
-      "type": "object",
-      "required": [
-        "event",
-        "items"
-      ],
-      "properties": {
-        "event": {
-          "const": "CollectReport",
-          "description": "The event type"
-        },
-        "node_id": {
-          "type": "string",
-          "description": "The node id of the collector (if any)"
-        },
-        "items": {
-          "type": "array",
-          "description": "The collected items",
-          "items": {
-            "title": "TestItem",
-            "description": "Pytest Test Item",
-            "type": "object",
-            "required": [
-              "node_id",
-              "name",
-              "doc",
-              "markers",
-              "parameters"
-            ],
-            "properties": {
-              "node_id": {
-                "type": "string",
-                "description": "Node ID"
-              },
-              "file": {
-                "type": "string",
-                "description": "File path"
-              },
-              "module": {
-                "type": "string",
-                "description": "Module name"
-              },
-              "parent": {
-                "type": "string",
-                "description": "Class name"
-              },
-              "function": {
-                "type": "string",
-                "description": "Function name"
-              },
-              "name": {
-                "type": "string",
-                "description": "Test Name"
-              },
-              "doc": {
-                "type": "string",
-                "description": "Test docstring"
-              },
-              "markers": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                },
-                "description": "Test markers"
-              },
-              "parameters": {
-                "type": "object",
-                "description": "Test parameters names and types",
-                "additionalProperties": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/collect_report.json"
     },
     {
-      "title": "Error Message",
-      "description": "An error message",
-      "type": "object",
-      "required": [
-        "event",
-        "when",
-        "filename",
-        "lineno",
-        "exception_type",
-        "exception_value"
-      ],
-      "properties": {
-        "event": {
-          "const": "ErrorMessage",
-          "description": "The event type"
-        },
-        "when": {
-          "enum": [
-            "config",
-            "collect",
-            "runtest"
-          ],
-          "description": "When the error message is emitted"
-        },
-        "filename": {
-          "type": "string",
-          "description": "The filename of the file where the error message is emitted"
-        },
-        "lineno": {
-          "type": "integer",
-          "description": "The line number of the file where the error message is emitted"
-        },
-        "exception_type": {
-          "type": "string",
-          "description": "The exception type"
-        },
-        "exception_value": {
-          "type": "string",
-          "description": "The exception value"
-        }
-      }
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/error_message.json"
     },
     {
-      "title": "Warning Message",
-      "description": "A warning message",
-      "type": "object",
-      "required": [
-        "event",
-        "when",
-        "filename",
-        "lineno",
-        "message"
-      ],
-      "properties": {
-        "event": {
-          "const": "WarningMessage",
-          "description": "The event type"
-        },
-        "when": {
-          "enum": [
-            "config",
-            "collect",
-            "runtest"
-          ],
-          "description": "When the warning message is emitted"
-        },
-        "filename": {
-          "type": "string",
-          "description": "The filename of the file where the warning message is emitted"
-        },
-        "lineno": {
-          "type": "integer",
-          "description": "The line number of the file where the warning message is emitted"
-        },
-        "category": {
-          "type": "string",
-          "description": "The category of the warning message"
-        },
-        "message": {
-          "type": "string",
-          "description": "The warning message"
-        }
-      }
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/warning_message.json"
     },
     {
-      "title": "Session Start",
-      "description": "Pytest Session Start",
-      "type": "object",
-      "required": [
-        "event",
-        "pytest_version"
-      ],
-      "properties": {
-        "event": {
-          "const": "SessionStart",
-          "description": "The event type"
-        },
-        "pytest_version": {
-          "type": "string",
-          "description": "The version of pytest that is running the tests"
-        }
-      }
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/session_start.json"
     },
     {
-      "title": "Session Finish",
-      "description": "Pytest Session Finish",
-      "type": "object",
-      "required": [
-        "event",
-        "exit_status"
-      ],
-      "properties": {
-        "event": {
-          "const": "SessionFinish",
-          "description": "The event type"
-        },
-        "exit_status": {
-          "type": "integer",
-          "description": "The status which pytest will return to the system"
-        }
-      }
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/session_finish.json"
     }
-  ]
+  ],
+  "$id": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/discovery_event.json"
 }

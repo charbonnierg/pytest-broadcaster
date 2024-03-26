@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "https://github.com/charbonnierg/pytest-discover/schemas/collect_report.json",
+  "$id": "collect_report.json",
   "title": "Collect Report",
   "description": "Pytest Collect Report",
   "type": "object",

@@ -1,6 +1,5 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "https://github.com/charbonnierg/pytest-discover/schemas/error_message.json",
   "title": "Error Message",
   "description": "An error message",
   "type": "object",
@@ -41,5 +40,6 @@
       "type": "string",
       "description": "The exception value"
     }
-  }
+  },
+  "$id": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/error_message.json"
 }
