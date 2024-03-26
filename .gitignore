@@ -5,9 +5,9 @@ build/
 dist/
 wheels/
 *.egg-info
-
-# venv
+.ruff_cache
+.pytest_cache
 .venv
-
+.vscode
 check
 demo
