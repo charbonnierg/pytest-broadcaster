@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/charbonnierg/pytest-discover/schemas/session_start.json",
+  "title": "Session Start",
+  "description": "Pytest Session Start",
+  "type": "object",
+  "required": [
+    "event",
+    "pytest_version"
+  ],
+  "properties": {
+    "event": {
+      "const": "SessionStart"
+    },
+    "pytest_version": {
+      "type": "string",
+      "description": "The version of pytest that is running the tests"
+    }
+  }
+}

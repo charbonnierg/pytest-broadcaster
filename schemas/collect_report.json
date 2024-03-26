@@ -1,0 +1,65 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://github.com/charbonnierg/pytest-discover/schemas/collect_report.json",
+    "title": "CollectReport",
+    "description": "Pytest Collect Report",
+    "type": "object",
+    "required": [
+      "event",
+      "id",
+      "name",
+      "doc",
+      "markers",
+      "markers_with_args",
+      "markers_as_columns",
+      "marker_args_as_columns",
+      "parameters"
+    ],
+    "properties": {
+      "event": {
+        "const": "CollectReport"
+      },
+      "node_id": {
+        "type": "string",
+        "description": "Node ID"
+      },
+      "module": {
+        "type": "string",
+        "description": "Module name"
+      },
+      "parent": {
+        "type": "string",
+        "description": "Class name"
+      },
+      "function": {
+        "type": "string",
+        "description": "Function name"
+      },
+      "name": {
+        "type": "string",
+        "description": "Test Name"
+      },
+      "file": {
+        "type": "string",
+        "description": "File path"
+      },
+      "doc": {
+        "type": "string",
+        "description": "Test docstring"
+      },
+      "markers": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Test markers"
+      },
+      "parameters": {
+        "type": "object",
+        "description": "Test parameters",
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
+    }
+  }

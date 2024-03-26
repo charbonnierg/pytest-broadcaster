@@ -1,0 +1,49 @@
+[project]
+name = "pytest-discover"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "Guillaume Charbonnier", email = "guillaume.charbonnier@araymond.com" }
+]
+dependencies = [
+    "pytest",
+    "typing-extensions",
+]
+readme = "README.md"
+requires-python = ">= 3.8"
+
+[project.entry-points.pytest11]
+pytest_discover = "pytest_discover.plugin"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = [
+    "datamodel-code-generator>=0.25.5",
+]
+
+[tool.rye.scripts]
+bootstrap = { cmd = "rye sync --no-lock" }
+generate-models = { cmd = "datamodel-codegen --input schemas/ --output src/pytest_discover/models --input-file-type jsonschema --disable-timestamp --output-model-type=dataclasses.dataclass --use-field-description --use-schema-description" }
+generate-models-check = { cmd = "datamodel-codegen --input schemas/ --output check --input-file-type jsonschema --disable-timestamp --output-model-type=dataclasses.dataclass --use-field-description --use-schema-description" }
+verify-models = { chain = ["generate-models-check", "generate-models-diff"] }
+generate-models-diff = { cmd = "diff --exclude __pycache__ -r src/pytest_discover/models check" }
+
+[tool.pyright]
+pythonVersion = "3.8"
+include = ["tests", "src"]
+strict = ["src"]
+exclude = ["**/.venv", "**/node_modules", "**/__pycache__", ".git", "**/build"]
+venv = ".venv"
+venvPath = "."
+typeCheckingMode = "basic"
+reportUnnecessaryTypeIgnoreComment = "warning"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pytest_discover"]
