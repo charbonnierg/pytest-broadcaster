@@ -9,7 +9,8 @@ import pytest
 from _pytest.pathlib import Path  # pyright: ignore[reportPrivateImportUsage]
 from _pytest.terminal import TerminalReporter
 
-from . import _fields as api
+from .__about__ import __version__
+from .internal import _fields as api
 from .models.collect_report import CollectReport
 from .models.discovery_result import DiscoveryResult
 from .models.error_message import ErrorMessage
@@ -121,6 +122,7 @@ class PytestDiscoverPlugin:
         self._file: TextIO | None = None
         self._result = DiscoveryResult(
             pytest_version=pytest.__version__,
+            plugin_version=__version__,
             exit_status=0,
             warnings=[],
             errors=[],
@@ -162,7 +164,9 @@ class PytestDiscoverPlugin:
     # Called after the Session object has been created and before performing collection and entering the run test loop.
     # Ref: https://docs.pytest.org/en/latest/reference/reference.html#pytest.hookspec.pytest_sessionstart
     def pytest_sessionstart(self) -> None:
-        event = SessionStart(pytest_version=pytest.__version__)
+        event = SessionStart(
+            pytest_version=pytest.__version__, plugin_version=__version__
+        )
         self._write_event(event)
 
     # Called after whole test run finished, right before returning the exit status to the system.

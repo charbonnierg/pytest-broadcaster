@@ -6,7 +6,8 @@
   "type": "object",
   "required": [
     "event",
-    "pytest_version"
+    "pytest_version",
+    "plugin_version"
   ],
   "properties": {
     "event": {
@@ -16,6 +17,10 @@
     "pytest_version": {
       "type": "string",
       "description": "The version of pytest that is running the tests"
+    },
+    "plugin_version": {
+      "type": "string",
+      "description": "The version of pytest-discover plugin that discovered the tests"
     }
   }
 }

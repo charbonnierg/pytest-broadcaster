@@ -16,6 +16,10 @@ class SessionStart:
     """
     The version of pytest that is running the tests
     """
+    plugin_version: str
+    """
+    The version of pytest-discover plugin that discovered the tests
+    """
     event: str = "SessionStart"
     """
     The event type

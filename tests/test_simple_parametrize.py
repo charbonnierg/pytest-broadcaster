@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import pytest
+from pytest_discover import __version__
 
 from ._utils import CommonTestSetup
 
@@ -27,6 +28,7 @@ class TestParametrize(CommonTestSetup):
         assert self.json_file.exists()
         assert self.read_json_file() == {
             "pytest_version": pytest.__version__,
+            "plugin_version": __version__,
             "exit_status": 0,
             "errors": [],
             "warnings": [],
@@ -75,7 +77,11 @@ class TestParametrize(CommonTestSetup):
         assert result.ret == 0
         assert self.json_lines_file.exists()
         assert self.read_json_lines_file() == [
-            {"pytest_version": pytest.__version__, "event": "SessionStart"},
+            {
+                "pytest_version": pytest.__version__,
+                "plugin_version": __version__,
+                "event": "SessionStart",
+            },
             {
                 "items": [
                     {

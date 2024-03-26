@@ -19,6 +19,10 @@ class DiscoveryResult:
     """
     The version of pytest that generated the report
     """
+    plugin_version: str
+    """
+    The version of the plugin that generated the report
+    """
     exit_status: int
     """
     The exit status of the pytest run
