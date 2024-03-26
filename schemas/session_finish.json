@@ -10,7 +10,8 @@
   ],
   "properties": {
     "event": {
-      "const": "SessionFinish"
+      "const": "SessionFinish",
+      "description": "The event type"
     },
     "exit_status": {
       "type": "integer",

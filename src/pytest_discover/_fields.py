@@ -26,7 +26,7 @@ class NodeID:
         return self.value
 
 
-def extract_node_id_infos(item: pytest.Item) -> NodeID:
+def make_node_id(item: pytest.Item) -> NodeID:
     mod, cls, func, params = parse_node_id(item.nodeid)
     name = "%s[%s]" % (func, params) if params else func
     return NodeID(

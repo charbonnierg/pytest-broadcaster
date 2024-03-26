@@ -17,3 +17,6 @@ class SessionFinish:
     The status which pytest will return to the system
     """
     event: str = "SessionFinish"
+    """
+    The event type
+    """

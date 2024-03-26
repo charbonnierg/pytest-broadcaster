@@ -5,7 +5,6 @@
   "description": "Pytest Test Item",
   "type": "object",
   "required": [
-    "event",
     "node_id",
     "name",
     "doc",
@@ -13,9 +12,6 @@
     "parameters"
   ],
   "properties": {
-    "event": {
-      "const": "TestItem"
-    },
     "node_id": {
       "type": "string",
       "description": "Node ID"

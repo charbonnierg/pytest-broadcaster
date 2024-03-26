@@ -14,7 +14,8 @@
   ],
   "properties": {
     "event": {
-      "const": "ErrorMessage"
+      "const": "ErrorMessage",
+      "description": "The event type"
     },
     "when": {
       "enum": [

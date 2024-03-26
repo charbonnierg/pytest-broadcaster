@@ -17,3 +17,6 @@ class SessionStart:
     The version of pytest that is running the tests
     """
     event: str = "SessionStart"
+    """
+    The event type
+    """

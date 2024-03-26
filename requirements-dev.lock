@@ -37,6 +37,8 @@ markupsafe==2.1.5
     # via jinja2
 mypy-extensions==1.0.0
     # via black
+nodeenv==1.8.0
+    # via pyright
 packaging==24.0
     # via black
     # via datamodel-code-generator
@@ -52,6 +54,7 @@ pydantic==2.6.4
     # via pydantic
 pydantic-core==2.16.3
     # via pydantic
+pyright==1.1.355
 pytest==8.1.1
     # via pytest-discover
 pyyaml==6.0.1
@@ -60,3 +63,5 @@ typing-extensions==4.10.0
     # via pydantic
     # via pydantic-core
     # via pytest-discover
+setuptools==69.2.0
+    # via nodeenv

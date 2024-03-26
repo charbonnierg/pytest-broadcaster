@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import warnings
 from dataclasses import asdict
-from typing import Any, TextIO
+from typing import TYPE_CHECKING, Any, TextIO
 
 import pytest
 from _pytest.pathlib import Path  # pyright: ignore[reportPrivateImportUsage]
@@ -19,23 +19,30 @@ from .models.session_start import SessionStart
 from .models.test_item import TestItem
 from .models.warning_message import WarningMessage
 
+if TYPE_CHECKING:
+    from .models.discovery_event import DiscoveryEvent
+
+
 __PLUGIN_ATTR__ = "_collect_log_plugin"
 
 
 def create_plugin(
-    config: pytest.Config, json_path: str | None, ndjson_path: str | None
+    config: pytest.Config,
+    json_path: str | None,
+    json_lines_path: str | None,
 ) -> PytestDiscoverPlugin:
     """Create and register a new pytest-discover plugin instance.
 
     Args:
         config: The pytest configuration object.
-        filename: The path to the output file.
+        json_path: The path to the JSON output file.
+        json_lines_path: The path to the JSON Lines output file.
 
     Returns:
         The created and registered plugin instance.
     """
     # Create plugin instance.
-    plugin = PytestDiscoverPlugin(config, json_path, ndjson_path)
+    plugin = PytestDiscoverPlugin(config, json_path, json_lines_path)
     # Open the plugin
     plugin.open()
     # Register the plugin with the plugin manager.
@@ -53,29 +60,29 @@ def pytest_addoption(parser: pytest.Parser) -> None:
         action="store",
         metavar="path",
         default=None,
-        help="Path to JSON file holding collected items.",
+        help="Path to JSON output file holding collected items.",
     )
     group.addoption(
         "--collect-log",
         action="store",
         metavar="path",
         default=None,
-        help="Path to NDJSON file holding collected items.",
+        help="Path to JSON Lines output file where events are logged to.",
     )
 
 
 # Perform initial plugin configuration, called once after command line options have been parsed.
 # Ref: https://docs.pytest.org/en/latest/reference/reference.html#pytest.hookspec.pytest_configure
 def pytest_configure(config: pytest.Config) -> None:
-    ndjson_path = config.option.collect_log
+    json_lines_path = config.option.collect_log
     json_path = config.option.collect_report
-    if not (ndjson_path or json_path):
+    if not (json_lines_path or json_path):
         return
     # Skip if workerinput is present, which means we are in a worker process.
     if hasattr(config, "workerinput"):
         return
     # Create and register the plugin.
-    plugin = create_plugin(config, json_path, ndjson_path)
+    plugin = create_plugin(config, json_path, json_lines_path)
     # Store the plugin instance in the config object.
     setattr(config, __PLUGIN_ATTR__, plugin)
 
@@ -97,17 +104,21 @@ class PytestDiscoverPlugin:
         self,
         config: pytest.Config,
         json_filepath: str | None,
-        ndjson_filepath: str | None,
+        json_lines_filepath: str | None,
     ) -> None:
         """Initialize the plugin with the given configuration and file path.
 
         Args:
             config: The pytest configuration object.
-            filepath: The path to the output file.
+            json_filepath: The path to the JSON output file.
+            json_lines_filepath: The path to the JSON Lines output file.
+
         """
         self.config = config
         self.json_filepath = Path(json_filepath) if json_filepath else None
-        self.ndjson_filepath = Path(ndjson_filepath) if ndjson_filepath else None
+        self.json_lines_filepath = (
+            Path(json_lines_filepath) if json_lines_filepath else None
+        )
         self._file: TextIO | None = None
         self._result = DiscoveryResult(
             pytest_version=pytest.__version__,
@@ -118,18 +129,18 @@ class PytestDiscoverPlugin:
         )
 
     def open(self) -> None:
-        """Open the output file for writing."""
-        if self.ndjson_filepath is None:
+        """Open the JSON Lines output file for writing."""
+        if self.json_lines_filepath is None:
             return
         if self._file is not None:
             raise RuntimeError("pytest-discover output file is already opened")
         # Ensure the directory exists.
-        self.ndjson_filepath.parent.mkdir(parents=True, exist_ok=True)
+        self.json_lines_filepath.parent.mkdir(parents=True, exist_ok=True)
         # Open the text file in write mode.
-        self._file = self.ndjson_filepath.open("wt", buffering=1, encoding="UTF-8")
+        self._file = self.json_lines_filepath.open("wt", buffering=1, encoding="UTF-8")
 
     def close(self) -> None:
-        """Close the output file and write the result file."""
+        """Close the JSON Lines output file and write the JSON result file."""
         if self._file is not None:
             self._file.close()
             self._file = None
@@ -139,13 +150,9 @@ class PytestDiscoverPlugin:
 
     def _write_event(
         self,
-        data: CollectReport
-        | SessionFinish
-        | SessionStart
-        | WarningMessage
-        | ErrorMessage,
+        data: DiscoveryEvent,
     ) -> None:
-        if self.ndjson_filepath is None:
+        if self.json_lines_filepath is None:
             return
         if self._file is None:
             raise RuntimeError("pytest-discover output file is not open yet")
@@ -220,7 +227,7 @@ class PytestDiscoverPlugin:
         for result in report.result:
             if not isinstance(result, pytest.Item):
                 continue
-            node_id = api.extract_node_id_infos(result)
+            node_id = api.make_node_id(result)
             item = TestItem(
                 node_id=node_id.value,
                 name=node_id.name,
@@ -249,9 +256,9 @@ class PytestDiscoverPlugin:
     # Add a section to terminal summary reporting.
     # Ref: https://docs.pytest.org/en/latest/reference/reference.html#pytest.hookspec.pytest_terminal_summary
     def pytest_terminal_summary(self, terminalreporter: TerminalReporter):
-        if self.ndjson_filepath:
+        if self.json_lines_filepath:
             terminalreporter.write_sep(
-                "-", f"generated report log file: {self.ndjson_filepath.as_posix()}"
+                "-", f"generated report log file: {self.json_lines_filepath.as_posix()}"
             )
         if self.json_filepath:
             terminalreporter.write_sep(

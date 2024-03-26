@@ -41,6 +41,9 @@ class WarningMessage:
     The warning message
     """
     event: str = "WarningMessage"
+    """
+    The event type
+    """
     category: Optional[str] = None
     """
     The category of the warning message

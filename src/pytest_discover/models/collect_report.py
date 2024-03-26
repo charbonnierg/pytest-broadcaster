@@ -20,6 +20,9 @@ class CollectReport:
     The collected items
     """
     event: str = "CollectReport"
+    """
+    The event type
+    """
     node_id: Optional[str] = None
     """
     The node id of the collector (if any)

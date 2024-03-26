@@ -10,7 +10,8 @@
   ],
   "properties": {
     "event": {
-      "const": "CollectReport"
+      "const": "CollectReport",
+      "description": "The event type"
     },
     "node_id": {
       "type": "string",

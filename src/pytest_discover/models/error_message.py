@@ -44,3 +44,6 @@ class ErrorMessage:
     The exception value
     """
     event: str = "ErrorMessage"
+    """
+    The event type
+    """

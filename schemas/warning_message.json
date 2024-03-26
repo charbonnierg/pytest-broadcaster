@@ -13,7 +13,8 @@
   ],
   "properties": {
     "event": {
-      "const": "WarningMessage"
+      "const": "WarningMessage",
+      "description": "The event type"
     },
     "when": {
       "enum": [

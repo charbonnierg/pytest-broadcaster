@@ -33,7 +33,6 @@ class TestItem:
     """
     Test parameters names and types
     """
-    event: str = "TestItem"
     file: Optional[str] = None
     """
     File path
