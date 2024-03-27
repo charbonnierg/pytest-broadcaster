@@ -12,28 +12,28 @@ export interface DiscoveryResult {
   /**
    * The version of pytest that generated the report
    */
-  pytest_version: string;
+  pytest_version: string
   /**
    * The version of the plugin that generated the report
    */
-  plugin_version: string;
+  plugin_version: string
   /**
    * The exit status of the pytest run
    */
-  exit_status: number;
+  exit_status: number
   /**
    * Errors generated during the discovery process
    */
-  errors: ErrorMessage[];
+  errors: ErrorMessage[]
   /**
    * Warnings generated during the discovery process
    */
-  warnings: WarningMessage[];
+  warnings: WarningMessage[]
   /**
    * The collected items
    */
-  items: TestItem[];
-  [k: string]: unknown;
+  items: TestItem[]
+  [k: string]: unknown
 }
 /**
  * An error message
@@ -42,28 +42,28 @@ export interface ErrorMessage {
   /**
    * The event type
    */
-  event: "ErrorMessage";
+  event: "ErrorMessage"
   /**
    * When the error message is emitted
    */
-  when: "config" | "collect" | "runtest";
+  when: "config" | "collect" | "runtest"
   /**
    * The filename of the file where the error message is emitted
    */
-  filename: string;
+  filename: string
   /**
    * The line number of the file where the error message is emitted
    */
-  lineno: number;
+  lineno: number
   /**
    * The exception type
    */
-  exception_type: string;
+  exception_type: string
   /**
    * The exception value
    */
-  exception_value: string;
-  [k: string]: unknown;
+  exception_value: string
+  [k: string]: unknown
 }
 /**
  * A warning message
@@ -72,28 +72,28 @@ export interface WarningMessage {
   /**
    * The event type
    */
-  event: "WarningMessage";
+  event: "WarningMessage"
   /**
    * When the warning message is emitted
    */
-  when: "config" | "collect" | "runtest";
+  when: "config" | "collect" | "runtest"
   /**
    * The filename of the file where the warning message is emitted
    */
-  filename: string;
+  filename: string
   /**
    * The line number of the file where the warning message is emitted
    */
-  lineno: number;
+  lineno: number
   /**
    * The category of the warning message
    */
-  category?: string;
+  category?: string
   /**
    * The warning message
    */
-  message: string;
-  [k: string]: unknown;
+  message: string
+  [k: string]: unknown
 }
 /**
  * Pytest Test Item
@@ -102,40 +102,40 @@ export interface TestItem {
   /**
    * Node ID
    */
-  node_id: string;
+  node_id: string
   /**
    * File path
    */
-  file?: string;
+  file?: string
   /**
    * Module name
    */
-  module?: string;
+  module?: string
   /**
    * Class name
    */
-  parent?: string;
+  parent?: string
   /**
    * Function name
    */
-  function?: string;
+  function?: string
   /**
    * Test Name
    */
-  name: string;
+  name: string
   /**
    * Test docstring
    */
-  doc: string;
+  doc: string
   /**
    * Test markers
    */
-  markers: string[];
+  markers: string[]
   /**
    * Test parameters names and types
    */
   parameters: {
-    [k: string]: string;
-  };
-  [k: string]: unknown;
+    [k: string]: string
+  }
+  [k: string]: unknown
 }

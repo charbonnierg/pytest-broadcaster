@@ -1,23 +1,23 @@
 ul {
-    padding-left: 0rem;
+  padding-left: 0rem;
 }
 ul li {
-    display: inline;
-    margin-right: 0.5rem;
-    margin-left: 0rem;
+  display: inline;
+  margin-right: 0.5rem;
+  margin-left: 0rem;
 }
 
 table ul {
-    padding-top: 0rem;
-    padding-bottom: 0rem;
-    margin-top: 0rem;
-    margin-bottom: 0rem;
+  padding-top: 0rem;
+  padding-bottom: 0rem;
+  margin-top: 0rem;
+  margin-bottom: 0rem;
 }
 
 sl-tag {
- cursor: pointer;
+  cursor: pointer;
 }
 
 sl-tag sl-icon {
-    padding-right: 0.25rem;
+  padding-right: 0.25rem;
 }

@@ -12,10 +12,10 @@ export interface SessionFinish {
   /**
    * The event type
    */
-  event: "SessionFinish";
+  event: "SessionFinish"
   /**
    * The status which pytest will return to the system
    */
-  exit_status: number;
-  [k: string]: unknown;
+  exit_status: number
+  [k: string]: unknown
 }

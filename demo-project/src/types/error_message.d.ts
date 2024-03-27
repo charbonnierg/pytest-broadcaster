@@ -12,26 +12,26 @@ export interface ErrorMessage {
   /**
    * The event type
    */
-  event: "ErrorMessage";
+  event: "ErrorMessage"
   /**
    * When the error message is emitted
    */
-  when: "config" | "collect" | "runtest";
+  when: "config" | "collect" | "runtest"
   /**
    * The filename of the file where the error message is emitted
    */
-  filename: string;
+  filename: string
   /**
    * The line number of the file where the error message is emitted
    */
-  lineno: number;
+  lineno: number
   /**
    * The exception type
    */
-  exception_type: string;
+  exception_type: string
   /**
    * The exception value
    */
-  exception_value: string;
-  [k: string]: unknown;
+  exception_value: string
+  [k: string]: unknown
 }

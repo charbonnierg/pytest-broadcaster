@@ -12,40 +12,40 @@ export interface TestItem {
   /**
    * Node ID
    */
-  node_id: string;
+  node_id: string
   /**
    * File path
    */
-  file?: string;
+  file?: string
   /**
    * Module name
    */
-  module?: string;
+  module?: string
   /**
    * Class name
    */
-  parent?: string;
+  parent?: string
   /**
    * Function name
    */
-  function?: string;
+  function?: string
   /**
    * Test Name
    */
-  name: string;
+  name: string
   /**
    * Test docstring
    */
-  doc: string;
+  doc: string
   /**
    * Test markers
    */
-  markers: string[];
+  markers: string[]
   /**
    * Test parameters names and types
    */
   parameters: {
-    [k: string]: string;
-  };
-  [k: string]: unknown;
+    [k: string]: string
+  }
+  [k: string]: unknown
 }

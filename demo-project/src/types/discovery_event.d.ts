@@ -8,7 +8,12 @@
 /**
  * Pytest Discover Event
  */
-export type DiscoveryEvent = CollectReport | ErrorMessage | WarningMessage | SessionStart | SessionFinish;
+export type DiscoveryEvent =
+  | CollectReport
+  | ErrorMessage
+  | WarningMessage
+  | SessionStart
+  | SessionFinish
 
 /**
  * Pytest Collect Report
@@ -17,16 +22,16 @@ export interface CollectReport {
   /**
    * The event type
    */
-  event: "CollectReport";
+  event: "CollectReport"
   /**
    * The node id of the collector (if any)
    */
-  node_id?: string;
+  node_id?: string
   /**
    * The collected items
    */
-  items: TestItem[];
-  [k: string]: unknown;
+  items: TestItem[]
+  [k: string]: unknown
 }
 /**
  * Pytest Test Item
@@ -35,42 +40,42 @@ export interface TestItem {
   /**
    * Node ID
    */
-  node_id: string;
+  node_id: string
   /**
    * File path
    */
-  file?: string;
+  file?: string
   /**
    * Module name
    */
-  module?: string;
+  module?: string
   /**
    * Class name
    */
-  parent?: string;
+  parent?: string
   /**
    * Function name
    */
-  function?: string;
+  function?: string
   /**
    * Test Name
    */
-  name: string;
+  name: string
   /**
    * Test docstring
    */
-  doc: string;
+  doc: string
   /**
    * Test markers
    */
-  markers: string[];
+  markers: string[]
   /**
    * Test parameters names and types
    */
   parameters: {
-    [k: string]: string;
-  };
-  [k: string]: unknown;
+    [k: string]: string
+  }
+  [k: string]: unknown
 }
 /**
  * An error message
@@ -79,28 +84,28 @@ export interface ErrorMessage {
   /**
    * The event type
    */
-  event: "ErrorMessage";
+  event: "ErrorMessage"
   /**
    * When the error message is emitted
    */
-  when: "config" | "collect" | "runtest";
+  when: "config" | "collect" | "runtest"
   /**
    * The filename of the file where the error message is emitted
    */
-  filename: string;
+  filename: string
   /**
    * The line number of the file where the error message is emitted
    */
-  lineno: number;
+  lineno: number
   /**
    * The exception type
    */
-  exception_type: string;
+  exception_type: string
   /**
    * The exception value
    */
-  exception_value: string;
-  [k: string]: unknown;
+  exception_value: string
+  [k: string]: unknown
 }
 /**
  * A warning message
@@ -109,28 +114,28 @@ export interface WarningMessage {
   /**
    * The event type
    */
-  event: "WarningMessage";
+  event: "WarningMessage"
   /**
    * When the warning message is emitted
    */
-  when: "config" | "collect" | "runtest";
+  when: "config" | "collect" | "runtest"
   /**
    * The filename of the file where the warning message is emitted
    */
-  filename: string;
+  filename: string
   /**
    * The line number of the file where the warning message is emitted
    */
-  lineno: number;
+  lineno: number
   /**
    * The category of the warning message
    */
-  category?: string;
+  category?: string
   /**
    * The warning message
    */
-  message: string;
-  [k: string]: unknown;
+  message: string
+  [k: string]: unknown
 }
 /**
  * Pytest Session Start
@@ -139,16 +144,16 @@ export interface SessionStart {
   /**
    * The event type
    */
-  event: "SessionStart";
+  event: "SessionStart"
   /**
    * The version of pytest that is running the tests
    */
-  pytest_version: string;
+  pytest_version: string
   /**
    * The version of pytest-discover plugin that discovered the tests
    */
-  plugin_version: string;
-  [k: string]: unknown;
+  plugin_version: string
+  [k: string]: unknown
 }
 /**
  * Pytest Session Finish
@@ -157,10 +162,10 @@ export interface SessionFinish {
   /**
    * The event type
    */
-  event: "SessionFinish";
+  event: "SessionFinish"
   /**
    * The status which pytest will return to the system
    */
-  exit_status: number;
-  [k: string]: unknown;
+  exit_status: number
+  [k: string]: unknown
 }

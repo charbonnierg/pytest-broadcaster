@@ -4,7 +4,7 @@ import SlIcon from "@shoelace-style/shoelace/dist/react/icon/index.js"
 import SlTag from "@shoelace-style/shoelace/dist/react/tag/index.js"
 import SlTooltip from "@shoelace-style/shoelace/dist/react/tooltip/index.js"
 
-import { type TestItemProperties } from "../lib/models"
+import type { TestItem as TestItemProperties } from "../types/test_item"
 import "./TestItem.css"
 
 /* Properties of a test item collected by pytest */
@@ -25,7 +25,7 @@ const formatDoc = (doc: string | null) => {
 
 /* A test item collected by pytest */
 export const TestItem = (item: TestItemProps) => {
-  const key = item.properties.id
+  const key = item.properties.node_id
   const markerKey = (marker: string) => `${item.properties.id}-${marker}`
   return (
     <SlTooltip content={item.properties.name}>

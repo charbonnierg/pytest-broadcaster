@@ -12,14 +12,14 @@ export interface SessionStart {
   /**
    * The event type
    */
-  event: "SessionStart";
+  event: "SessionStart"
   /**
    * The version of pytest that is running the tests
    */
-  pytest_version: string;
+  pytest_version: string
   /**
    * The version of pytest-discover plugin that discovered the tests
    */
-  plugin_version: string;
-  [k: string]: unknown;
+  plugin_version: string
+  [k: string]: unknown
 }

@@ -9,8 +9,9 @@ import type { SearchOptions, SearchResult } from "minisearch"
 import type MiniSearch from "minisearch"
 import { useCallback, useEffect, useRef, useState } from "react"
 
-import { type TestItemProperties, type TestResult } from "../lib/models"
 import { newSearchEngine } from "../lib/search"
+import type { DiscoveryResult } from "../types/discovery_result"
+import type { TestItem as TestItemProperties } from "../types/test_item"
 import TestItem, { type TestItemProps } from "./TestItem"
 import TestItemDetails from "./TestItemDetails"
 import "./TestSearch.css"
@@ -20,6 +21,7 @@ const sanitize = (item: any): TestItemProperties => {
   const { node_id, ...rest } = item
   return {
     id: node_id,
+    node_id: node_id,
     ...rest,
   }
 }
@@ -29,7 +31,8 @@ const transform = (item: TestItemProperties) => {
     return {
       onClick,
       properties: {
-        id: item.id,
+        id: item.node_id,
+        node_id: item.node_id,
         name: item.name,
         markers: item.markers,
         parameters: item.parameters,
@@ -65,7 +68,7 @@ const computeStats = (items: TestItemProperties[]): TestStatsProps => {
 }
 
 export interface TestSearchProps {
-  result: TestResult
+  result: DiscoveryResult
 }
 
 /* A search component for test items
@@ -95,7 +98,7 @@ export const TestSearch = () => {
   const uploadFileRef = useRef<HTMLInputElement | null>(null)
   const [engine, setEngine] = useState<MiniSearch<TestItemProperties>>(newSearchEngine())
   const [resultFile, setResultFile] = useState<string>("")
-  const [testResult, setTestResult] = useState<TestResult | null>(null)
+  const [testResult, setTestResult] = useState<DiscoveryResult | null>(null)
   const [allMarkers, setAllMarkers] = useState<Set<string>>(new Set<string>())
   const [stats, setStats] = useState<TestStatsProps | null>(null)
   const [items, setItems] = useState<TestItemProperties[]>([])
@@ -381,7 +384,7 @@ export const TestSearch = () => {
       {/* The results */}
       <ul role="list" className="card-grid">
         {displayedItems.map((item) => (
-          <TestItem key={item.properties.id} {...item} onClick={onItemClicked} />
+          <TestItem key={item.properties.node_id} {...item} onClick={onItemClicked} />
         ))}
         <div></div>
       </ul>

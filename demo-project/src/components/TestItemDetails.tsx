@@ -1,7 +1,7 @@
 import { SlIcon } from "@shoelace-style/shoelace/dist/react"
 import SlTag from "@shoelace-style/shoelace/dist/react/tag/index.js"
 
-import type { TestItemProperties } from "../lib/models"
+import type { TestItem as TestItemProperties } from "../types/test_item"
 import "./TestItemDetails.css"
 
 /* Properties of a test item collected by pytest */
@@ -98,12 +98,21 @@ const formatFile = (item: TestItemProperties) => {
   )
 }
 
+const formatName = (item: TestItemProperties) => {
+  if (item.name == null || item.name == "") {
+    return ""
+  }
+  return item.name.replaceAll("_", " ")
+}
+
 export const TestItemDetails = (item: TestItemDetailsProps) => {
   return (
     <>
       <h2>
-        <SlTag onClick={copy(item.properties.id)}>{item.properties.id}</SlTag>
+        <SlTag onClick={copy(item.properties.node_id)}>{item.properties.node_id}</SlTag>
       </h2>
+      <h3>{formatName(item.properties)}</h3>
+      <p>{item.properties.name}</p>
       <div>
         <h3>Metadata</h3>
         <table>

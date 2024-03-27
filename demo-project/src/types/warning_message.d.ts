@@ -12,26 +12,26 @@ export interface WarningMessage {
   /**
    * The event type
    */
-  event: "WarningMessage";
+  event: "WarningMessage"
   /**
    * When the warning message is emitted
    */
-  when: "config" | "collect" | "runtest";
+  when: "config" | "collect" | "runtest"
   /**
    * The filename of the file where the warning message is emitted
    */
-  filename: string;
+  filename: string
   /**
    * The line number of the file where the warning message is emitted
    */
-  lineno: number;
+  lineno: number
   /**
    * The category of the warning message
    */
-  category?: string;
+  category?: string
   /**
    * The warning message
    */
-  message: string;
-  [k: string]: unknown;
+  message: string
+  [k: string]: unknown
 }
