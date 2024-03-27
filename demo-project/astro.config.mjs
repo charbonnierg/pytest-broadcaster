@@ -4,6 +4,8 @@ import { viteStaticCopy } from "vite-plugin-static-copy"
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://charbonnierg.github.io",
+  base: "pytest-discover",
   output: "static",
   integrations: [react()],
   vite: {
