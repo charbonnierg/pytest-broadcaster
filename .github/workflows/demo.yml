@@ -1,64 +1,35 @@
-name: Demo Project
+name: Deploy to GitHub Pages
 
 on:
   workflow_dispatch:
   push:
     branches: [main]
+  pull_request:
+
+# Allow this job to clone the repo and create a page deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
-  # Build job
   build:
     runs-on: ubuntu-latest
-    # At a minimum this job should upload artifacts using actions/upload-pages-artifact
     steps:
-      - name: Clone repository
+      - name: Checkout your repository using git
         uses: actions/checkout@v4
-
-      - name: Install nodejs
-        uses: actions/setup-node@v4
+      - name: Install, build, and upload your site output
+        uses: withastro/action@v2
         with:
-          node-version: 20
-          cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
+            path: demo-project
 
-      - name: Generate site
-        working-directory: demo-project
-        run: |
-          npm ci
-          npm run build
-
-      - name: Fix permissions
-        working-directory: demo-project
-        run: |
-          chmod -c -R +rX "dist/" | while read line; do
-            echo "::warning title=Invalid file permissions automatically fixed::$line"
-          done
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          name: site
-          path: demo-project/dist
-
-  # Deploy job
   deploy:
-    runs-on: ubuntu-latest
-    # Add a dependency to the build job
     needs: build
-
-    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
-    permissions:
-      pages: write      # to deploy to Pages
-      id-token: write   # to verify the deployment originates from an appropriate source
-
-    # Deploy to the github-pages environment
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-        with:
-          artifact_name: site
