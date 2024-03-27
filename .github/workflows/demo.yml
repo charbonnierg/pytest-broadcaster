@@ -16,10 +16,10 @@ jobs:
 
       - name: Install nodejs
         uses: actions/setup-node@v4
-        working-directory: demo-project
         with:
           node-version: 20
           cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
 
       - name: Generate site
         working-directory: demo-project
@@ -30,13 +30,15 @@ jobs:
       - name: Fix permissions
         working-directory: demo-project
         run: |
-          chmod -c -R +rX "site/" | while read line; do
+          chmod -c -R +rX "dist/" | while read line; do
             echo "::warning title=Invalid file permissions automatically fixed::$line"
           done
 
       - name: Upload Pages artifact
-        working-directory: demo-project
         uses: actions/upload-pages-artifact@v3
+        with:
+          name: site
+          path: demo-project/dist
 
   # Deploy job
   deploy:
@@ -58,3 +60,5 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: site
