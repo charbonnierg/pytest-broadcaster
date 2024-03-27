@@ -1,6 +1,7 @@
 import type SlInputElement from "@shoelace-style/shoelace/dist/components/input/input.js"
 import SlButton from "@shoelace-style/shoelace/dist/react/button/index.js"
 import SlDrawer from "@shoelace-style/shoelace/dist/react/drawer/index.js"
+import SlIcon from "@shoelace-style/shoelace/dist/react/icon/index.js"
 import SlInput, {
   type SlInputEvent,
 } from "@shoelace-style/shoelace/dist/react/input/index.js"
@@ -375,6 +376,7 @@ export const TestSearch = () => {
                     : ""
               }
             >
+              <SlIcon name="tag"></SlIcon>
               {marker}
             </SlTag>
           )
@@ -389,9 +391,9 @@ export const TestSearch = () => {
         <div></div>
       </ul>
       {/* Controls */}
-      <div>
+      <div className="control-buttons">
         <SlButton
-          variant="neutral"
+          variant="default"
           onClick={() => {
             setOffset(Math.max(0, offset - pagination))
           }}
@@ -399,7 +401,7 @@ export const TestSearch = () => {
           Prev
         </SlButton>
         <SlButton
-          variant="neutral"
+          variant="default"
           onClick={() => {
             setOffset(Math.min(filteredItems.length - pagination, offset + pagination))
           }}

@@ -14,7 +14,7 @@ const copy = (value: string) => (e: any) => {
   e?.preventDefault()
 }
 
-const formatMarkers = (item: TestItemProperties) => {
+export const formatMarkers = (item: TestItemProperties) => {
   if (item.markers.length === 0) {
     return null
   }
@@ -35,7 +35,7 @@ const formatMarkers = (item: TestItemProperties) => {
   )
 }
 
-const formatParameters = (item: TestItemProperties) => {
+export const formatParameters = (item: TestItemProperties) => {
   if (Object.keys(item.parameters).length === 0) {
     return null
   }
@@ -56,7 +56,7 @@ const formatParameters = (item: TestItemProperties) => {
   )
 }
 
-const formatModule = (item: TestItemProperties) => {
+export const formatModule = (item: TestItemProperties) => {
   if (item.module == null || item.module == "") {
     return null
   }
@@ -70,7 +70,7 @@ const formatModule = (item: TestItemProperties) => {
   )
 }
 
-const formatParent = (item: TestItemProperties) => {
+export const formatParent = (item: TestItemProperties) => {
   if (item.parent == null || item.parent == "") {
     return null
   }
@@ -84,7 +84,7 @@ const formatParent = (item: TestItemProperties) => {
   )
 }
 
-const formatFile = (item: TestItemProperties) => {
+export const formatFile = (item: TestItemProperties) => {
   if (item.file == null || item.file == "") {
     return null
   }
@@ -98,7 +98,7 @@ const formatFile = (item: TestItemProperties) => {
   )
 }
 
-const formatName = (item: TestItemProperties) => {
+export const formatName = (item: TestItemProperties) => {
   if (item.name == null || item.name == "") {
     return ""
   }

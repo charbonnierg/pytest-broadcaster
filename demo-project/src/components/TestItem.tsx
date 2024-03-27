@@ -6,6 +6,7 @@ import SlTooltip from "@shoelace-style/shoelace/dist/react/tooltip/index.js"
 
 import type { TestItem as TestItemProperties } from "../types/test_item"
 import "./TestItem.css"
+import { formatFile, formatMarkers, formatName } from "./TestItemDetails"
 
 /* Properties of a test item collected by pytest */
 export interface TestItemProps {
@@ -25,39 +26,17 @@ const formatDoc = (doc: string | null) => {
 
 /* A test item collected by pytest */
 export const TestItem = (item: TestItemProps) => {
-  const key = item.properties.node_id
-  const markerKey = (marker: string) => `${item.properties.id}-${marker}`
   return (
-    <SlTooltip content={item.properties.name}>
+    <SlTooltip content={formatName(item.properties)}>
       <SlCard
-        key={key}
-        onClick={(e) => {
+        key={item.properties.node_id}
+        onClick={() => {
           item.onClick(item.properties)
         }}
       >
         <h3>{item.properties.name}</h3>
-        {item.properties.markers.map((marker) => {
-          return (
-            <SlTag key={markerKey(marker)} itemType="info" pill className="left-margin">
-              {marker}
-            </SlTag>
-          )
-        })}
-        <p>
-          <span>
-            <SlTag>
-              {item.properties.file}{" "}
-              <SlCopyButton
-                value={item.properties.file || ""}
-                disabled={item.properties.file === ""}
-              >
-                <SlIcon slot="copy-icon" name="clipboard"></SlIcon>
-                <SlIcon slot="success-icon" name="clipboard-check"></SlIcon>
-                <SlIcon slot="error-icon" name="clipboard-x"></SlIcon>
-              </SlCopyButton>
-            </SlTag>
-          </span>
-        </p>
+        {formatMarkers(item.properties)}
+        <p>{formatFile(item.properties)}</p>
         {formatDoc(item.properties.doc)}
       </SlCard>
     </SlTooltip>
