@@ -16,25 +16,26 @@ jobs:
 
       - name: Install nodejs
         uses: actions/setup-node@v4
+        working-directory: demo-project
         with:
           node-version: 20
           cache: 'npm'
 
       - name: Generate site
-        run: |
-          cd demo-project
+        working-directory: demo-project
+        run:
           npm ci
           npm run build
-          cp -
-          cd -r demo-project/dist site/
 
       - name: Fix permissions
+        working-directory: demo-project
         run: |
           chmod -c -R +rX "site/" | while read line; do
             echo "::warning title=Invalid file permissions automatically fixed::$line"
           done
 
       - name: Upload Pages artifact
+        working-directory: demo-project
         uses: actions/upload-pages-artifact@v3
 
   # Deploy job
