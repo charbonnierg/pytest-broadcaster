@@ -23,7 +23,7 @@ jobs:
 
       - name: Generate site
         working-directory: demo-project
-        run:
+        run: |
           npm ci
           npm run build
 
