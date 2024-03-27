@@ -18,7 +18,7 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
-      - name: Install, build, and upload your site output
+      - name: Install, build, and upload demo-project output
         uses: withastro/action@v2
         with:
             path: demo-project
