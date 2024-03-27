@@ -1,0 +1,7 @@
+sl-card {
+  overflow: hidden;
+}
+
+.tooltip-text {
+  overflow: overlay;
+}

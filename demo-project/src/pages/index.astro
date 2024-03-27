@@ -1,0 +1,123 @@
+---
+import ShoelaceLayout from "../layouts/ShoelaceLayout.astro"
+import TestSearch from "../components/TestSearch.jsx"
+import type { TestItemProperties, TestResult } from "../lib/models"
+
+const result = {
+  pytest_version: "8.1.1",
+  plugin_version: "0.4.1.dev1+gd38fa2c.d20240327",
+  exit_status: 0,
+  errors: [],
+  warnings: [],
+  items: [
+    {
+      id: "tests/test_basics.py::TestBasics::test_json",
+      name: "test_json",
+      doc: "",
+      markers: ["basic"],
+      parameters: {},
+      file: "tests/test_basics.py",
+      module: "tests.test_basics",
+      parent: "TestBasics",
+      function: "test_json",
+    },
+    {
+      id: "tests/test_basics.py::TestBasics::test_jsonl",
+      name: "test_jsonl",
+      doc: "",
+      markers: ["basic"],
+      parameters: {},
+      file: "tests/test_basics.py",
+      module: "tests.test_basics",
+      parent: "TestBasics",
+      function: "test_jsonl",
+    },
+    {
+      id: "tests/test_simple_marker.py::TestMarker::test_json",
+      name: "test_json",
+      doc: "",
+      markers: ["marker"],
+      parameters: {},
+      file: "tests/test_simple_marker.py",
+      module: "tests.test_simple_marker",
+      parent: "TestMarker",
+      function: "test_json",
+    },
+    {
+      id: "tests/test_simple_marker.py::TestMarker::test_jsonl",
+      name: "test_jsonl",
+      doc: "",
+      markers: ["marker"],
+      parameters: {},
+      file: "tests/test_simple_marker.py",
+      module: "tests.test_simple_marker",
+      parent: "TestMarker",
+      function: "test_jsonl",
+    },
+    {
+      id: "tests/test_simple_parametrize.py::TestParametrize::test_json",
+      name: "test_json",
+      doc: "",
+      markers: ["parametrize"],
+      parameters: { arg: "int" },
+      file: "tests/test_simple_parametrize.py",
+      module: "tests.test_simple_parametrize",
+      parent: "TestParametrize",
+      function: "test_json",
+    },
+    {
+      id: "tests/test_simple_parametrize.py::TestParametrize::test_jsonl",
+      name: "test_jsonl",
+      doc: "",
+      markers: ["parametrize"],
+      parameters: { arg: "int" },
+      file: "tests/test_simple_parametrize.py",
+      module: "tests.test_simple_parametrize",
+      parent: "TestParametrize",
+      function: "test_jsonl",
+    },
+    {
+      id: "tests/test_version.py::test_pytest_discover_version",
+      name: "test_pytest_discover_version",
+      doc: "",
+      markers: ["version"],
+      parameters: {},
+      file: "tests/test_version.py",
+      module: "tests.test_version",
+      parent: null,
+      function: "test_pytest_discover_version",
+    } as TestItemProperties,
+  ],
+} as TestResult
+---
+
+<style>
+  header,
+  main {
+    margin: auto;
+    width: 1024px;
+    max-width: calc(100% - 2rem);
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+  main {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    text-align: left;
+  }
+</style>
+
+<ShoelaceLayout title="pytest-discover">
+  <header>
+    <h1>pytest-discover</h1>
+  </header>
+  <main>
+    <TestSearch client:only="react" />
+  </main>
+</ShoelaceLayout>

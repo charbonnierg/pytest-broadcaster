@@ -1,0 +1,33 @@
+{
+  "name": "demo-project",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "format": "prettier --write .",
+    "astro": "astro",
+    "schemas": "json2ts -i ../schemas/ -o src/types/"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.5.10",
+    "@astrojs/react": "^3.1.0",
+    "@shoelace-style/shoelace": "^2.15.0",
+    "@types/react": "^18.2.72",
+    "@types/react-dom": "^18.2.22",
+    "astro": "^4.5.10",
+    "json-schema-to-typescript": "^13.1.2",
+    "minisearch": "^6.3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.4.3",
+    "vite-plugin-static-copy": "^1.0.2"
+  },
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "prettier": "^3.2.5",
+    "prettier-plugin-astro": "^0.13.0"
+  }
+}
