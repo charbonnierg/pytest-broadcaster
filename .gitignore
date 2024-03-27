@@ -2,6 +2,7 @@
 __pycache__/
 __about__.py
 *.py[oc]
+collect.json
 build/
 dist/
 wheels/
