@@ -40,6 +40,7 @@ managed = true
 dev-dependencies = [
     "datamodel-code-generator>=0.25.5",
     "pyright>=1.1.355",
+    "tomli>=2.0.1 ; python_version < '3.12'",
 ]
 
 [tool.rye.scripts]
@@ -55,9 +56,8 @@ generate = { chain = ["__generate-models", "__format-models", "__generate-schema
 diff = { chain = ["__generate-models-check", "__format-models-check", "__generate-models-diff"] }
 # Generate version file
 version = "hatch --quiet build --hooks-only"
-# Run typechecking
-typecheck = "pyright"
 # Private tasks used for chaining
+__typecheck = "pyright"
 __lint = "rye lint"
 __test = "rye test"
 __format = "rye fmt"

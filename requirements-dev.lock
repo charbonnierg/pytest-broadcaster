@@ -21,6 +21,8 @@ dnspython==2.6.1
     # via email-validator
 email-validator==2.1.1
     # via pydantic
+exceptiongroup==1.2.0
+    # via pytest
 genson==1.2.2
     # via datamodel-code-generator
 idna==3.6
@@ -59,7 +61,14 @@ pytest==8.1.1
     # via pytest-discover
 pyyaml==6.0.1
     # via datamodel-code-generator
+toml==0.10.2
+    # via datamodel-code-generator
+tomli==2.0.1 ; python_version < "3.12"
+    # via black
+    # via pytest
 typing-extensions==4.10.0
+    # via annotated-types
+    # via black
     # via pydantic
     # via pydantic-core
 setuptools==69.2.0
