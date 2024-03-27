@@ -200,6 +200,7 @@ export const TestSearch = () => {
         setStats(null)
         setFilteredItems([])
         setDisplayedItems([])
+        setDrawerOpened(true)
         return
       }
       const result = JSON.parse(content)
