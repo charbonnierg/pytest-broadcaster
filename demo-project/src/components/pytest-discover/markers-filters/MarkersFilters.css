@@ -1,0 +1,17 @@
+.tags-selection {
+  margin-top: 1rem;
+}
+
+.tags-selection p {
+  margin-top: var(--sl-spacing-3x-small);
+  margin-left: var(--sl-spacing-3x-small);
+  color: var(--sl-input-help-text-color);
+  font-size: var(--sl-input-help-text-font-size-medium);
+}
+
+.tags-selection sl-tag {
+  cursor: pointer;
+  margin-right: 0.25rem;
+  margin-left: 0.25rem;
+  margin-bottom: 0.5rem;
+}

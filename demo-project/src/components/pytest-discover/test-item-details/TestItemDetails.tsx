@@ -1,5 +1,4 @@
-import type { TestItem as TestItemProperties } from "../../types/test_item"
-import "./TestItemDetails.css"
+import type { TestItem as TestItemProperties } from "../../../types/test_item"
 import {
   formatFile,
   formatMarkers,
@@ -8,7 +7,8 @@ import {
   formatParameters,
   formatParent,
   sanitizeName,
-} from "./format"
+} from "../format"
+import "./TestItemDetails.css"
 
 export interface TestItemDetailsProps {
   properties: TestItemProperties

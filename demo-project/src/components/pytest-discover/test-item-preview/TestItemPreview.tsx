@@ -1,14 +1,14 @@
 import SlCard from "@shoelace-style/shoelace/dist/react/card/index.js"
 import SlTooltip from "@shoelace-style/shoelace/dist/react/tooltip/index.js"
 
-import type { TestItem as TestItemProperties } from "../../types/test_item"
-import "./TestItem.css"
+import type { TestItem as TestItemProperties } from "../../../types/test_item"
 import {
   formatFile,
   formatMarkers,
   sanitizeName,
   truncateDescription,
-} from "./format.tsx"
+} from "../format.tsx"
+import "./TestItemPreview.css"
 
 export interface TestItemProps {
   onClick: (props: TestItemProperties) => void
@@ -16,7 +16,7 @@ export interface TestItemProps {
 }
 
 /* A test item collected by pytest */
-export const TestItem = (item: TestItemProps) => {
+export const TestItemPreview = (item: TestItemProps) => {
   return (
     <SlTooltip content={sanitizeName(item.properties)}>
       <SlCard
@@ -34,4 +34,4 @@ export const TestItem = (item: TestItemProps) => {
   )
 }
 
-export default TestItem
+export default TestItemPreview

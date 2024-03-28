@@ -1,26 +1,25 @@
 import type SlInputElement from "@shoelace-style/shoelace/dist/components/input/input.js"
-import SlButton from "@shoelace-style/shoelace/dist/react/button/index.js"
-import SlDrawer from "@shoelace-style/shoelace/dist/react/drawer/index.js"
-import SlIcon from "@shoelace-style/shoelace/dist/react/icon/index.js"
 import SlInput, {
   type SlInputEvent,
 } from "@shoelace-style/shoelace/dist/react/input/index.js"
-import SlTag from "@shoelace-style/shoelace/dist/react/tag/index.js"
 import type { SearchOptions, SearchResult } from "minisearch"
 import type MiniSearch from "minisearch"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 import { type IncludedExcludeStatus, newIncludeExcludeFilter } from "../../lib/filter"
 import { newLocalStorageResultsRepository } from "../../lib/repository"
 import { newSearchEngine } from "../../lib/search"
 import { type Statistics, computeStats } from "../../lib/stats"
-import { newJSONReader } from "../../lib/upload"
 import type { DiscoveryResult } from "../../types/discovery_result"
 import type { TestItem as TestItemProperties } from "../../types/test_item"
-import TestItem, { type TestItemProps } from "./TestItem"
-import TestItemDetails from "./TestItemDetails"
-import "./TestSearch.css"
-import { TestStats } from "./TestStats"
+import MarkersFilters from "./markers-filters/MarkersFilters"
+import { PaginationControl } from "./pagination/PaginationControl"
+import { SearchResults } from "./search-results/SearchResults"
+import { SettingsBar } from "./settings/SettingsBar"
+import { SettingsButton } from "./settings/SettingsButton"
+import { TestItemFocused } from "./test-item-focused/TestItemFocused"
+import { type TestItemProps } from "./test-item-preview/TestItemPreview"
+import { TestStats } from "./test-stats/TestStats"
 
 const sanitize = (item: any): TestItemProperties => {
   const { node_id, ...rest } = item
@@ -54,168 +53,13 @@ const fromSearchResult = (result: SearchResult): TestItemProperties => {
   return result as unknown as TestItemProperties
 }
 
-const SettingsButton = ({ onClick }: { onClick: () => void }) => (
-  <SlButton
-    className="floating-button"
-    aria-label="Settings"
-    variant="default"
-    onClick={onClick}
-  >
-    Settings
-  </SlButton>
-)
-
-const MarkersFilters = ({
-  choices,
-  get,
-  onClick,
-}: {
-  choices: Set<string>
-  get: (marker: string) => IncludedExcludeStatus
-  onClick: (marker: string) => void
-}) => {
-  const variant = (marker: string) => {
-    const status = get(marker)
-    if (status === "included") {
-      return "success"
-    }
-    if (status === "excluded") {
-      return "danger"
-    }
-    return "neutral"
-  }
-  return (
-    <div className="tags-selection">
-      {Array.from(choices).map((marker) => {
-        return (
-          <SlTag
-            key={marker}
-            pill
-            variant={variant(marker)}
-            onClick={() => onClick(marker)}
-            data-state={get(marker)}
-          >
-            <SlIcon name="tag"></SlIcon>
-            {marker}
-          </SlTag>
-        )
-      })}
-    </div>
-  )
-}
-
-const PaginationControl = ({ prev, next }: { prev: () => void; next: () => void }) => (
-  <div className="control-buttons">
-    <SlButton variant="default" onClick={prev}>
-      Prev
-    </SlButton>
-    <SlButton variant="default" onClick={next}>
-      Next
-    </SlButton>
-  </div>
-)
-
-const FocusedItem = ({
-  opened,
-  close,
-  item,
-}: {
-  opened: boolean
-  close: () => void
-  item: TestItemProperties
-}) => (
-  <SlDrawer
-    no-header
-    className="focused-item"
-    placement="bottom"
-    open={opened}
-    onSlRequestClose={(e) => {
-      if (e.detail.source === "overlay") {
-        e.preventDefault()
-      }
-    }}
-    onSlAfterHide={close}
-  >
-    <TestItemDetails properties={item}></TestItemDetails>
-    <SlButton className="close-focused-item" variant="default" onClick={close}>
-      Close
-    </SlButton>
-  </SlDrawer>
-)
-
-const SettingsBar = ({
-  opened,
-  close,
-  clear,
-  filename,
-  setFilename,
-}: {
-  opened: boolean
-  close: () => void
-  clear: () => void
-  filename: string
-  setFilename: (filename: string) => void
-}) => {
-  const ref = useRef<HTMLInputElement | null>(null)
-  return (
-    <SlDrawer
-      label="Settings"
-      open={opened}
-      onSlRequestClose={(e) => {
-        if (e.detail.source === "overlay") {
-          e.preventDefault()
-        }
-      }}
-      onSlAfterHide={close}
-    >
-      <form>
-        <input
-          ref={ref}
-          type="file"
-          id="file-upload"
-          value={filename}
-          onChange={(evt) => {
-            setFilename(evt.target.value)
-          }}
-        />
-      </form>
-      <SlButton
-        variant="default"
-        onClick={() => {
-          const el = ref.current
-          if (el == null) {
-            return
-          }
-          el.click()
-        }}
-      >
-        Upload file
-      </SlButton>
-      <SlButton variant="default" onClick={clear}>
-        Clear all
-      </SlButton>
-      <SlButton variant="default" slot="footer" onClick={close}>
-        Close
-      </SlButton>
-    </SlDrawer>
-  )
-}
-
 export interface TestSearchProps {
   result: DiscoveryResult
 }
 
-/* A search component for test items
-
-Key Features:
-
-- Search test using Full text search
-- Filter test using markers
-- Display test items
-- Display more information in a drawer on click
-- Close drawer on click outside
-*/
+/* A search component for test items. */
 export const TestSearch = () => {
+  const repository = newLocalStorageResultsRepository()
   // Initialize UI state
   const [settingsOpened, setSettingsOpened] = useState<boolean>(false)
   const [focusOpened, setFocusOpened] = useState<boolean>(false)
@@ -226,21 +70,17 @@ export const TestSearch = () => {
   const [search, setSearch] = useState<string>("")
   const [offset, setOffset] = useState<number>(0)
   // Initialize hidden search input
-  const [limit, setLimit] = useState<number>(5000)
-  const [pagination, setPagination] = useState<number>(20)
+  const [limit] = useState<number>(5000)
+  const [pagination] = useState<number>(20)
   // Initialize state
-  const uploadFileRef = useRef<HTMLInputElement | null>(null)
-  const [engine, setEngine] = useState<MiniSearch<TestItemProperties>>(newSearchEngine())
+  const [engine] = useState<MiniSearch<TestItemProperties>>(newSearchEngine())
   const [resultFile, setResultFile] = useState<string>("")
   const [testResult, setTestResult] = useState<DiscoveryResult | null>(null)
   const [allMarkers, setAllMarkers] = useState<Set<string>>(new Set<string>())
   const [stats, setStats] = useState<Statistics | null>(null)
   const [items, setItems] = useState<TestItemProperties[]>([])
   const [filteredItems, setFilteredItems] = useState<TestItemProps[]>([])
-  // We only display a subset of items
   const [displayedItems, setDisplayedItems] = useState<TestItemProps[]>([])
-
-  const repository = newLocalStorageResultsRepository()
 
   // Define function to reset the state
   const reset = () => {
@@ -252,8 +92,6 @@ export const TestSearch = () => {
     setSettingsOpened(true)
   }
 
-  // Define function to read uploaded file
-  const readResultsFile = newJSONReader(setTestResult)
   // Create a new filter for markers
   const markerFilter = newIncludeExcludeFilter({
     getIncluded: () => includedMarkers,
@@ -263,40 +101,21 @@ export const TestSearch = () => {
   })
 
   // Define function to filter items based on markers
-  const filterAccordingToMarkerFilter = useCallback(
+  const filterItem = useCallback(
     (item: TestItemProperties): boolean => markerFilter.filter(...item.markers),
     [includedMarkers, excludedMarkers],
   )
+
   // Define function to get marker status
   const getMarkerStatus = useCallback(
     (marker: string): IncludedExcludeStatus => markerFilter.get(marker),
     [includedMarkers, excludedMarkers],
   )
-  // Define callback to react to marker selection
-  const onMarkerSelected = (marker: string) => markerFilter.toggle(marker)
-
-  // Define callback to react to search input
-  // Cast element, this is required as per the official doc
-  // https://shoelace.style/frameworks/react#event-handling
-  const onSearchTermsUpdated = (event: SlInputEvent) =>
-    setSearch((event.target as SlInputElement).value)
-
-  // Define callback to react to item clicked and open dialog
-  const onItemClicked = (item: TestItemProperties) => {
-    if (focusOpened) {
-      return
-    }
-    setFocusedItem(item)
-    setFocusOpened(true)
-  }
 
   // Observe filtered items and set displayed items
   useEffect(() => {
     setDisplayedItems(filteredItems.slice(offset, offset + pagination))
   }, [filteredItems, offset, pagination])
-
-  // Observe test file and set test results
-  useEffect(() => readResultsFile(uploadFileRef.current), [resultFile])
 
   // Observe test results and update state
   useEffect(() => {
@@ -316,7 +135,7 @@ export const TestSearch = () => {
     repository.saveResults(testResult)
     // Gather all items
     const newItems = testResult.items.map(sanitize)
-    const newfilteredItems = newItems.filter(filterAccordingToMarkerFilter)
+    const newfilteredItems = newItems.filter(filterItem)
     // Update state
     setItems(newItems)
     setAllMarkers(new Set(newItems.map((item) => item.markers).flat()))
@@ -339,15 +158,14 @@ export const TestSearch = () => {
       // Boost nodeid
       boost: { id: 2 },
       // Filter results using markers
-      filter: (result) =>
-        filterAccordingToMarkerFilter(result as unknown as TestItemProperties),
+      filter: (result) => filterItem(result as unknown as TestItemProperties),
       // Limit results
       limit: limit,
     } as SearchOptions
     // Reset offset
     setOffset(0)
     if (search === "") {
-      const newfilteredItems = items.filter(filterAccordingToMarkerFilter)
+      const newfilteredItems = items.filter(filterItem)
       setStats(computeStats(newfilteredItems))
       setFilteredItems(newfilteredItems.map((item) => transform(item)(setFocusedItem)))
     } else {
@@ -359,56 +177,57 @@ export const TestSearch = () => {
         ),
       )
     }
-  }, [search, limit, filterAccordingToMarkerFilter, items, allMarkers, engine])
+  }, [search, limit, filterItem, items, allMarkers, engine])
 
   // Return UI component
   return (
     <div>
-      {/* The settings sidebar */}
+      <SettingsButton onClick={() => setSettingsOpened(true)} />
       <SettingsBar
         opened={settingsOpened}
         close={() => setSettingsOpened(false)}
         filename={resultFile}
         setFilename={setResultFile}
+        setDiscoveryResult={setTestResult}
         clear={() => {
           repository.clearResults()
           setResultFile("")
           setTestResult(null)
         }}
       />
-      {/* The focused item */}
-      {focusedItem && (
-        <FocusedItem
-          opened={focusOpened}
-          close={() => setFocusOpened(false)}
-          item={focusedItem}
-        />
-      )}
+      <TestItemFocused
+        opened={focusOpened}
+        close={() => setFocusOpened(false)}
+        item={focusedItem}
+      />
 
-      {/* The floating button */}
-      <SettingsButton onClick={() => setSettingsOpened(true)} />
+      <TestStats stats={stats} />
 
-      {/* The statistics */}
-      {stats && <TestStats stats={stats} />}
-
-      {/* The input */}
       <SlInput
         helpText="Enter some text"
         value={search}
-        onSlInput={onSearchTermsUpdated}
+        onSlInput={(event: SlInputEvent) =>
+          setSearch((event.target as SlInputElement).value)
+        }
       />
-      {/* The filter */}
+
       <MarkersFilters
-        {...{ choices: allMarkers, get: getMarkerStatus, onClick: onMarkerSelected }}
+        choices={allMarkers}
+        get={getMarkerStatus}
+        onClick={(marker: string) => markerFilter.toggle(marker)}
       />
-      {/* The results */}
-      <ul role="list" className="card-grid">
-        {displayedItems.map((item) => (
-          <TestItem key={item.properties.node_id} {...item} onClick={onItemClicked} />
-        ))}
-        <div></div>
-      </ul>
-      {/* Controls */}
+
+      <SearchResults
+        items={displayedItems.map((item) => item.properties)}
+        onItemClicked={(item: TestItemProperties) => {
+          if (focusOpened) {
+            return
+          }
+          setFocusedItem(item)
+          setFocusOpened(true)
+        }}
+      />
+
       <PaginationControl
         prev={() => {
           setOffset(Math.max(0, offset - pagination))
