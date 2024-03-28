@@ -10,6 +10,19 @@ export interface TestStatsProps {
   totalSuites: number
 }
 
+const variant = (value: number) => (value === 0 ? "danger" : "success")
+
+const Stats = ({ label, value }: { label: string; value: number }) => {
+  return (
+    <>
+      <SlBadge variant={undefined}>{label}</SlBadge>
+      <SlBadge pill variant={variant(value)}>
+        {value}
+      </SlBadge>
+    </>
+  )
+}
+
 /* A component to display test statistics */
 export const TestStats = ({
   totalCount,
@@ -18,30 +31,13 @@ export const TestStats = ({
   totalModules,
   totalSuites,
 }: TestStatsProps) => {
-  const variantNeutral = (value: number) => (value === 0 ? undefined : undefined)
-  const variantSuccess = (value: number) => (value === 0 ? "danger" : "success")
   return (
     <div className="stats">
-      <SlBadge variant={variantNeutral(totalCount)}>Total Tests</SlBadge>
-      <SlBadge pill variant={variantSuccess(totalCount)}>
-        {totalCount}
-      </SlBadge>
-      <SlBadge variant={variantNeutral(totalCount)}>Total Markers</SlBadge>
-      <SlBadge pill variant={variantSuccess(totalMarkersCount)}>
-        {totalMarkersCount}
-      </SlBadge>
-      <SlBadge variant={variantNeutral(totalFiles)}>Total Files</SlBadge>
-      <SlBadge pill variant={variantSuccess(totalFiles)}>
-        {totalFiles}
-      </SlBadge>
-      <SlBadge variant={variantNeutral(totalModules)}>Total Modules</SlBadge>
-      <SlBadge pill variant={variantSuccess(totalModules)}>
-        {totalModules}
-      </SlBadge>
-      <SlBadge variant={variantNeutral(totalSuites)}>Total Suites</SlBadge>
-      <SlBadge pill variant={variantSuccess(totalSuites)}>
-        {totalSuites}
-      </SlBadge>
+      <Stats label="Total Tests" value={totalCount} />
+      <Stats label="Total Markers" value={totalMarkersCount} />
+      <Stats label="Total Files" value={totalFiles} />
+      <Stats label="Total Modules" value={totalModules} />
+      <Stats label="Total Suites" value={totalSuites} />
     </div>
   )
 }

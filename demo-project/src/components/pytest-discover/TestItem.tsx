@@ -3,22 +3,11 @@ import SlTooltip from "@shoelace-style/shoelace/dist/react/tooltip/index.js"
 
 import type { TestItem as TestItemProperties } from "../../types/test_item"
 import "./TestItem.css"
-import { formatFile, formatMarkers, formatName } from "./TestItemDetails"
+import { formatDoc, formatFile, formatMarkers, formatName } from "./format.tsx"
 
-/* Properties of a test item collected by pytest */
 export interface TestItemProps {
   onClick: (props: TestItemProperties) => void
   properties: TestItemProperties
-}
-
-const formatDoc = (doc: string | null) => {
-  if (doc == null || doc == "") {
-    return null
-  }
-  if (doc.length > 100) {
-    return doc.slice(0, 100) + "..."
-  }
-  return doc
 }
 
 /* A test item collected by pytest */
