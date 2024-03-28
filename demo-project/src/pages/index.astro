@@ -1,7 +1,7 @@
 ---
 import { Image } from "astro:assets"
 import ShoelaceLayout from "../layouts/ShoelaceLayout.astro"
-import TestSearch from "../components/TestSearch.jsx"
+import TestSearch from "../components/pytest-discover/TestSearch.jsx"
 import Logo from "../assets/pytest-discover-logo-transparent.svg"
 import LogoDarkMode from "../assets/pytest-discover-logo-darkmode-transparent.svg"
 ---
@@ -14,8 +14,6 @@ import LogoDarkMode from "../assets/pytest-discover-logo-darkmode-transparent.sv
     max-width: calc(100% - 2rem);
     padding-left: 1rem;
     padding-right: 1rem;
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
   }
   main {
     padding-top: 1rem;
@@ -31,6 +29,8 @@ import LogoDarkMode from "../assets/pytest-discover-logo-darkmode-transparent.sv
     display: flex;
     flex-direction: row;
     align-items: center;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
   }
 
   .logo {
@@ -43,8 +43,8 @@ import LogoDarkMode from "../assets/pytest-discover-logo-darkmode-transparent.sv
 
 <ShoelaceLayout title="pytest-discover">
   <header>
-    <Image class="logo hide-on-dark" src={Logo} alt="pytest-discover logo" />
-    <Image class="logo hide-on-light" src={LogoDarkMode} alt="pytest-discover logo" />
+    <Image class="logo only-light" src={Logo} alt="pytest-discover logo" />
+    <Image class="logo only-dark" src={LogoDarkMode} alt="pytest-discover logo" />
     <h1>pytest-discover</h1>
   </header>
   <main>

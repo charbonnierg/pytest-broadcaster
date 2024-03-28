@@ -1,7 +1,7 @@
 import { SlIcon } from "@shoelace-style/shoelace/dist/react"
 import SlTag from "@shoelace-style/shoelace/dist/react/tag/index.js"
 
-import type { TestItem as TestItemProperties } from "../types/test_item"
+import type { TestItem as TestItemProperties } from "../../types/test_item"
 import "./TestItemDetails.css"
 
 /* Properties of a test item collected by pytest */

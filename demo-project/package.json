@@ -8,7 +8,9 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "astro": "astro",
+    "check": "npm run format:check && astro check",
     "schemas": "json2ts -i ../schemas/ -o src/types/"
   },
   "dependencies": {
@@ -18,16 +20,16 @@
     "@types/react": "^18.2.72",
     "@types/react-dom": "^18.2.22",
     "astro": "^4.5.10",
-    "json-schema-to-typescript": "^13.1.2",
     "minisearch": "^6.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "typescript": "^5.4.3",
-    "vite-plugin-static-copy": "^1.0.2"
+    "typescript": "^5.4.3"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "json-schema-to-typescript": "^13.1.2",
     "prettier": "^3.2.5",
-    "prettier-plugin-astro": "^0.13.0"
+    "prettier-plugin-astro": "^0.13.0",
+    "vite-plugin-static-copy": "^1.0.2"
   }
 }

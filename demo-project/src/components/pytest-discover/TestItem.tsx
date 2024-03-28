@@ -1,10 +1,7 @@
 import SlCard from "@shoelace-style/shoelace/dist/react/card/index.js"
-import SlCopyButton from "@shoelace-style/shoelace/dist/react/copy-button/index.js"
-import SlIcon from "@shoelace-style/shoelace/dist/react/icon/index.js"
-import SlTag from "@shoelace-style/shoelace/dist/react/tag/index.js"
 import SlTooltip from "@shoelace-style/shoelace/dist/react/tooltip/index.js"
 
-import type { TestItem as TestItemProperties } from "../types/test_item"
+import type { TestItem as TestItemProperties } from "../../types/test_item"
 import "./TestItem.css"
 import { formatFile, formatMarkers, formatName } from "./TestItemDetails"
 
