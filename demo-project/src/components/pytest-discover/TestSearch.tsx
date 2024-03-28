@@ -7,7 +7,10 @@ import type MiniSearch from "minisearch"
 import { useCallback, useEffect, useState } from "react"
 
 import { type IncludedExcludeStatus, newIncludeExcludeFilter } from "../../lib/filter"
-import { newLocalStorageResultsRepository } from "../../lib/repository"
+import {
+  type ResultsRepository,
+  newLocalStorageResultsRepository,
+} from "../../lib/repository"
 import { newSearchEngine } from "../../lib/search"
 import { type Statistics, computeStats } from "../../lib/stats"
 import type { DiscoveryResult } from "../../types/discovery_result"
@@ -53,6 +56,34 @@ const fromSearchResult = (result: SearchResult): TestItemProperties => {
   return result as unknown as TestItemProperties
 }
 
+const doInitialize = (
+  result: DiscoveryResult,
+  repository: ResultsRepository,
+  engine: MiniSearch<TestItemProperties>,
+  setItems: (items: TestItemProperties[]) => void,
+  setFilteredItems: (items: TestItemProps[]) => void,
+  setMarkers: (markers: Set<string>) => void,
+  setStats: (stats: Statistics) => void,
+  onItemClicked: (item: TestItemProperties) => void,
+  filter: (item: TestItemProperties) => boolean,
+) => {
+  // Save in local storage
+  repository.saveResults(result)
+  // Gather all items
+  const newItems = result.items.map(sanitize)
+  const newfilteredItems = newItems.filter(filter)
+  // Update state
+  setItems(newItems)
+  setMarkers(new Set(newItems.map((item) => item.markers).flat()))
+  // Initialize search engine
+  engine.addAllAsync(newItems).catch((error) => {
+    console.error("failed to add items to search engine: ", error)
+  })
+  // Update state
+  setStats(computeStats(newfilteredItems))
+  setFilteredItems(newfilteredItems.map((item) => transform(item)(onItemClicked)))
+}
+
 export interface TestSearchProps {
   result: DiscoveryResult
 }
@@ -76,7 +107,7 @@ export const TestSearch = () => {
   const [engine] = useState<MiniSearch<TestItemProperties>>(newSearchEngine())
   const [resultFile, setResultFile] = useState<string>("")
   const [testResult, setTestResult] = useState<DiscoveryResult | null>(null)
-  const [allMarkers, setAllMarkers] = useState<Set<string>>(new Set<string>())
+  const [markers, setMarkers] = useState<Set<string>>(new Set<string>())
   const [stats, setStats] = useState<Statistics | null>(null)
   const [items, setItems] = useState<TestItemProperties[]>([])
   const [filteredItems, setFilteredItems] = useState<TestItemProps[]>([])
@@ -85,7 +116,7 @@ export const TestSearch = () => {
   // Define function to reset the state
   const reset = () => {
     setItems([])
-    setAllMarkers(new Set<string>())
+    setMarkers(new Set<string>())
     setStats(null)
     setFilteredItems([])
     setDisplayedItems([])
@@ -131,24 +162,21 @@ export const TestSearch = () => {
       setTestResult(resultsFromStorage)
       return
     }
-    // Save in local storage
-    repository.saveResults(testResult)
-    // Gather all items
-    const newItems = testResult.items.map(sanitize)
-    const newfilteredItems = newItems.filter(filterItem)
-    // Update state
-    setItems(newItems)
-    setAllMarkers(new Set(newItems.map((item) => item.markers).flat()))
     // Initialize search engine
-    engine.addAllAsync(newItems).catch((error) => {
-      console.error("failed to add items to search engine: ", error)
-    })
-    // Update state
-    setStats(computeStats(newfilteredItems))
-    setFilteredItems(newfilteredItems.map((item) => transform(item)(setFocusedItem)))
+    doInitialize(
+      testResult,
+      repository,
+      engine,
+      setItems,
+      setFilteredItems,
+      setMarkers,
+      setStats,
+      setFocusedItem,
+      filterItem,
+    )
     // Cleanup search engine on unmount
     return () => {
-      engine.removeAll(newItems)
+      engine.removeAll()
     }
   }, [testResult, engine])
 
@@ -177,7 +205,7 @@ export const TestSearch = () => {
         ),
       )
     }
-  }, [search, limit, filterItem, items, allMarkers, engine])
+  }, [search, limit, filterItem, items, markers, engine])
 
   // Return UI component
   return (
@@ -212,7 +240,7 @@ export const TestSearch = () => {
       />
 
       <MarkersFilters
-        choices={allMarkers}
+        choices={markers}
         get={getMarkerStatus}
         onClick={(marker: string) => markerFilter.toggle(marker)}
       />
