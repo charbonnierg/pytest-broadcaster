@@ -13,6 +13,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { newIncludeExcludeFilter } from "../../lib/filter"
 import { newSearchEngine } from "../../lib/search"
 import { type Statistics, computeStats } from "../../lib/stats"
+import { readJSONInto as readUploadedJSON } from "../../lib/upload"
 import type { DiscoveryResult } from "../../types/discovery_result"
 import type { TestItem as TestItemProperties } from "../../types/test_item"
 import TestItem, { type TestItemProps } from "./TestItem"
@@ -141,18 +142,7 @@ export const TestSearch = () => {
   // Observe test file and set test results
   useEffect(() => {
     const el = uploadFileRef.current as HTMLInputElement | null
-    if (el?.files == null || el.files.length == 0) {
-      return
-    }
-    const file = el.files[0]
-    const reader = new FileReader()
-    reader.onload = (event) => {
-      const from = event.target as FileReader
-      const content = from.result
-      const result = JSON.parse(content as string)
-      setTestResult(result)
-    }
-    reader.readAsText(file)
+    readUploadedJSON(el, setTestResult)
   }, [resultFile])
 
   // Observe test results and update state
