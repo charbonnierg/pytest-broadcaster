@@ -11,6 +11,7 @@ import type MiniSearch from "minisearch"
 import { useCallback, useEffect, useRef, useState } from "react"
 
 import { newIncludeExcludeFilter } from "../../lib/filter"
+import { LocalStorageDiscoveryResultRepository } from "../../lib/repository"
 import { newSearchEngine } from "../../lib/search"
 import { type Statistics, computeStats } from "../../lib/stats"
 import { readJSONInto as readUploadedJSON } from "../../lib/upload"
@@ -92,6 +93,8 @@ export const TestSearch = () => {
   // We only display a subset of items
   const [displayedItems, setDisplayedItems] = useState<TestItemProps[]>([])
 
+  const repository = LocalStorageDiscoveryResultRepository()
+
   // Define function to reset the state
   const reset = () => {
     setItems([])
@@ -148,20 +151,19 @@ export const TestSearch = () => {
   // Observe test results and update state
   useEffect(() => {
     if (testResult == null) {
-      // Lookup in local storage
-      const content = localStorage.getItem("testResult")
+      // Lookup from storage
+      const resultsFromStorage = repository.loadDiscoveryResult()
       // Reset if no content
-      if (content == null) {
+      if (resultsFromStorage == null) {
         reset()
         return
       }
-      // Parse and set results
-      const result = JSON.parse(content)
-      setTestResult(result)
+      // Set results
+      setTestResult(resultsFromStorage)
       return
     }
     // Save in local storage
-    localStorage.setItem("testResult", JSON.stringify(testResult))
+    repository.saveDiscoveryResult(testResult)
     // Gather all items
     const newItems = testResult.items.map(sanitize)
     const newMarkers = new Set(newItems.map((item) => item.markers).flat())
@@ -250,7 +252,7 @@ export const TestSearch = () => {
         <SlButton
           variant="default"
           onClick={() => {
-            localStorage.removeItem("testResult")
+            repository.removeDiscoveryResult()
             setResultFile("")
             setTestResult(null)
           }}
