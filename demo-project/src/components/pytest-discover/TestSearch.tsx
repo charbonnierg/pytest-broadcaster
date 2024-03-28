@@ -10,6 +10,7 @@ import type { SearchOptions, SearchResult } from "minisearch"
 import type MiniSearch from "minisearch"
 import { useCallback, useEffect, useRef, useState } from "react"
 
+import { newIncludeExcludeFilter } from "../../lib/filter"
 import { newSearchEngine } from "../../lib/search"
 import { type Statistics, computeStats } from "../../lib/stats"
 import type { DiscoveryResult } from "../../types/discovery_result"
@@ -90,68 +91,51 @@ export const TestSearch = () => {
   // We only display a subset of items
   const [displayedItems, setDisplayedItems] = useState<TestItemProps[]>([])
 
-  // Define callback to react to marker selection
-  const onMarkerSelected = (marker: string) => {
-    // Marker is neither included or excluded
-    // So we include it
-    if (!includedMarkers.includes(marker) && !excludedMarkers.includes(marker)) {
-      setIncludedMarkers([...includedMarkers, marker])
-    }
-    // Marker is included so we exclude it
-    else if (includedMarkers.includes(marker)) {
-      setIncludedMarkers(includedMarkers.filter((m) => m !== marker))
-      setExcludedMarkers([...excludedMarkers, marker])
-    }
-    // Marker is exclude, so we remove it from exclusion
-    else {
-      setExcludedMarkers(excludedMarkers.filter((m) => m !== marker))
-    }
+  // Define function to reset the state
+  const reset = () => {
+    setItems([])
+    setAllMarkers(new Set<string>())
+    setStats(null)
+    setFilteredItems([])
+    setDisplayedItems([])
+    setDrawerOpened(true)
   }
 
-  // Define callback to react to search input
-  const onSearchTermsUpdated = (event: SlInputEvent) => {
-    // Get element, this is required as per the official doc
-    // https://shoelace.style/frameworks/react#event-handling
-    const inputElement = event.target as SlInputElement
-    // Update search terms
-    setSearch(inputElement.value)
-  }
+  // Create a new filter for markers
+  const markerFilter = newIncludeExcludeFilter({
+    getIncluded: () => includedMarkers,
+    getExcluded: () => excludedMarkers,
+    setInclude: setIncludedMarkers,
+    setExclude: setExcludedMarkers,
+  })
 
-  // Define callback to react to item clicked
-  // and open dialog
-  const onItemClicked = (item: TestItemProperties) => {
-    setFocusedItem(item)
-    if (!dialogOpened) {
-      setDialogOpened(true)
-    }
-  }
-
-  // Define function to filter items
-  // based on markers
-  const filterItem = useCallback(
-    (item: TestItemProperties): boolean => {
-      if (includedMarkers.length > 0) {
-        if (!includedMarkers.some((marker) => item.markers.includes(marker))) {
-          return false
-        }
-      }
-      if (excludedMarkers.length > 0) {
-        if (excludedMarkers.some((marker) => item.markers.includes(marker))) {
-          return false
-        }
-      }
-      return true
-    },
+  // Define function to filter items based on markers
+  const filterAccordingToMarkerFilter = useCallback(
+    (item: TestItemProperties): boolean => markerFilter.filter(...item.markers),
     [includedMarkers, excludedMarkers],
   )
 
-  // Observe filtered items and set displayed items
-  useEffect(() => {
-    if (filteredItems.length === 0) {
+  // Define callback to react to marker selection
+  const onMarkerSelected = (marker: string) => markerFilter.toggle(marker)
+
+  // Define callback to react to search input
+  // Cast element, this is required as per the official doc
+  // https://shoelace.style/frameworks/react#event-handling
+  const onSearchTermsUpdated = (event: SlInputEvent) =>
+    setSearch((event.target as SlInputElement).value)
+
+  // Define callback to react to item clicked and open dialog
+  const onItemClicked = (item: TestItemProperties) => {
+    if (dialogOpened) {
       return
     }
-    const newDisplayedItems = filteredItems.slice(offset, offset + pagination)
-    setDisplayedItems(newDisplayedItems)
+    setFocusedItem(item)
+    setDialogOpened(true)
+  }
+
+  // Observe filtered items and set displayed items
+  useEffect(() => {
+    setDisplayedItems(filteredItems.slice(offset, offset + pagination))
   }, [filteredItems, offset, pagination])
 
   // Observe test file and set test results
@@ -176,27 +160,22 @@ export const TestSearch = () => {
     if (testResult == null) {
       // Lookup in local storage
       const content = localStorage.getItem("testResult")
+      // Reset if no content
       if (content == null) {
-        // Clean-up
-        setItems([])
-        setAllMarkers(new Set<string>())
-        setStats(null)
-        setFilteredItems([])
-        setDisplayedItems([])
-        setDrawerOpened(true)
+        reset()
         return
       }
+      // Parse and set results
       const result = JSON.parse(content)
       setTestResult(result)
       return
-    } else {
-      // Save in local storage
-      localStorage.setItem("testResult", JSON.stringify(testResult))
     }
+    // Save in local storage
+    localStorage.setItem("testResult", JSON.stringify(testResult))
     // Gather all items
     const newItems = testResult.items.map(sanitize)
     const newMarkers = new Set(newItems.map((item) => item.markers).flat())
-    const newfilteredItems = newItems.filter(filterItem)
+    const newfilteredItems = newItems.filter(filterAccordingToMarkerFilter)
     // Update state
     setItems(newItems)
     // Initialize search engine
@@ -219,14 +198,15 @@ export const TestSearch = () => {
       // Boost nodeid
       boost: { id: 2 },
       // Filter results using markers
-      filter: (result) => filterItem(result as unknown as TestItemProperties),
+      filter: (result) =>
+        filterAccordingToMarkerFilter(result as unknown as TestItemProperties),
       // Limit results
       limit: limit,
     } as SearchOptions
     // Reset offset
     setOffset(0)
     if (search === "") {
-      const newfilteredItems = items.filter(filterItem)
+      const newfilteredItems = items.filter(filterAccordingToMarkerFilter)
       setStats(computeStats(newfilteredItems))
       setFilteredItems(newfilteredItems.map((item) => transform(item)(setFocusedItem)))
     } else {
@@ -238,7 +218,7 @@ export const TestSearch = () => {
         ),
       )
     }
-  }, [search, limit, filterItem, items, allMarkers, engine])
+  }, [search, limit, filterAccordingToMarkerFilter, items, allMarkers, engine])
 
   // Return UI component
   return (
