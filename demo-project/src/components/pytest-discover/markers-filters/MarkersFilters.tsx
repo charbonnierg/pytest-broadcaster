@@ -9,7 +9,7 @@ export const MarkersFilters = ({
   get,
   onClick,
 }: {
-  choices: Set<string>
+  choices: string[]
   get: (marker: string) => IncludedExcludeStatus
   onClick: (marker: string) => void
 }) => {

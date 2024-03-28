@@ -28,7 +28,7 @@ const doInitialize = (
   engine: MiniSearch<TestItem>,
   setItems: (items: TestItem[]) => void,
   setFilteredItems: (items: TestItem[]) => void,
-  setMarkers: (markers: Set<string>) => void,
+  setMarkers: (markers: string[]) => void,
   setStats: (stats: Statistics) => void,
   filter: (item: TestItem) => boolean,
 ) => {
@@ -39,7 +39,7 @@ const doInitialize = (
   const newfilteredItems = newItems.filter(filter)
   // Update state
   setItems(newItems)
-  setMarkers(new Set(newItems.map((item) => item.markers).flat()))
+  setMarkers(Array.from(new Set(newItems.map((item) => item.markers).flat())))
   // Initialize search engine
   engine.addAllAsync(newItems).catch((error) => {
     console.error("failed to add items to search engine: ", error)
@@ -87,18 +87,19 @@ export const TestSearch = () => {
   const [settingsOpened, setSettingsOpened] = useState<boolean>(false)
   const [focusOpened, setFocusOpened] = useState<boolean>(false)
   const [focusedItem, setFocusedItem] = useState<TestItem | null>(null)
-  // Initialize search input
+  // Initialize markers state
+  const [markers, setMarkers] = useState<string[]>([])
   const [includedMarkers, setIncludedMarkers] = useState<string[]>([])
   const [excludedMarkers, setExcludedMarkers] = useState<string[]>([])
+  // Initialze search input state
   const [searchTerms, setSearchTerms] = useState<string>("")
   const [paginationOffset, setPaginationOffset] = useState<number>(0)
-  // Initialize hidden search input
   const [searchLimit] = useState<number>(5000)
   const [paginationPageSize] = useState<number>(20)
-  // Initialize state
+  // Initialize settings state
   const [resultFilename, setResultFilename] = useState<string | null>(null)
   const [discoveryResult, setDiscoveryResult] = useState<DiscoveryResult | null>(null)
-  const [markers, setMarkers] = useState<Set<string>>(new Set<string>())
+  // Initialize search result state
   const [stats, setStats] = useState<Statistics | null>(null)
   const [items, setItems] = useState<TestItem[]>([])
   const [filteredItems, setFilteredItems] = useState<TestItem[]>([])
@@ -107,7 +108,7 @@ export const TestSearch = () => {
   // Define function to reset the state
   const reset = () => {
     setItems([])
-    setMarkers(new Set<string>())
+    setMarkers([])
     setStats(null)
     setFilteredItems([])
     setDisplayedItems([])
