@@ -4,7 +4,7 @@
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(48ch, 2fr));
   gap: var(--sl-spacing-x-large);
   padding: 0;
 }

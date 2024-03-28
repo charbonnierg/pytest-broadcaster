@@ -1,5 +1,6 @@
 sl-card {
   overflow: hidden;
+  cursor: pointer;
 }
 
 .tooltip-text {
