@@ -1,3 +1,6 @@
+/* filter.ts exposes utilities to filter items based on inclusion/exclusion criteria.*/
+
+// Options required by the IncludeExcludeFilter interface.
 export interface IncludeExcludeOptions<T> {
   getIncluded: () => T[]
   getExcluded: () => T[]
@@ -5,14 +8,17 @@ export interface IncludeExcludeOptions<T> {
   setExclude: (value: T[]) => void
 }
 
+// Status of an item in the IncludeExcludeFilter.
 export type IncludedExcludeStatus = "included" | "excluded" | "neither"
 
+// IncludeExcludeFilter is a utility to filter items based on inclusion/exclusion criteria.
 export interface IncludeExcludeFilter<T> {
   toggle: (value: T) => void
   filter: (...value: T[]) => boolean
   get: (value: T) => IncludedExcludeStatus
 }
 
+// Create a new IncludeExcludeFilter.
 export const newIncludeExcludeFilter = <T>({
   getIncluded,
   getExcluded,

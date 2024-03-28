@@ -11,10 +11,10 @@ import type MiniSearch from "minisearch"
 import { useCallback, useEffect, useRef, useState } from "react"
 
 import { newIncludeExcludeFilter } from "../../lib/filter"
-import { LocalStorageDiscoveryResultRepository } from "../../lib/repository"
+import { newLocalStorageResultsRepository } from "../../lib/repository"
 import { newSearchEngine } from "../../lib/search"
 import { type Statistics, computeStats } from "../../lib/stats"
-import { readJSONInto as readUploadedJSON } from "../../lib/upload"
+import { newJSONReader } from "../../lib/upload"
 import type { DiscoveryResult } from "../../types/discovery_result"
 import type { TestItem as TestItemProperties } from "../../types/test_item"
 import TestItem, { type TestItemProps } from "./TestItem"
@@ -93,7 +93,7 @@ export const TestSearch = () => {
   // We only display a subset of items
   const [displayedItems, setDisplayedItems] = useState<TestItemProps[]>([])
 
-  const repository = LocalStorageDiscoveryResultRepository()
+  const repository = newLocalStorageResultsRepository()
 
   // Define function to reset the state
   const reset = () => {
@@ -105,6 +105,8 @@ export const TestSearch = () => {
     setDrawerOpened(true)
   }
 
+  // Define function to read uploaded file
+  const readResultsFile = newJSONReader(setTestResult)
   // Create a new filter for markers
   const markerFilter = newIncludeExcludeFilter({
     getIncluded: () => includedMarkers,
@@ -143,16 +145,13 @@ export const TestSearch = () => {
   }, [filteredItems, offset, pagination])
 
   // Observe test file and set test results
-  useEffect(() => {
-    const el = uploadFileRef.current as HTMLInputElement | null
-    readUploadedJSON(el, setTestResult)
-  }, [resultFile])
+  useEffect(() => readResultsFile(uploadFileRef.current), [resultFile])
 
   // Observe test results and update state
   useEffect(() => {
     if (testResult == null) {
       // Lookup from storage
-      const resultsFromStorage = repository.loadDiscoveryResult()
+      const resultsFromStorage = repository.loadResults()
       // Reset if no content
       if (resultsFromStorage == null) {
         reset()
@@ -163,7 +162,7 @@ export const TestSearch = () => {
       return
     }
     // Save in local storage
-    repository.saveDiscoveryResult(testResult)
+    repository.saveResults(testResult)
     // Gather all items
     const newItems = testResult.items.map(sanitize)
     const newMarkers = new Set(newItems.map((item) => item.markers).flat())
@@ -252,7 +251,7 @@ export const TestSearch = () => {
         <SlButton
           variant="default"
           onClick={() => {
-            repository.removeDiscoveryResult()
+            repository.clearResults()
             setResultFile("")
             setTestResult(null)
           }}

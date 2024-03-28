@@ -1,15 +1,18 @@
+/* repository.ts exposes utilities to load and save discovery results.*/
 import type { DiscoveryResult } from "../types/discovery_result"
 
-export interface DiscoveryResultRepository {
+// DiscoveryResultRepository is a repository to load and save discovery results.
+export interface ResultsRepository {
   // Load the discovery result from a JSON file
-  loadDiscoveryResult: () => DiscoveryResult | null
+  loadResults: () => DiscoveryResult | null
   // Save the discovery result to a JSON file
-  saveDiscoveryResult: (result: DiscoveryResult) => void
+  saveResults: (result: DiscoveryResult) => void
   // Remove the discovery result from the repository
-  removeDiscoveryResult: () => void
+  clearResults: () => void
 }
 
-export const LocalStorageDiscoveryResultRepository = (): DiscoveryResultRepository => {
+// LocalStorageDiscoveryResultRepository is a DiscoveryResultRepository that uses the local storage.
+export const newLocalStorageResultsRepository = (): ResultsRepository => {
   const loadDiscoveryResult = () => {
     const result = localStorage.getItem("discovery_result")
     if (result == null) {
@@ -27,8 +30,8 @@ export const LocalStorageDiscoveryResultRepository = (): DiscoveryResultReposito
   }
 
   return {
-    loadDiscoveryResult,
-    saveDiscoveryResult,
-    removeDiscoveryResult,
+    loadResults: loadDiscoveryResult,
+    saveResults: saveDiscoveryResult,
+    clearResults: removeDiscoveryResult,
   }
 }

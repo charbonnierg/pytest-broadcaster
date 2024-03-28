@@ -1,3 +1,4 @@
+/* stats.ts exposes utilities to compute statistics from discovery results.*/
 import type { TestItem } from "../types/test_item"
 
 // I'm sure something like that already exists in the TS standard library
@@ -12,19 +13,6 @@ export interface Statistics {
   totalFiles: number
   totalModules: number
   totalSuites: number
-}
-
-const uniqueCount = <K extends string>(items: HasField<K>[], field: K): number => {
-  const unique = new Set(items.map((item) => item[field]))
-  return Array.from(unique).filter((value) => value !== null).length
-}
-
-const uniqueMultiCount = <K extends string>(
-  items: HasField<K, any[]>[],
-  field: K,
-): number => {
-  const unique = new Set(items.flatMap((item) => item[field]))
-  return Array.from(unique).filter((value) => value !== null).length
 }
 
 export const computeStats = (items: TestItem[]): Statistics => {
@@ -43,4 +31,17 @@ export const computeStats = (items: TestItem[]): Statistics => {
     ).length,
   }
   return stats
+}
+
+const uniqueCount = <K extends string>(items: HasField<K>[], field: K): number => {
+  const unique = new Set(items.map((item) => item[field]))
+  return Array.from(unique).filter((value) => value !== null).length
+}
+
+const uniqueMultiCount = <K extends string>(
+  items: HasField<K, any[]>[],
+  field: K,
+): number => {
+  const unique = new Set(items.flatMap((item) => item[field]))
+  return Array.from(unique).filter((value) => value !== null).length
 }
