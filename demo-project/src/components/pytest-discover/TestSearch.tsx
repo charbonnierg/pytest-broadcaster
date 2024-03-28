@@ -104,6 +104,103 @@ const MarkersFilters = ({
   )
 }
 
+const PaginationControl = ({ prev, next }: { prev: () => void; next: () => void }) => (
+  <div className="control-buttons">
+    <SlButton variant="default" onClick={prev}>
+      Prev
+    </SlButton>
+    <SlButton variant="default" onClick={next}>
+      Next
+    </SlButton>
+  </div>
+)
+
+const FocusedItem = ({
+  opened,
+  close,
+  item,
+}: {
+  opened: boolean
+  close: () => void
+  item: TestItemProperties
+}) => (
+  <SlDrawer
+    no-header
+    className="focused-item"
+    placement="bottom"
+    open={opened}
+    onSlRequestClose={(e) => {
+      if (e.detail.source === "overlay") {
+        e.preventDefault()
+      }
+    }}
+    onSlAfterHide={close}
+  >
+    <TestItemDetails properties={item}></TestItemDetails>
+    <SlButton className="close-focused-item" variant="default" onClick={close}>
+      Close
+    </SlButton>
+  </SlDrawer>
+)
+
+const SettingsBar = ({
+  opened,
+  close,
+  clear,
+  filename,
+  setFilename,
+}: {
+  opened: boolean
+  close: () => void
+  clear: () => void
+  filename: string
+  setFilename: (filename: string) => void
+}) => {
+  const ref = useRef<HTMLInputElement | null>(null)
+  return (
+    <SlDrawer
+      label="Settings"
+      open={opened}
+      onSlRequestClose={(e) => {
+        if (e.detail.source === "overlay") {
+          e.preventDefault()
+        }
+      }}
+      onSlAfterHide={close}
+    >
+      <form>
+        <input
+          ref={ref}
+          type="file"
+          id="file-upload"
+          value={filename}
+          onChange={(evt) => {
+            setFilename(evt.target.value)
+          }}
+        />
+      </form>
+      <SlButton
+        variant="default"
+        onClick={() => {
+          const el = ref.current
+          if (el == null) {
+            return
+          }
+          el.click()
+        }}
+      >
+        Upload file
+      </SlButton>
+      <SlButton variant="default" onClick={clear}>
+        Clear all
+      </SlButton>
+      <SlButton variant="default" slot="footer" onClick={close}>
+        Close
+      </SlButton>
+    </SlDrawer>
+  )
+}
+
 export interface TestSearchProps {
   result: DiscoveryResult
 }
@@ -120,8 +217,8 @@ Key Features:
 */
 export const TestSearch = () => {
   // Initialize UI state
-  const [drawerOpened, setDrawerOpened] = useState<boolean>(false)
-  const [dialogOpened, setDialogOpened] = useState<boolean>(false)
+  const [settingsOpened, setSettingsOpened] = useState<boolean>(false)
+  const [focusOpened, setFocusOpened] = useState<boolean>(false)
   const [focusedItem, setFocusedItem] = useState<TestItemProperties | null>(null)
   // Initialize search input
   const [includedMarkers, setIncludedMarkers] = useState<string[]>([])
@@ -152,7 +249,7 @@ export const TestSearch = () => {
     setStats(null)
     setFilteredItems([])
     setDisplayedItems([])
-    setDrawerOpened(true)
+    setSettingsOpened(true)
   }
 
   // Define function to read uploaded file
@@ -186,11 +283,11 @@ export const TestSearch = () => {
 
   // Define callback to react to item clicked and open dialog
   const onItemClicked = (item: TestItemProperties) => {
-    if (dialogOpened) {
+    if (focusOpened) {
       return
     }
     setFocusedItem(item)
-    setDialogOpened(true)
+    setFocusOpened(true)
   }
 
   // Observe filtered items and set displayed items
@@ -267,82 +364,29 @@ export const TestSearch = () => {
   // Return UI component
   return (
     <div>
-      {/* The drawer */}
-      <SlDrawer
-        label="Settings"
-        open={drawerOpened}
-        onSlRequestClose={(e) => {
-          if (e.detail.source === "overlay") {
-            e.preventDefault()
-          }
+      {/* The settings sidebar */}
+      <SettingsBar
+        opened={settingsOpened}
+        close={() => setSettingsOpened(false)}
+        filename={resultFile}
+        setFilename={setResultFile}
+        clear={() => {
+          repository.clearResults()
+          setResultFile("")
+          setTestResult(null)
         }}
-        onSlAfterHide={() => setDrawerOpened(false)}
-      >
-        <form>
-          <input
-            ref={uploadFileRef}
-            type="file"
-            id="file-upload"
-            value={resultFile}
-            onChange={(evt) => {
-              setResultFile(evt.target.value)
-            }}
-          />
-        </form>
-        <SlButton
-          variant="default"
-          onClick={() => {
-            const el = uploadFileRef.current
-            if (el == null) {
-              return
-            }
-            el.click()
-          }}
-        >
-          Upload file
-        </SlButton>
-        <SlButton
-          variant="default"
-          onClick={() => {
-            repository.clearResults()
-            setResultFile("")
-            setTestResult(null)
-          }}
-        >
-          Clear all
-        </SlButton>
-        <SlButton variant="default" slot="footer" onClick={() => setDrawerOpened(false)}>
-          Close
-        </SlButton>
-      </SlDrawer>
-
-      {/* The dialog */}
+      />
+      {/* The focused item */}
       {focusedItem && (
-        <SlDrawer
-          no-header
-          className="focused-item"
-          placement="bottom"
-          open={dialogOpened}
-          onSlRequestClose={(e) => {
-            if (e.detail.source === "overlay") {
-              e.preventDefault()
-            }
-          }}
-          onSlAfterHide={() => setDialogOpened(false)}
-        >
-          <TestItemDetails properties={focusedItem}></TestItemDetails>
-          <SlButton
-            className="close-focused-item"
-            variant="default"
-            onClick={() => setDialogOpened(false)}
-          >
-            Close
-          </SlButton>
-        </SlDrawer>
+        <FocusedItem
+          opened={focusOpened}
+          close={() => setFocusOpened(false)}
+          item={focusedItem}
+        />
       )}
 
       {/* The floating button */}
-      <SettingsButton onClick={() => setDrawerOpened(true)} />
+      <SettingsButton onClick={() => setSettingsOpened(true)} />
 
       {/* The statistics */}
       {stats && <TestStats stats={stats} />}
@@ -353,12 +397,10 @@ export const TestSearch = () => {
         value={search}
         onSlInput={onSearchTermsUpdated}
       />
-
       {/* The filter */}
       <MarkersFilters
         {...{ choices: allMarkers, get: getMarkerStatus, onClick: onMarkerSelected }}
       />
-
       {/* The results */}
       <ul role="list" className="card-grid">
         {displayedItems.map((item) => (
@@ -367,24 +409,14 @@ export const TestSearch = () => {
         <div></div>
       </ul>
       {/* Controls */}
-      <div className="control-buttons">
-        <SlButton
-          variant="default"
-          onClick={() => {
-            setOffset(Math.max(0, offset - pagination))
-          }}
-        >
-          Prev
-        </SlButton>
-        <SlButton
-          variant="default"
-          onClick={() => {
-            setOffset(Math.min(filteredItems.length - pagination, offset + pagination))
-          }}
-        >
-          Next
-        </SlButton>
-      </div>
+      <PaginationControl
+        prev={() => {
+          setOffset(Math.max(0, offset - pagination))
+        }}
+        next={() => {
+          setOffset(Math.min(filteredItems.length - pagination, offset + pagination))
+        }}
+      />
     </div>
   )
 }
