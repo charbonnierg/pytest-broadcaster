@@ -84,12 +84,47 @@ const doInitialize = (
   setFilteredItems(newfilteredItems.map((item) => transform(item)(onItemClicked)))
 }
 
+const doSearch = (
+  items: TestItemProperties[],
+  engine: MiniSearch<TestItemProperties>,
+  search: string,
+  limit: number,
+  setOffset: (offset: number) => void,
+  setStats: (stats: Statistics) => void,
+  setFilteredItems: (items: TestItemProps[]) => void,
+  setFocusedItem: (item: TestItemProperties | null) => void,
+  filter: (item: TestItemProperties) => boolean,
+) => {
+  const options = {
+    // Boost nodeid
+    boost: { id: 2 },
+    // Filter results using markers
+    filter: (result) => filter(result as unknown as TestItemProperties),
+    // Limit results
+    limit: limit,
+  } as SearchOptions
+  // Reset offset
+  setOffset(0)
+  if (search === "") {
+    const newfilteredItems = items.filter(filter)
+    setStats(computeStats(newfilteredItems))
+    setFilteredItems(newfilteredItems.map((item) => transform(item)(setFocusedItem)))
+  } else {
+    const newfilteredItems = engine.search(search, options)
+    setStats(computeStats(newfilteredItems.map(fromSearchResult)))
+    setFilteredItems(
+      newfilteredItems.map((item) => transform(fromSearchResult(item))(setFocusedItem)),
+    )
+  }
+}
+
 export interface TestSearchProps {
   result: DiscoveryResult
 }
 
 /* A search component for test items. */
 export const TestSearch = () => {
+  const engine = newSearchEngine()
   const repository = newLocalStorageResultsRepository()
   // Initialize UI state
   const [settingsOpened, setSettingsOpened] = useState<boolean>(false)
@@ -104,7 +139,6 @@ export const TestSearch = () => {
   const [limit] = useState<number>(5000)
   const [pagination] = useState<number>(20)
   // Initialize state
-  const [engine] = useState<MiniSearch<TestItemProperties>>(newSearchEngine())
   const [resultFile, setResultFile] = useState<string>("")
   const [testResult, setTestResult] = useState<DiscoveryResult | null>(null)
   const [markers, setMarkers] = useState<Set<string>>(new Set<string>())
@@ -178,34 +212,22 @@ export const TestSearch = () => {
     return () => {
       engine.removeAll()
     }
-  }, [testResult, engine])
+  }, [testResult])
 
   // Observe search terms and update filtered items
   useEffect(() => {
-    const options = {
-      // Boost nodeid
-      boost: { id: 2 },
-      // Filter results using markers
-      filter: (result) => filterItem(result as unknown as TestItemProperties),
-      // Limit results
-      limit: limit,
-    } as SearchOptions
-    // Reset offset
-    setOffset(0)
-    if (search === "") {
-      const newfilteredItems = items.filter(filterItem)
-      setStats(computeStats(newfilteredItems))
-      setFilteredItems(newfilteredItems.map((item) => transform(item)(setFocusedItem)))
-    } else {
-      const newfilteredItems = engine.search(search, options)
-      setStats(computeStats(newfilteredItems.map(fromSearchResult)))
-      setFilteredItems(
-        newfilteredItems.map((item) =>
-          transform(fromSearchResult(item))(setFocusedItem),
-        ),
-      )
-    }
-  }, [search, limit, filterItem, items, markers, engine])
+    doSearch(
+      items,
+      engine,
+      search,
+      limit,
+      setOffset,
+      setStats,
+      setFilteredItems,
+      setFocusedItem,
+      filterItem,
+    )
+  }, [search, limit, filterItem, items, markers])
 
   // Return UI component
   return (
