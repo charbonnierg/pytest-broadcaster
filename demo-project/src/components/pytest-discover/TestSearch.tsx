@@ -54,6 +54,17 @@ const fromSearchResult = (result: SearchResult): TestItemProperties => {
   return result as unknown as TestItemProperties
 }
 
+const SettingsButton = ({ onClick }: { onClick: () => void }) => (
+  <SlButton
+    className="floating-button"
+    aria-label="Settings"
+    variant="default"
+    onClick={onClick}
+  >
+    Settings
+  </SlButton>
+)
+
 export interface TestSearchProps {
   result: DiscoveryResult
 }
@@ -289,14 +300,7 @@ export const TestSearch = () => {
       )}
 
       {/* The floating button */}
-      <SlButton
-        className="floating-button"
-        aria-label="Settings"
-        variant="default"
-        onClick={() => setDrawerOpened(true)}
-      >
-        Settings
-      </SlButton>
+      <SettingsButton onClick={() => setDrawerOpened(true)} />
 
       {/* The statistics */}
       {stats && <TestStats stats={stats} />}
