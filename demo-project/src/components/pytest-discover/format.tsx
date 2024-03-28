@@ -3,14 +3,27 @@ import SlTag from "@shoelace-style/shoelace/dist/react/tag/index.js"
 
 import type { TestItem } from "../../types/test_item"
 
+/* Create a new callback that will:
+ * copy a string to the clipboard
+ * prevent event default.
+ */
 const copy = (value: string) => (e: any) => {
   navigator.clipboard.writeText(value)
   e?.preventDefault()
 }
 
-export const formatDoc = (doc: string | null) => {
+/* Format a test item name */
+export const sanitizeName = (item: TestItem): string => {
+  if (item.name == null || item.name == "") {
+    return ""
+  }
+  return item.name.replaceAll("_", " ")
+}
+
+/* Format a test item docstring */
+export const truncateDescription = (doc: string | null): string => {
   if (doc == null || doc == "") {
-    return null
+    return ""
   }
   if (doc.length > 100) {
     return doc.slice(0, 100) + "..."
@@ -18,7 +31,8 @@ export const formatDoc = (doc: string | null) => {
   return doc
 }
 
-export const formatMarkers = (item: TestItem) => {
+/* Format a test item markers */
+export const formatMarkers = (item: TestItem): JSX.Element | null => {
   if (item.markers.length === 0) {
     return null
   }
@@ -39,7 +53,8 @@ export const formatMarkers = (item: TestItem) => {
   )
 }
 
-export const formatParameters = (item: TestItem) => {
+/* Format a test item parameters */
+export const formatParameters = (item: TestItem): JSX.Element | null => {
   if (Object.keys(item.parameters).length === 0) {
     return null
   }
@@ -60,7 +75,8 @@ export const formatParameters = (item: TestItem) => {
   )
 }
 
-export const formatModule = (item: TestItem) => {
+/* Format a test item module name */
+export const formatModule = (item: TestItem): JSX.Element | null => {
   if (item.module == null || item.module == "") {
     return null
   }
@@ -74,7 +90,8 @@ export const formatModule = (item: TestItem) => {
   )
 }
 
-export const formatParent = (item: TestItem) => {
+/* Format a test item parent name */
+export const formatParent = (item: TestItem): JSX.Element | null => {
   if (item.parent == null || item.parent == "") {
     return null
   }
@@ -88,7 +105,8 @@ export const formatParent = (item: TestItem) => {
   )
 }
 
-export const formatFile = (item: TestItem) => {
+/* Format a test item file name */
+export const formatFile = (item: TestItem): JSX.Element | null => {
   if (item.file == null || item.file == "") {
     return null
   }
@@ -102,13 +120,7 @@ export const formatFile = (item: TestItem) => {
   )
 }
 
-export const formatNodeId = (item: TestItem) => {
+/* Format a test item node id */
+export const formatNodeId = (item: TestItem): JSX.Element => {
   return <SlTag onClick={copy(item.node_id)}>{item.node_id}</SlTag>
-}
-
-export const formatName = (item: TestItem) => {
-  if (item.name == null || item.name == "") {
-    return ""
-  }
-  return item.name.replaceAll("_", " ")
 }

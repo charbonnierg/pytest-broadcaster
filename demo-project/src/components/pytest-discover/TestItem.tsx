@@ -3,7 +3,12 @@ import SlTooltip from "@shoelace-style/shoelace/dist/react/tooltip/index.js"
 
 import type { TestItem as TestItemProperties } from "../../types/test_item"
 import "./TestItem.css"
-import { formatDoc, formatFile, formatMarkers, formatName } from "./format.tsx"
+import {
+  formatFile,
+  formatMarkers,
+  sanitizeName,
+  truncateDescription,
+} from "./format.tsx"
 
 export interface TestItemProps {
   onClick: (props: TestItemProperties) => void
@@ -13,7 +18,7 @@ export interface TestItemProps {
 /* A test item collected by pytest */
 export const TestItem = (item: TestItemProps) => {
   return (
-    <SlTooltip content={formatName(item.properties)}>
+    <SlTooltip content={sanitizeName(item.properties)}>
       <SlCard
         key={item.properties.node_id}
         onClick={() => {
@@ -23,7 +28,7 @@ export const TestItem = (item: TestItemProps) => {
         <h3>{item.properties.name}</h3>
         {formatMarkers(item.properties)}
         <p>{formatFile(item.properties)}</p>
-        {formatDoc(item.properties.doc)}
+        {truncateDescription(item.properties.doc)}
       </SlCard>
     </SlTooltip>
   )
