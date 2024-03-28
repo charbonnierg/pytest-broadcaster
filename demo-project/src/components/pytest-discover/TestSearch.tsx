@@ -10,7 +10,7 @@ import type { SearchOptions, SearchResult } from "minisearch"
 import type MiniSearch from "minisearch"
 import { useCallback, useEffect, useRef, useState } from "react"
 
-import { newIncludeExcludeFilter } from "../../lib/filter"
+import { type IncludedExcludeStatus, newIncludeExcludeFilter } from "../../lib/filter"
 import { newLocalStorageResultsRepository } from "../../lib/repository"
 import { newSearchEngine } from "../../lib/search"
 import { type Statistics, computeStats } from "../../lib/stats"
@@ -64,6 +64,45 @@ const SettingsButton = ({ onClick }: { onClick: () => void }) => (
     Settings
   </SlButton>
 )
+
+const MarkersFilters = ({
+  choices,
+  get,
+  onClick,
+}: {
+  choices: Set<string>
+  get: (marker: string) => IncludedExcludeStatus
+  onClick: (marker: string) => void
+}) => {
+  const variant = (marker: string) => {
+    const status = get(marker)
+    if (status === "included") {
+      return "success"
+    }
+    if (status === "excluded") {
+      return "danger"
+    }
+    return "neutral"
+  }
+  return (
+    <div className="tags-selection">
+      {Array.from(choices).map((marker) => {
+        return (
+          <SlTag
+            key={marker}
+            pill
+            variant={variant(marker)}
+            onClick={() => onClick(marker)}
+            data-state={get(marker)}
+          >
+            <SlIcon name="tag"></SlIcon>
+            {marker}
+          </SlTag>
+        )
+      })}
+    </div>
+  )
+}
 
 export interface TestSearchProps {
   result: DiscoveryResult
@@ -131,7 +170,11 @@ export const TestSearch = () => {
     (item: TestItemProperties): boolean => markerFilter.filter(...item.markers),
     [includedMarkers, excludedMarkers],
   )
-
+  // Define function to get marker status
+  const getMarkerStatus = useCallback(
+    (marker: string): IncludedExcludeStatus => markerFilter.get(marker),
+    [includedMarkers, excludedMarkers],
+  )
   // Define callback to react to marker selection
   const onMarkerSelected = (marker: string) => markerFilter.toggle(marker)
 
@@ -176,16 +219,15 @@ export const TestSearch = () => {
     repository.saveResults(testResult)
     // Gather all items
     const newItems = testResult.items.map(sanitize)
-    const newMarkers = new Set(newItems.map((item) => item.markers).flat())
     const newfilteredItems = newItems.filter(filterAccordingToMarkerFilter)
     // Update state
     setItems(newItems)
+    setAllMarkers(new Set(newItems.map((item) => item.markers).flat()))
     // Initialize search engine
     engine.addAllAsync(newItems).catch((error) => {
       console.error("failed to add items to search engine: ", error)
     })
     // Update state
-    setAllMarkers(newMarkers)
     setStats(computeStats(newfilteredItems))
     setFilteredItems(newfilteredItems.map((item) => transform(item)(setFocusedItem)))
     // Cleanup search engine on unmount
@@ -313,34 +355,9 @@ export const TestSearch = () => {
       />
 
       {/* The filter */}
-      <div className="tags-selection">
-        {Array.from(allMarkers).map((marker) => {
-          return (
-            <SlTag
-              key={marker}
-              pill
-              variant={
-                includedMarkers.includes(marker)
-                  ? "success"
-                  : excludedMarkers.includes(marker)
-                    ? "danger"
-                    : "neutral"
-              }
-              onClick={() => onMarkerSelected(marker)}
-              data-state={
-                includedMarkers.includes(marker)
-                  ? "selected"
-                  : excludedMarkers.includes(marker)
-                    ? "excluded"
-                    : ""
-              }
-            >
-              <SlIcon name="tag"></SlIcon>
-              {marker}
-            </SlTag>
-          )
-        })}
-      </div>
+      <MarkersFilters
+        {...{ choices: allMarkers, get: getMarkerStatus, onClick: onMarkerSelected }}
+      />
 
       {/* The results */}
       <ul role="list" className="card-grid">
