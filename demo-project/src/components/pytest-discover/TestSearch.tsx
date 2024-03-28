@@ -2,7 +2,6 @@ import type SlInputElement from "@shoelace-style/shoelace/dist/components/input/
 import SlInput, {
   type SlInputEvent,
 } from "@shoelace-style/shoelace/dist/react/input/index.js"
-import type { SearchOptions, SearchResult } from "minisearch"
 import type MiniSearch from "minisearch"
 import { useCallback, useEffect, useState } from "react"
 
@@ -11,61 +10,27 @@ import {
   type ResultsRepository,
   newLocalStorageResultsRepository,
 } from "../../lib/repository"
-import { newSearchEngine } from "../../lib/search"
+import { newSearchEngine, sanitize, search } from "../../lib/search"
 import { type Statistics, computeStats } from "../../lib/stats"
 import type { DiscoveryResult } from "../../types/discovery_result"
-import type { TestItem as TestItemProperties } from "../../types/test_item"
+import type { TestItem } from "../../types/test_item"
 import MarkersFilters from "./markers-filters/MarkersFilters"
 import { PaginationControl } from "./pagination/PaginationControl"
 import { SearchResults } from "./search-results/SearchResults"
 import { SettingsBar } from "./settings/SettingsBar"
 import { SettingsButton } from "./settings/SettingsButton"
 import { TestItemFocused } from "./test-item-focused/TestItemFocused"
-import { type TestItemProps } from "./test-item-preview/TestItemPreview"
 import { TestStats } from "./test-stats/TestStats"
-
-const sanitize = (item: any): TestItemProperties => {
-  const { node_id, ...rest } = item
-  return {
-    id: node_id,
-    node_id: node_id,
-    ...rest,
-  }
-}
-
-const transform = (item: TestItemProperties) => {
-  return (onClick: (item: TestItemProperties) => void) => {
-    return {
-      onClick,
-      properties: {
-        id: item.node_id,
-        node_id: item.node_id,
-        name: item.name,
-        markers: item.markers,
-        parameters: item.parameters,
-        file: item.file,
-        doc: item.doc,
-        module: item.module,
-        parent: item.parent,
-      },
-    }
-  }
-}
-
-const fromSearchResult = (result: SearchResult): TestItemProperties => {
-  return result as unknown as TestItemProperties
-}
 
 const doInitialize = (
   result: DiscoveryResult,
   repository: ResultsRepository,
-  engine: MiniSearch<TestItemProperties>,
-  setItems: (items: TestItemProperties[]) => void,
-  setFilteredItems: (items: TestItemProps[]) => void,
+  engine: MiniSearch<TestItem>,
+  setItems: (items: TestItem[]) => void,
+  setFilteredItems: (items: TestItem[]) => void,
   setMarkers: (markers: Set<string>) => void,
   setStats: (stats: Statistics) => void,
-  onItemClicked: (item: TestItemProperties) => void,
-  filter: (item: TestItemProperties) => boolean,
+  filter: (item: TestItem) => boolean,
 ) => {
   // Save in local storage
   repository.saveResults(result)
@@ -81,41 +46,33 @@ const doInitialize = (
   })
   // Update state
   setStats(computeStats(newfilteredItems))
-  setFilteredItems(newfilteredItems.map((item) => transform(item)(onItemClicked)))
+  setFilteredItems(newfilteredItems)
 }
 
 const doSearch = (
-  items: TestItemProperties[],
-  engine: MiniSearch<TestItemProperties>,
-  search: string,
+  items: TestItem[],
+  engine: MiniSearch<TestItem>,
+  searchTerms: string,
   limit: number,
   setOffset: (offset: number) => void,
   setStats: (stats: Statistics) => void,
-  setFilteredItems: (items: TestItemProps[]) => void,
-  setFocusedItem: (item: TestItemProperties | null) => void,
-  filter: (item: TestItemProperties) => boolean,
+  setFilteredItems: (items: TestItem[]) => void,
+  filter: (item: TestItem) => boolean,
 ) => {
-  const options = {
-    // Boost nodeid
-    boost: { id: 2 },
-    // Filter results using markers
-    filter: (result) => filter(result as unknown as TestItemProperties),
-    // Limit results
-    limit: limit,
-  } as SearchOptions
-  // Reset offset
   setOffset(0)
-  if (search === "") {
+  if (searchTerms === "") {
     const newfilteredItems = items.filter(filter)
     setStats(computeStats(newfilteredItems))
-    setFilteredItems(newfilteredItems.map((item) => transform(item)(setFocusedItem)))
-  } else {
-    const newfilteredItems = engine.search(search, options)
-    setStats(computeStats(newfilteredItems.map(fromSearchResult)))
-    setFilteredItems(
-      newfilteredItems.map((item) => transform(fromSearchResult(item))(setFocusedItem)),
-    )
+    setFilteredItems(newfilteredItems)
+    return
   }
+  const newfilteredItems = search(engine, searchTerms, {
+    boost: { node_id: 2 },
+    filter: filter,
+    limit: limit,
+  })
+  setStats(computeStats(newfilteredItems))
+  setFilteredItems(newfilteredItems)
 }
 
 export interface TestSearchProps {
@@ -124,28 +81,28 @@ export interface TestSearchProps {
 
 /* A search component for test items. */
 export const TestSearch = () => {
-  const engine = newSearchEngine()
+  const [engine] = useState(newSearchEngine())
   const repository = newLocalStorageResultsRepository()
   // Initialize UI state
   const [settingsOpened, setSettingsOpened] = useState<boolean>(false)
   const [focusOpened, setFocusOpened] = useState<boolean>(false)
-  const [focusedItem, setFocusedItem] = useState<TestItemProperties | null>(null)
+  const [focusedItem, setFocusedItem] = useState<TestItem | null>(null)
   // Initialize search input
   const [includedMarkers, setIncludedMarkers] = useState<string[]>([])
   const [excludedMarkers, setExcludedMarkers] = useState<string[]>([])
-  const [search, setSearch] = useState<string>("")
-  const [offset, setOffset] = useState<number>(0)
+  const [searchTerms, setSearchTerms] = useState<string>("")
+  const [paginationOffset, setPaginationOffset] = useState<number>(0)
   // Initialize hidden search input
-  const [limit] = useState<number>(5000)
-  const [pagination] = useState<number>(20)
+  const [searchLimit] = useState<number>(5000)
+  const [paginationPageSize] = useState<number>(20)
   // Initialize state
-  const [resultFile, setResultFile] = useState<string>("")
-  const [testResult, setTestResult] = useState<DiscoveryResult | null>(null)
+  const [resultFilename, setResultFilename] = useState<string | null>(null)
+  const [discoveryResult, setDiscoveryResult] = useState<DiscoveryResult | null>(null)
   const [markers, setMarkers] = useState<Set<string>>(new Set<string>())
   const [stats, setStats] = useState<Statistics | null>(null)
-  const [items, setItems] = useState<TestItemProperties[]>([])
-  const [filteredItems, setFilteredItems] = useState<TestItemProps[]>([])
-  const [displayedItems, setDisplayedItems] = useState<TestItemProps[]>([])
+  const [items, setItems] = useState<TestItem[]>([])
+  const [filteredItems, setFilteredItems] = useState<TestItem[]>([])
+  const [displayedItems, setDisplayedItems] = useState<TestItem[]>([])
 
   // Define function to reset the state
   const reset = () => {
@@ -167,7 +124,7 @@ export const TestSearch = () => {
 
   // Define function to filter items based on markers
   const filterItem = useCallback(
-    (item: TestItemProperties): boolean => markerFilter.filter(...item.markers),
+    (item: TestItem): boolean => markerFilter.filter(...item.markers),
     [includedMarkers, excludedMarkers],
   )
 
@@ -179,12 +136,14 @@ export const TestSearch = () => {
 
   // Observe filtered items and set displayed items
   useEffect(() => {
-    setDisplayedItems(filteredItems.slice(offset, offset + pagination))
-  }, [filteredItems, offset, pagination])
+    setDisplayedItems(
+      filteredItems.slice(paginationOffset, paginationOffset + paginationPageSize),
+    )
+  }, [filteredItems, paginationOffset, paginationPageSize])
 
   // Observe test results and update state
   useEffect(() => {
-    if (testResult == null) {
+    if (discoveryResult == null) {
       // Lookup from storage
       const resultsFromStorage = repository.loadResults()
       // Reset if no content
@@ -193,41 +152,39 @@ export const TestSearch = () => {
         return
       }
       // Set results
-      setTestResult(resultsFromStorage)
+      setDiscoveryResult(resultsFromStorage)
       return
     }
     // Initialize search engine
     doInitialize(
-      testResult,
+      discoveryResult,
       repository,
       engine,
       setItems,
       setFilteredItems,
       setMarkers,
       setStats,
-      setFocusedItem,
       filterItem,
     )
     // Cleanup search engine on unmount
     return () => {
       engine.removeAll()
     }
-  }, [testResult])
+  }, [discoveryResult])
 
   // Observe search terms and update filtered items
   useEffect(() => {
     doSearch(
       items,
       engine,
-      search,
-      limit,
-      setOffset,
+      searchTerms,
+      searchLimit,
+      setPaginationOffset,
       setStats,
       setFilteredItems,
-      setFocusedItem,
       filterItem,
     )
-  }, [search, limit, filterItem, items, markers])
+  }, [searchTerms, searchLimit, filterItem, items, markers])
 
   // Return UI component
   return (
@@ -236,13 +193,13 @@ export const TestSearch = () => {
       <SettingsBar
         opened={settingsOpened}
         close={() => setSettingsOpened(false)}
-        filename={resultFile}
-        setFilename={setResultFile}
-        setDiscoveryResult={setTestResult}
+        filename={resultFilename}
+        setFilename={setResultFilename}
+        setDiscoveryResult={setDiscoveryResult}
         clear={() => {
           repository.clearResults()
-          setResultFile("")
-          setTestResult(null)
+          setResultFilename(null)
+          setDiscoveryResult(null)
         }}
       />
       <TestItemFocused
@@ -255,9 +212,9 @@ export const TestSearch = () => {
 
       <SlInput
         helpText="Enter some text"
-        value={search}
+        value={searchTerms}
         onSlInput={(event: SlInputEvent) =>
-          setSearch((event.target as SlInputElement).value)
+          setSearchTerms((event.target as SlInputElement).value)
         }
       />
 
@@ -268,8 +225,8 @@ export const TestSearch = () => {
       />
 
       <SearchResults
-        items={displayedItems.map((item) => item.properties)}
-        onItemClicked={(item: TestItemProperties) => {
+        items={displayedItems}
+        onItemClicked={(item: TestItem) => {
           if (focusOpened) {
             return
           }
@@ -280,10 +237,15 @@ export const TestSearch = () => {
 
       <PaginationControl
         prev={() => {
-          setOffset(Math.max(0, offset - pagination))
+          setPaginationOffset(Math.max(0, paginationOffset - paginationPageSize))
         }}
         next={() => {
-          setOffset(Math.min(filteredItems.length - pagination, offset + pagination))
+          setPaginationOffset(
+            Math.min(
+              filteredItems.length - paginationPageSize,
+              paginationOffset + paginationPageSize,
+            ),
+          )
         }}
       />
     </div>

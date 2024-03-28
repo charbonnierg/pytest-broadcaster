@@ -1,7 +1,7 @@
 import SlCard from "@shoelace-style/shoelace/dist/react/card/index.js"
 import SlTooltip from "@shoelace-style/shoelace/dist/react/tooltip/index.js"
 
-import type { TestItem as TestItemProperties } from "../../../types/test_item"
+import type { TestItem } from "../../../types/test_item"
 import {
   formatFile,
   formatMarkers,
@@ -11,8 +11,8 @@ import {
 import "./TestItemPreview.css"
 
 export interface TestItemProps {
-  onClick: (props: TestItemProperties) => void
-  properties: TestItemProperties
+  onClick: (props: TestItem) => void
+  properties: TestItem
 }
 
 /* A test item collected by pytest */

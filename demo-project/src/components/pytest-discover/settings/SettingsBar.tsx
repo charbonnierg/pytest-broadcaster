@@ -17,7 +17,7 @@ export const SettingsBar = ({
   opened: boolean
   close: () => void
   clear: () => void
-  filename: string
+  filename: string | null
   setFilename: (filename: string) => void
   setDiscoveryResult: (results: DiscoveryResult) => void
 }) => {
@@ -42,7 +42,7 @@ export const SettingsBar = ({
           ref={ref}
           type="file"
           id="file-upload"
-          value={filename}
+          value={filename || ""}
           onChange={(evt) => {
             setFilename(evt.target.value)
           }}

@@ -1,4 +1,4 @@
-import type { TestItem as TestItemProperties } from "../../../types/test_item"
+import type { TestItem } from "../../../types/test_item"
 import {
   formatFile,
   formatMarkers,
@@ -11,7 +11,7 @@ import {
 import "./TestItemDetails.css"
 
 export interface TestItemDetailsProps {
-  properties: TestItemProperties
+  properties: TestItem
 }
 
 export const TestItemDetails = (item: TestItemDetailsProps) => {
