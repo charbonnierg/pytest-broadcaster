@@ -116,6 +116,10 @@
     .matchMedia("(prefers-color-scheme: dark)")
     .addEventListener("change", () => setTheme(theme))
 
+  window
+    .matchMedia("(prefers-color-scheme: light)")
+    .addEventListener("change", () => setTheme(theme))
+
   // Set the initial theme and sync the UI
   setTheme(theme)
 </script>

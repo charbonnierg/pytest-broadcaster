@@ -35,3 +35,15 @@
 .sl-theme-dark {
   color-scheme: dark;
 }
+
+.hide-on-light {
+  display: none;
+}
+
+html.sl-theme-dark .hide-on-dark {
+  display: none;
+}
+
+html.sl-theme-dark .hide-on-light {
+  display: block;
+}

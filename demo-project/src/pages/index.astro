@@ -1,6 +1,9 @@
 ---
+import { Image } from "astro:assets"
 import ShoelaceLayout from "../layouts/ShoelaceLayout.astro"
 import TestSearch from "../components/TestSearch.jsx"
+import Logo from "../assets/pytest-discover-logo-transparent.svg"
+import LogoDarkMode from "../assets/pytest-discover-logo-darkmode-transparent.svg"
 ---
 
 <style>
@@ -23,10 +26,25 @@ import TestSearch from "../components/TestSearch.jsx"
     font-weight: 700;
     text-align: left;
   }
+
+  header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .logo {
+    height: 4em;
+    width: 4em;
+    margin-top: 1em;
+    margin-right: 1em;
+  }
 </style>
 
 <ShoelaceLayout title="pytest-discover">
   <header>
+    <Image class="logo hide-on-dark" src={Logo} alt="pytest-discover logo" />
+    <Image class="logo hide-on-light" src={LogoDarkMode} alt="pytest-discover logo" />
     <h1>pytest-discover</h1>
   </header>
   <main>
