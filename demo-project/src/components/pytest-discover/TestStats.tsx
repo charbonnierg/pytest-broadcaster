@@ -1,13 +1,10 @@
 import SlBadge from "@shoelace-style/shoelace/dist/react/badge/index.js"
 
+import type { Statistics } from "../../lib/stats"
 import "./TestStats.css"
 
 export interface TestStatsProps {
-  totalCount: number
-  totalMarkersCount: number
-  totalFiles: number
-  totalModules: number
-  totalSuites: number
+  stats: Statistics
 }
 
 const variant = (value: number) => (value === 0 ? "danger" : "success")
@@ -25,11 +22,7 @@ const Stats = ({ label, value }: { label: string; value: number }) => {
 
 /* A component to display test statistics */
 export const TestStats = ({
-  totalCount,
-  totalMarkersCount,
-  totalFiles,
-  totalModules,
-  totalSuites,
+  stats: { totalCount, totalMarkersCount, totalFiles, totalModules, totalSuites },
 }: TestStatsProps) => {
   return (
     <div className="stats">

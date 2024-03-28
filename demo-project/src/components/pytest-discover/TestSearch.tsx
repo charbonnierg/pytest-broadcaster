@@ -11,12 +11,13 @@ import type MiniSearch from "minisearch"
 import { useCallback, useEffect, useRef, useState } from "react"
 
 import { newSearchEngine } from "../../lib/search"
+import { type Statistics, computeStats } from "../../lib/stats"
 import type { DiscoveryResult } from "../../types/discovery_result"
 import type { TestItem as TestItemProperties } from "../../types/test_item"
 import TestItem, { type TestItemProps } from "./TestItem"
 import TestItemDetails from "./TestItemDetails"
 import "./TestSearch.css"
-import { TestStats, type TestStatsProps } from "./TestStats"
+import { TestStats } from "./TestStats"
 
 const sanitize = (item: any): TestItemProperties => {
   const { node_id, ...rest } = item
@@ -48,24 +49,6 @@ const transform = (item: TestItemProperties) => {
 
 const fromSearchResult = (result: SearchResult): TestItemProperties => {
   return result as unknown as TestItemProperties
-}
-
-const computeStats = (items: TestItemProperties[]): TestStatsProps => {
-  const stats = {
-    totalCount: items.length,
-    totalMarkersCount: Array.from(new Set(items.map((item) => item.markers).flat()))
-      .length,
-    totalFiles: Array.from(new Set(items.map((item) => item.file))).filter(
-      (file) => file !== null,
-    ).length,
-    totalModules: Array.from(new Set(items.map((item) => item.module))).filter(
-      (module) => module !== null,
-    ).length,
-    totalSuites: Array.from(
-      new Set(items.map((item) => item.parent || item.module || item.file)),
-    ).length,
-  }
-  return stats
 }
 
 export interface TestSearchProps {
@@ -101,7 +84,7 @@ export const TestSearch = () => {
   const [resultFile, setResultFile] = useState<string>("")
   const [testResult, setTestResult] = useState<DiscoveryResult | null>(null)
   const [allMarkers, setAllMarkers] = useState<Set<string>>(new Set<string>())
-  const [stats, setStats] = useState<TestStatsProps | null>(null)
+  const [stats, setStats] = useState<Statistics | null>(null)
   const [items, setItems] = useState<TestItemProperties[]>([])
   const [filteredItems, setFilteredItems] = useState<TestItemProps[]>([])
   // We only display a subset of items
@@ -345,7 +328,7 @@ export const TestSearch = () => {
       </SlButton>
 
       {/* The statistics */}
-      {stats && <TestStats {...stats} />}
+      {stats && <TestStats stats={stats} />}
 
       {/* The input */}
       <SlInput
