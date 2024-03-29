@@ -39,7 +39,7 @@ export const SettingsBar = ({
 
   return (
     <SlDrawer
-      label="Settings"
+      label="Test Report"
       open={opened}
       onSlRequestClose={(e) => {
         if (e.detail.source === "overlay") {
