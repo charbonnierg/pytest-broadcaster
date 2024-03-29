@@ -14,10 +14,10 @@ export const DiscoveryResultMeta = ({
   children,
 }: {
   filename: string | null
-  results: DiscoveryResult | null
+  results: DiscoveryResult
   children: JSX.Element
 }) => {
-  if (filename == null || results == null) {
+  if (filename == null) {
     return null
   }
   let parts = filename.split("/")
@@ -107,11 +107,13 @@ export const SettingsBar = ({
           Upload file
         </SlButton>
       )}
-      <DiscoveryResultMeta results={results} filename={filename}>
-        <SlButton className="hover-danger-button" variant="default" onClick={clear}>
-          Clear
-        </SlButton>
-      </DiscoveryResultMeta>
+      {results && (
+        <DiscoveryResultMeta results={results} filename={filename}>
+          <SlButton className="hover-danger-button" variant="default" onClick={clear}>
+            Clear
+          </SlButton>
+        </DiscoveryResultMeta>
+      )}
       <SlButton variant="default" slot="footer" onClick={close}>
         Close
       </SlButton>
