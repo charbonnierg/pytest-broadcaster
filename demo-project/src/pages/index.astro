@@ -1,7 +1,7 @@
 ---
 import { Image } from "astro:assets"
 import ShoelaceLayout from "../layouts/ShoelaceLayout.astro"
-import TestSearch from "../components/pytest-discover/TestSearch.jsx"
+import SearchApp from "../components/pytest-discover/SearchApp.jsx"
 import Logo from "../assets/pytest-discover-logo-transparent.svg"
 import LogoDarkMode from "../assets/pytest-discover-logo-darkmode-transparent.svg"
 ---
@@ -48,6 +48,6 @@ import LogoDarkMode from "../assets/pytest-discover-logo-darkmode-transparent.sv
     <h1>pytest-discover</h1>
   </header>
   <main>
-    <TestSearch client:only="react" />
+    <SearchApp client:only="react" />
   </main>
 </ShoelaceLayout>
