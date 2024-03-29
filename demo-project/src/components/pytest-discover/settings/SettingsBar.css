@@ -11,6 +11,11 @@
   margin-bottom: 1rem;
 }
 
-.close-button .button:hover {
-  background-color: var(--sl-color-danger-300);
+sl-button.hover-danger-button::part(base):hover {
+  color: var(--sl-color-neutral-800);
+  border-color: var(--sl-color-neutral-400);
+  background-color: var(--sl-color-danger-100);
+  box-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
 }

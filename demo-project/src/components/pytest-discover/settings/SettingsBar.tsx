@@ -61,10 +61,10 @@ export const SettingsBar = ({
       >
         Upload file
       </SlButton>
-      <SlButton className="clear-button" variant="default" onClick={clear}>
+      <SlButton className="hover-danger-button" variant="default" onClick={clear}>
         Clear all
       </SlButton>
-      <SlButton className="close-button" variant="default" slot="footer" onClick={close}>
+      <SlButton variant="default" slot="footer" onClick={close}>
         Close
       </SlButton>
     </SlDrawer>
