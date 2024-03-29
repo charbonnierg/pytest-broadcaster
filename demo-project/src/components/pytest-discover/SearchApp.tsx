@@ -59,6 +59,7 @@ export const SearchApp = () => {
         opened={settingsOpened}
         close={() => setSettingsOpened(false)}
         filename={reportFilename}
+        results={discoveryResult}
         setFilename={setReportFilename}
         setReport={setReport}
         clear={() => {

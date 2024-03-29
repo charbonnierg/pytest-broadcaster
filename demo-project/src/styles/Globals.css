@@ -1,8 +1,8 @@
-/* COLORS */
-
 /* Light theme */
 :root {
   color-scheme: normal;
+
+  /* COLORS */
 
   /* Primary: accent color */
   --sl-color-primary-50: var(--sl-color-blue-50);
@@ -29,6 +29,10 @@
   --sl-color-success-800: var(--sl-color-emerald-800);
   --sl-color-success-900: var(--sl-color-emerald-900);
   --sl-color-success-950: var(--sl-color-emerald-950);
+
+  /* Box Shadows */
+
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
 /* Dark theme */
