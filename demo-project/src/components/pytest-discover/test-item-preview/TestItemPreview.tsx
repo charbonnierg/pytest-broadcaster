@@ -10,13 +10,13 @@ import {
 } from "../format.tsx"
 import "./TestItemPreview.css"
 
-export interface TestItemProps {
+interface TestItemPreviewProps {
   onClick: (props: TestItem) => void
   properties: TestItem
 }
 
 /* A test item collected by pytest */
-export const TestItemPreview = (item: TestItemProps) => {
+export const TestItemPreview = (item: TestItemPreviewProps) => {
   return (
     <SlTooltip content={item.properties.name}>
       <SlCard

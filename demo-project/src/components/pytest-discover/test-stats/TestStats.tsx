@@ -3,10 +3,6 @@ import SlBadge from "@shoelace-style/shoelace/dist/react/badge/index.js"
 import type { Statistics } from "../../../lib/stats"
 import "./TestStats.css"
 
-export interface TestStatsProps {
-  stats: Statistics | null
-}
-
 const variant = (value: number) => (value === 0 ? "danger" : "success")
 
 const Stats = ({ label, value }: { label: string; value: number }) => {
@@ -18,6 +14,10 @@ const Stats = ({ label, value }: { label: string; value: number }) => {
       </SlBadge>
     </>
   )
+}
+
+export interface TestStatsProps {
+  stats: Statistics | null
 }
 
 /* A component to display test statistics */

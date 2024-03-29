@@ -8,15 +8,17 @@ import { newJSONReader } from "../../../lib/upload"
 import type { DiscoveryResult } from "../../../types/discovery_result"
 import "./SettingsBar.css"
 
+interface DiscoveryResultMetaProps {
+  filename: string | null
+  results: DiscoveryResult
+  children: JSX.Element
+}
+
 export const DiscoveryResultMeta = ({
   filename,
   results,
   children,
-}: {
-  filename: string | null
-  results: DiscoveryResult
-  children: JSX.Element
-}) => {
+}: DiscoveryResultMetaProps) => {
   if (filename == null) {
     return null
   }
@@ -48,6 +50,16 @@ export const DiscoveryResultMeta = ({
   )
 }
 
+interface SettingsBarProps {
+  opened: boolean
+  close: () => void
+  clear: () => void
+  filename: string | null
+  results: DiscoveryResult | null
+  setFilename: (filename: string) => void
+  setReport: (report: DiscoveryResult) => void
+}
+
 export const SettingsBar = ({
   opened,
   close,
@@ -56,15 +68,7 @@ export const SettingsBar = ({
   results,
   setFilename,
   setReport,
-}: {
-  opened: boolean
-  close: () => void
-  clear: () => void
-  filename: string | null
-  results: DiscoveryResult | null
-  setFilename: (filename: string) => void
-  setReport: (report: DiscoveryResult) => void
-}) => {
+}: SettingsBarProps) => {
   const ref = useRef<HTMLInputElement | null>(null)
   const reader = newJSONReader(setReport)
 

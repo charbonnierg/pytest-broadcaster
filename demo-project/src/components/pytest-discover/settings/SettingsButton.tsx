@@ -2,7 +2,11 @@ import SlButton from "@shoelace-style/shoelace/dist/react/button/index.js"
 
 import "./SettingsButton.css"
 
-export const SettingsButton = ({ onClick }: { onClick: () => void }) => (
+interface SettingsButtonProps {
+  onClick: () => void
+}
+
+export const SettingsButton = ({ onClick }: SettingsButtonProps) => (
   <SlButton
     className="floating-button"
     aria-label="Settings"

@@ -5,15 +5,13 @@ import type { TestItem } from "../../../types/test_item"
 import { TestItemDetails } from "../test-item-details/TestItemDetails"
 import "./TestItemFocused.css"
 
-export const TestItemFocused = ({
-  opened,
-  close,
-  item,
-}: {
+interface TestItemFocusedProps {
   opened: boolean
   close: () => void
   item: TestItem | null
-}) =>
+}
+
+export const TestItemFocused = ({ opened, close, item }: TestItemFocusedProps) =>
   item && (
     <SlDrawer
       no-header

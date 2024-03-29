@@ -10,7 +10,7 @@ import {
 } from "../format"
 import "./TestItemDetails.css"
 
-export interface TestItemDetailsProps {
+interface TestItemDetailsProps {
   properties: TestItem
 }
 
