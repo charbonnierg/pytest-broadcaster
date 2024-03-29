@@ -7,6 +7,10 @@ span[data-success] {
   margin-left: 1rem;
 }
 
+sl-tree-item p sl-badge {
+  margin-left: 1rem;
+}
+
 p[data-success="false"] sl-tag::part(base) {
   border: 1px solid var(--sl-color-danger-500);
 }
