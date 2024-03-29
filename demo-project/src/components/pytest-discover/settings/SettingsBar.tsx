@@ -12,17 +12,17 @@ export const SettingsBar = ({
   clear,
   filename,
   setFilename,
-  setDiscoveryResult,
+  setReport,
 }: {
   opened: boolean
   close: () => void
   clear: () => void
   filename: string | null
   setFilename: (filename: string) => void
-  setDiscoveryResult: (results: DiscoveryResult) => void
+  setReport: (report: DiscoveryResult) => void
 }) => {
   const ref = useRef<HTMLInputElement | null>(null)
-  const reader = newJSONReader(setDiscoveryResult)
+  const reader = newJSONReader(setReport)
 
   useEffect(() => reader(ref.current), [filename])
 

@@ -18,17 +18,15 @@ export const useSearchResults = (
   const [offset, setOffset] = useState<number>(0)
   const [limit] = useState<number>(defaultLimit)
   const [pageSize] = useState<number>(defaultPageSize)
-  const [items, setItems] = useState<TestItem[]>([])
-  const [filteredItems, setFilteredItems] = useState<TestItem[]>([])
-  const [results, setDisplayedItems] = useState<TestItem[]>([])
-  const [stats, setStats] = useState<Statistics | null>(null)
-  const [discoveryResult, setDiscoveryResult] = useState<DiscoveryResult | null>(
-    repository.loadResults(),
-  )
+  const [allItems, setAllItems] = useState<TestItem[]>([])
+  const [matchingItems, setMatchingItems] = useState<TestItem[]>([])
+  const [results, setResults] = useState<TestItem[]>([])
+  const [statistics, setStatistics] = useState<Statistics | null>(null)
+  const [report, setReport] = useState<DiscoveryResult | null>(repository.loadResults())
 
   const nextPage = useCallback(() => {
-    setOffset(Math.min(filteredItems.length - pageSize, offset + pageSize))
-  }, [filteredItems, offset, pageSize])
+    setOffset(Math.min(matchingItems.length - pageSize, offset + pageSize))
+  }, [matchingItems, offset, pageSize])
 
   const prevPage = useCallback(() => {
     setOffset(Math.max(0, offset - pageSize))
@@ -36,52 +34,52 @@ export const useSearchResults = (
 
   // Observe test results and update state
   useEffect(() => {
-    if (discoveryResult == null) {
+    if (report == null) {
       const resultsFromStorage = repository.loadResults()
       if (resultsFromStorage != null) {
-        setDiscoveryResult(resultsFromStorage)
+        setReport(resultsFromStorage)
         return
       }
-      setItems([])
+      setAllItems([])
       markers.set([])
-      setStats(null)
-      setFilteredItems([])
-      setDisplayedItems([])
+      setStatistics(null)
+      setMatchingItems([])
+      setResults([])
       return
     }
     // Save in local storage
-    repository.saveResults(discoveryResult)
+    repository.saveResults(report)
     // Gather all items
-    const newItems = discoveryResult.items.map(sanitize)
+    const newItems = report.items.map(sanitize)
     const newfilteredItems = newItems.filter(markers.filter)
     // Update state
-    setItems(newItems)
+    setAllItems(newItems)
     markers.set(Array.from(new Set(newItems.map((item) => item.markers).flat())))
     // Initialize search engine
     engine.addAllAsync(newItems).catch((error) => {
       console.error("failed to add items to search engine: ", error)
     })
     // Update state
-    setStats(computeStats(newfilteredItems))
-    setFilteredItems(newfilteredItems)
+    setStatistics(computeStats(newfilteredItems))
+    setMatchingItems(newfilteredItems)
     // Cleanup search engine on unmount
     return () => {
       engine.removeAll()
     }
-  }, [discoveryResult])
+  }, [report])
 
   // Observe filtered items and set displayed items
   useEffect(() => {
-    setDisplayedItems(filteredItems.slice(offset, offset + pageSize))
-  }, [filteredItems, offset, pageSize])
+    setResults(matchingItems.slice(offset, offset + pageSize))
+  }, [matchingItems, offset, pageSize])
 
   // Observe search terms and update filtered items
   useEffect(() => {
     setOffset(0)
     if (terms === "") {
-      const newfilteredItems = items.filter(markers.filter)
-      setStats(computeStats(newfilteredItems))
-      setFilteredItems(newfilteredItems)
+      const newfilteredItems = allItems.filter(markers.filter)
+      setStatistics(computeStats(newfilteredItems))
+      setMatchingItems(newfilteredItems)
       return
     }
     const newfilteredItems = search(engine, terms, {
@@ -89,29 +87,28 @@ export const useSearchResults = (
       filter: markers.filter,
       limit: limit,
     })
-    setStats(computeStats(newfilteredItems))
-    setFilteredItems(newfilteredItems)
-  }, [terms, items, markers.filter, markers.values])
-
+    setStatistics(computeStats(newfilteredItems))
+    setMatchingItems(newfilteredItems)
+  }, [terms, allItems, markers.filter, markers.values])
 
   return {
-    discoveryResult,
-    setDiscoveryResult,
+    report,
     offset,
     limit,
     markers,
     results,
-    stats,
+    statistics,
     terms,
+    setReport,
     setTerms,
     nextPage,
     prevPage,
     reset: () => {
-      setItems([])
+      setAllItems([])
       markers.set([])
-      setStats(null)
-      setFilteredItems([])
-      setDisplayedItems([])
+      setStatistics(null)
+      setMatchingItems([])
+      setResults([])
       engine.removeAll()
     },
   }

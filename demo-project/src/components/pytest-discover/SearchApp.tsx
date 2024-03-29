@@ -17,7 +17,7 @@ import { TestItemFocused } from "./test-item-focused/TestItemFocused"
 import { TestStats } from "./test-stats/TestStats"
 
 export interface SearchAppProps {
-  result: DiscoveryResult
+  report: DiscoveryResult
 }
 
 /* A search component for test items. */
@@ -29,18 +29,18 @@ export const SearchApp = () => {
   const [focusOpened, setFocusOpened] = useState<boolean>(false)
   const [focusedItem, setFocusedItem] = useState<TestItem | null>(null)
   // Initialize settings state
-  const [resultFilename, setResultFilename] = useState<string | null>(null)
+  const [reportFilename, setReportFilename] = useState<string | null>(null)
   // Initialize search state
   const {
-    markers,
-    terms: searchTerms,
-    results,
-    stats,
-    setTerms: setSearchTerms,
-    discoveryResult,
-    setDiscoveryResult,
-    prevPage,
+    setTerms,
+    setReport,
     nextPage,
+    prevPage,
+    terms,
+    results,
+    markers,
+    statistics,
+    report: discoveryResult,
   } = useSearchResults(repository, 5000, 20)
 
   // Open settings if there is no discovery result
@@ -58,13 +58,13 @@ export const SearchApp = () => {
       <SettingsBar
         opened={settingsOpened}
         close={() => setSettingsOpened(false)}
-        filename={resultFilename}
-        setFilename={setResultFilename}
-        setDiscoveryResult={setDiscoveryResult}
+        filename={reportFilename}
+        setFilename={setReportFilename}
+        setReport={setReport}
         clear={() => {
           repository.clearResults()
-          setResultFilename(null)
-          setDiscoveryResult(null)
+          setReportFilename(null)
+          setReport(null)
         }}
       />
       <TestItemFocused
@@ -73,13 +73,13 @@ export const SearchApp = () => {
         item={focusedItem}
       />
 
-      <TestStats stats={stats} />
+      <TestStats stats={statistics} />
 
       <SlInput
         helpText="Enter some text"
-        value={searchTerms}
+        value={terms}
         onSlInput={(event: SlInputEvent) =>
-          setSearchTerms((event.target as SlInputElement).value)
+          setTerms((event.target as SlInputElement).value)
         }
       />
 
