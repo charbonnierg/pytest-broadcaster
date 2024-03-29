@@ -2,11 +2,6 @@
   display: none;
 }
 
-.filename h2 {
-  display: inline-block;
-  margin-right: 1rem;
-}
-
 .upload-button {
   margin-right: 1rem;
 }
@@ -14,22 +9,6 @@
 .close-button {
   margin-right: 1rem;
   margin-bottom: 1rem;
-}
-
-span[data-success] {
-  margin-left: 1rem;
-}
-
-p[data-success="false"] sl-tag::part(base) {
-  border: 1px solid var(--sl-color-danger-500);
-}
-
-span[data-success="true"] {
-  color: var(--sl-color-success-500);
-}
-
-span[data-success="false"] {
-  color: var(--sl-color-danger-500);
 }
 
 sl-button.hover-danger-button::part(base):hover {

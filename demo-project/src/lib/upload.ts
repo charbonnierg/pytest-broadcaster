@@ -1,7 +1,8 @@
 /* upload.ts exposes utilities to read JSON files into arbitrary destination.*/
 
 export const newJSONReader =
-  (writer: (result: any) => void) => (el: HTMLInputElement | null) => {
+  (writer: (filename: string, content: any) => void) =>
+  (el: HTMLInputElement | null) => {
     if (el?.files == null || el.files.length == 0) {
       return
     }
@@ -11,7 +12,7 @@ export const newJSONReader =
       const from = event.target as FileReader
       const content = from.result
       const result = JSON.parse(content as string)
-      writer(result)
+      writer(file.name, result)
     }
     reader.readAsText(file)
   }

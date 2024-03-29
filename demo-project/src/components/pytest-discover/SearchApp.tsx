@@ -4,8 +4,8 @@ import SlInput, {
 } from "@shoelace-style/shoelace/dist/react/input/index.js"
 import { useEffect, useState } from "react"
 
-import { useSearchResults } from "../../hooks/search-result"
-import { newLocalStorageResultsRepository } from "../../lib/repository"
+import { useSearchResults } from "../../hooks/use-search-results"
+import { newLocalStorageReportRepository } from "../../lib/repository"
 import type { DiscoveryResult } from "../../types/discovery_result"
 import type { TestItem } from "../../types/test_item"
 import MarkersFilters from "./markers-filters/MarkersFilters"
@@ -23,13 +23,11 @@ export interface SearchAppProps {
 /* A search component for test items. */
 export const SearchApp = () => {
   // Create new repository
-  const repository = newLocalStorageResultsRepository()
+  const repository = newLocalStorageReportRepository()
   // Initialize UI state
   const [settingsOpened, setSettingsOpened] = useState<boolean>(false)
   const [focusOpened, setFocusOpened] = useState<boolean>(false)
   const [focusedItem, setFocusedItem] = useState<TestItem | null>(null)
-  // Initialize settings state
-  const [reportFilename, setReportFilename] = useState<string | null>(null)
   // Initialize search state
   const {
     setTerms,
@@ -47,8 +45,6 @@ export const SearchApp = () => {
   useEffect(() => {
     if (discoveryResult == null) {
       setSettingsOpened(true)
-    } else {
-      setSettingsOpened(false)
     }
   }, [discoveryResult])
 
@@ -57,14 +53,11 @@ export const SearchApp = () => {
       <SettingsButton onClick={() => setSettingsOpened(true)} />
       <SettingsBar
         opened={settingsOpened}
-        close={() => setSettingsOpened(false)}
-        filename={reportFilename}
-        results={discoveryResult}
-        setFilename={setReportFilename}
+        onClose={() => setSettingsOpened(false)}
+        result={discoveryResult.get()}
         setReport={setReport}
-        clear={() => {
-          repository.clearResults()
-          setReportFilename(null)
+        onClear={() => {
+          repository.clearReport()
           setReport(null)
         }}
       />

@@ -1,37 +1,42 @@
 /* repository.ts exposes utilities to load and save discovery results.*/
 import type { DiscoveryResult } from "../types/discovery_result"
 
-// DiscoveryResultRepository is a repository to load and save discovery results.
-export interface ResultsRepository {
-  // Load the discovery result from a JSON file
-  loadResults: () => DiscoveryResult | null
-  // Save the discovery result to a JSON file
-  saveResults: (result: DiscoveryResult) => void
-  // Remove the discovery result from the repository
-  clearResults: () => void
+export interface Report {
+  result: DiscoveryResult
+  filename: string
 }
 
-// LocalStorageDiscoveryResultRepository is a DiscoveryResultRepository that uses the local storage.
-export const newLocalStorageResultsRepository = (): ResultsRepository => {
-  const loadDiscoveryResult = () => {
-    const result = localStorage.getItem("discovery_result")
-    if (result == null) {
+// ReportRepository is a repository to load and save discovery results.
+export interface ReportRepository {
+  // Load the discovery result from a JSON file
+  loadReport: () => Report | null
+  // Save the discovery result to a JSON file
+  saveReport: (results: Report) => void
+  // Remove the discovery result from the repository
+  clearReport: () => void
+}
+
+// newLocalStorageReportRepository creates a new ReportRepository that uses the local storage.
+export const newLocalStorageReportRepository = (): ReportRepository => {
+  const loadReport = () => {
+    const current = localStorage.getItem("discovery_result")
+    if (current == null) {
       return null
     }
-    return JSON.parse(result)
+    return JSON.parse(current) as Report
   }
 
-  const saveDiscoveryResult = (result: DiscoveryResult) => {
-    localStorage.setItem("discovery_result", JSON.stringify(result))
+  const saveReport = (results: Report) => {
+    localStorage.setItem("discovery_result", JSON.stringify(results))
   }
 
-  const removeDiscoveryResult = () => {
+  const clearReport = () => {
     localStorage.removeItem("discovery_result")
   }
 
   return {
-    loadResults: loadDiscoveryResult,
-    saveResults: saveDiscoveryResult,
-    clearResults: removeDiscoveryResult,
+    loadReport,
+    saveReport,
+    clearReport,
   }
 }

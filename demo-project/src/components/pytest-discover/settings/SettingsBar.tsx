@@ -1,78 +1,41 @@
 import SlButton from "@shoelace-style/shoelace/dist/react/button/index.js"
 import SlDrawer from "@shoelace-style/shoelace/dist/react/drawer/index.js"
-import SlIcon from "@shoelace-style/shoelace/dist/react/icon/index.js"
-import SlTag from "@shoelace-style/shoelace/dist/react/tag/index.js"
-import { useEffect, useRef } from "react"
+import { useRef } from "react"
 
+import type { Report } from "../../../lib/repository"
 import { newJSONReader } from "../../../lib/upload"
-import type { DiscoveryResult } from "../../../types/discovery_result"
+import { ReportMeta } from "./ReportsMeta"
 import "./SettingsBar.css"
-
-interface DiscoveryResultMetaProps {
-  filename: string | null
-  results: DiscoveryResult
-  children: JSX.Element
-}
-
-export const DiscoveryResultMeta = ({
-  filename,
-  results,
-  children,
-}: DiscoveryResultMetaProps) => {
-  if (filename == null) {
-    return null
-  }
-  let parts = filename.split("/")
-  let name = parts[parts.length - 1]
-  parts = name.split("\\")
-  name = parts[parts.length - 1]
-  return (
-    <div className="filename">
-      <h2>{name}</h2>
-      {children}
-      <p>
-        <SlTag>
-          <SlIcon name="lightbulb"></SlIcon>Pytest version: {results.pytest_version}
-        </SlTag>
-      </p>
-      <p>
-        <SlTag>
-          <SlIcon name="lightbulb"></SlIcon>Plugin version: {results.plugin_version}
-        </SlTag>
-      </p>
-      <p data-success={results.exit_status === 0}>
-        <SlTag>
-          <SlIcon name="lightbulb"></SlIcon>Exit status:
-          <span data-success={results.exit_status === 0}>{results.exit_status}</span>
-        </SlTag>
-      </p>
-    </div>
-  )
-}
 
 interface SettingsBarProps {
   opened: boolean
-  close: () => void
-  clear: () => void
-  filename: string | null
-  results: DiscoveryResult | null
-  setFilename: (filename: string) => void
-  setReport: (report: DiscoveryResult) => void
+  onClose: () => void
+  onClear: () => void
+  result: Report | null
+  setReport: (report: Report) => void
 }
 
 export const SettingsBar = ({
   opened,
-  close,
-  clear,
-  filename,
-  results,
-  setFilename,
+  onClose,
+  onClear,
+  result,
   setReport,
 }: SettingsBarProps) => {
+  // Create a new reference to some HTML element
+  // This element will be used hidden but used to upload a file
   const ref = useRef<HTMLInputElement | null>(null)
-  const reader = newJSONReader(setReport)
-
-  useEffect(() => reader(ref.current), [filename])
+  // Create a new JSON reader to read uploaded file from the HTML element
+  const reader = newJSONReader((filename, r) => {
+    setReport({ result: r, filename: filename })
+  })
+  // Define a function to clear the input field and call the onClear function
+  const clear = () => {
+    if (ref.current != null) {
+      ref.current.value = ""
+    }
+    onClear()
+  }
 
   return (
     <SlDrawer
@@ -83,42 +46,48 @@ export const SettingsBar = ({
           e.preventDefault()
         }
       }}
-      onSlAfterHide={close}
+      onSlAfterHide={onClose}
     >
+      {/* Input form is hidden */}
       <form>
         <input
           ref={ref}
           type="file"
           id="file-upload"
-          value={filename || ""}
           onChange={(evt) => {
-            setFilename(evt.target.value)
+            console.warn("file upload event", evt.target.value, evt.target.files)
+            const input = evt.target
+            reader(input)
           }}
         />
       </form>
-      {filename == null && (
+      {/* Button is displayed only when there is no current result */}
+      {result == null && (
         <SlButton
           className="upload-button"
           variant="default"
-          onClick={() => {
+          onClick={(e) => {
             const el = ref.current
             if (el == null) {
               return
             }
             el.click()
+            e.preventDefault()
           }}
         >
           Upload file
         </SlButton>
       )}
-      {results && (
-        <DiscoveryResultMeta results={results} filename={filename}>
+      {/* Meta is displayed only when there is a current result */}
+      {result != null && (
+        <ReportMeta result={result}>
           <SlButton className="hover-danger-button" variant="default" onClick={clear}>
             Clear
           </SlButton>
-        </DiscoveryResultMeta>
+        </ReportMeta>
       )}
-      <SlButton variant="default" slot="footer" onClick={close}>
+      {/* Close button is always displayed */}
+      <SlButton variant="default" slot="footer" onClick={onClose}>
         Close
       </SlButton>
     </SlDrawer>

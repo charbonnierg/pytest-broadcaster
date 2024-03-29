@@ -1,18 +1,19 @@
 import { useCallback, useEffect, useState } from "react"
 
-import type { ResultsRepository } from "../lib/repository"
+import type { ReportRepository } from "../lib/repository"
 import { newSearchEngine, sanitize, search } from "../lib/search"
 import { type Statistics, computeStats } from "../lib/stats"
-import type { DiscoveryResult } from "../types/discovery_result"
 import type { TestItem } from "../types/test_item"
-import { useMarkersFilters } from "./markers-filters"
+import { useMarkersFilters } from "./use-markers-filters"
+import { useReport } from "./use-report"
 
 export const useSearchResults = (
-  repository: ResultsRepository,
+  repository: ReportRepository,
   defaultLimit: number,
   defaultPageSize: number,
 ) => {
   const markers = useMarkersFilters()
+  const report = useReport(repository)
   const [engine] = useState(newSearchEngine())
   const [terms, setTerms] = useState<string>("")
   const [offset, setOffset] = useState<number>(0)
@@ -22,7 +23,6 @@ export const useSearchResults = (
   const [matchingItems, setMatchingItems] = useState<TestItem[]>([])
   const [results, setResults] = useState<TestItem[]>([])
   const [statistics, setStatistics] = useState<Statistics | null>(null)
-  const [report, setReport] = useState<DiscoveryResult | null>(repository.loadResults())
 
   const nextPage = useCallback(() => {
     setOffset(Math.min(matchingItems.length - pageSize, offset + pageSize))
@@ -34,12 +34,7 @@ export const useSearchResults = (
 
   // Observe test results and update state
   useEffect(() => {
-    if (report == null) {
-      const resultsFromStorage = repository.loadResults()
-      if (resultsFromStorage != null) {
-        setReport(resultsFromStorage)
-        return
-      }
+    if (!report.result || !report.filename) {
       setAllItems([])
       markers.set([])
       setStatistics(null)
@@ -47,10 +42,8 @@ export const useSearchResults = (
       setResults([])
       return
     }
-    // Save in local storage
-    repository.saveResults(report)
     // Gather all items
-    const newItems = report.items.map(sanitize)
+    const newItems = report.result.items.map(sanitize)
     const newfilteredItems = newItems.filter(markers.filter)
     // Update state
     setAllItems(newItems)
@@ -66,12 +59,7 @@ export const useSearchResults = (
     return () => {
       engine.removeAll()
     }
-  }, [report])
-
-  // Observe filtered items and set displayed items
-  useEffect(() => {
-    setResults(matchingItems.slice(offset, offset + pageSize))
-  }, [matchingItems, offset, pageSize])
+  }, [report.result])
 
   // Observe search terms and update filtered items
   useEffect(() => {
@@ -91,6 +79,11 @@ export const useSearchResults = (
     setMatchingItems(newfilteredItems)
   }, [terms, allItems, markers.filter, markers.values])
 
+  // Observe filtered items and set displayed items
+  useEffect(() => {
+    setResults(matchingItems.slice(offset, offset + pageSize))
+  }, [matchingItems, offset, pageSize])
+
   return {
     report,
     offset,
@@ -99,7 +92,7 @@ export const useSearchResults = (
     results,
     statistics,
     terms,
-    setReport,
+    setReport: report.set,
     setTerms,
     nextPage,
     prevPage,
