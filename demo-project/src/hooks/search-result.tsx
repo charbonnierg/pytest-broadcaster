@@ -22,10 +22,17 @@ export const useSearchResults = (
   const [filteredItems, setFilteredItems] = useState<TestItem[]>([])
   const [results, setDisplayedItems] = useState<TestItem[]>([])
   const [stats, setStats] = useState<Statistics | null>(null)
-
   const [discoveryResult, setDiscoveryResult] = useState<DiscoveryResult | null>(
     repository.loadResults(),
   )
+
+  const nextPage = useCallback(() => {
+    setOffset(Math.min(filteredItems.length - pageSize, offset + pageSize))
+  }, [filteredItems, offset, pageSize])
+
+  const prevPage = useCallback(() => {
+    setOffset(Math.max(0, offset - pageSize))
+  }, [offset, pageSize])
 
   // Observe test results and update state
   useEffect(() => {
@@ -86,13 +93,6 @@ export const useSearchResults = (
     setFilteredItems(newfilteredItems)
   }, [terms, items, markers.filter, markers.values])
 
-  const nextPage = useCallback(() => {
-    setOffset(Math.min(filteredItems.length - pageSize, offset + pageSize))
-  }, [filteredItems, offset, pageSize])
-
-  const prevPage = useCallback(() => {
-    setOffset(Math.max(0, offset - pageSize))
-  }, [offset, pageSize])
 
   return {
     discoveryResult,
