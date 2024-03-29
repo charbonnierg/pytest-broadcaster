@@ -1,3 +1,16 @@
 #file-upload {
   display: none;
 }
+
+.upload-button {
+  margin-right: 1rem;
+}
+
+.close-button {
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+}
+
+.close-button .button:hover {
+  background-color: var(--sl-color-danger-300);
+}

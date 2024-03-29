@@ -21,7 +21,6 @@ export const TestItemDetails = (item: TestItemDetailsProps) => {
       <h3>{sanitizeName(item.properties)}</h3>
       <p>{item.properties.name}</p>
       <div>
-        <h3>Metadata</h3>
         <table>
           <tbody>
             <tr>
@@ -41,8 +40,12 @@ export const TestItemDetails = (item: TestItemDetailsProps) => {
             </tr>
           </tbody>
         </table>
-        <h3>Description</h3>
-        <p>{item.properties.doc}</p>
+        {item.properties.doc != "" && (
+          <>
+            <h3>Description</h3>
+            <p>{item.properties.doc}</p>
+          </>
+        )}
       </div>
     </>
   )

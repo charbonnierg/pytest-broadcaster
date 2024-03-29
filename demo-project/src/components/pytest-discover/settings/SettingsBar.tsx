@@ -49,6 +49,7 @@ export const SettingsBar = ({
         />
       </form>
       <SlButton
+        className="upload-button"
         variant="default"
         onClick={() => {
           const el = ref.current
@@ -60,10 +61,10 @@ export const SettingsBar = ({
       >
         Upload file
       </SlButton>
-      <SlButton variant="default" onClick={clear}>
+      <SlButton className="clear-button" variant="default" onClick={clear}>
         Clear all
       </SlButton>
-      <SlButton variant="default" slot="footer" onClick={close}>
+      <SlButton className="close-button" variant="default" slot="footer" onClick={close}>
         Close
       </SlButton>
     </SlDrawer>
