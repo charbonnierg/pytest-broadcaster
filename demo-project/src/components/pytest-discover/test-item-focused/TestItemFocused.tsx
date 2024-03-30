@@ -11,7 +11,11 @@ interface TestItemFocusedProps {
   item: TestItem | null
 }
 
-export const TestItemFocused = ({ opened, close, item }: TestItemFocusedProps) =>
+export const TestItemFocused = ({
+  opened,
+  close,
+  item,
+}: TestItemFocusedProps) =>
   item && (
     <SlDrawer
       no-header
@@ -26,7 +30,11 @@ export const TestItemFocused = ({ opened, close, item }: TestItemFocusedProps) =
       onSlAfterHide={close}
     >
       <TestItemDetails properties={item}></TestItemDetails>
-      <SlButton className="close-focused-item" variant="default" onClick={close}>
+      <SlButton
+        className="close-focused-item"
+        variant="default"
+        onClick={close}
+      >
         Close
       </SlButton>
     </SlDrawer>

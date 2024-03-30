@@ -1,0 +1,12 @@
+import { defineWorkspace } from 'vitest/config'
+
+export default defineWorkspace([
+  {
+    test: {
+      name: 'node',
+      root: './src/lib',
+      environment: 'node',
+      setupFiles: ['./setup.node.ts'],
+    },
+  },
+])

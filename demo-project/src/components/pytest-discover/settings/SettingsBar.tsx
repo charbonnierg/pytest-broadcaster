@@ -55,7 +55,11 @@ export const SettingsBar = ({
           type="file"
           id="file-upload"
           onChange={(evt) => {
-            console.warn("file upload event", evt.target.value, evt.target.files)
+            console.warn(
+              "file upload event",
+              evt.target.value,
+              evt.target.files,
+            )
             const input = evt.target
             reader(input)
           }}
@@ -81,7 +85,11 @@ export const SettingsBar = ({
       {/* Meta is displayed only when there is a current result */}
       {result != null && (
         <ReportMeta result={result}>
-          <SlButton className="hover-danger-button" variant="default" onClick={clear}>
+          <SlButton
+            className="hover-danger-button"
+            variant="default"
+            onClick={clear}
+          >
             Clear
           </SlButton>
         </ReportMeta>

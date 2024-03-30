@@ -67,7 +67,10 @@ export const search = (
   terms: string,
   options: SearchOpts,
 ): SearchResult[] => {
-  return engine.search(terms, options as unknown as _SearchOptions) as SearchResult[]
+  return engine.search(
+    terms,
+    options as unknown as _SearchOptions,
+  ) as SearchResult[]
 }
 
 export const sanitize = (item: TestItem): SearchDocument => {

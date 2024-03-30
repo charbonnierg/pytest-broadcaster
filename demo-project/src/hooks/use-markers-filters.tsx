@@ -1,6 +1,9 @@
 import { useCallback, useState } from "react"
 
-import { type IncludedExcludeStatus, newIncludeExcludeFilter } from "../lib/filter"
+import {
+  type IncludedExcludeStatus,
+  newIncludeExcludeFilter,
+} from "../lib/filter"
 import type { TestItem } from "../types/test_item"
 
 export const useMarkersFilters = () => {

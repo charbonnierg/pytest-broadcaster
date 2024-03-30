@@ -25,7 +25,11 @@ const variantFactory =
     return "neutral"
   }
 
-export const MarkersFilters = ({ choices, get, onClick }: MarkersFiltersProps) => {
+export const MarkersFilters = ({
+  choices,
+  get,
+  onClick,
+}: MarkersFiltersProps) => {
   const variant = variantFactory(get)
   return (
     <div className="tags-selection">

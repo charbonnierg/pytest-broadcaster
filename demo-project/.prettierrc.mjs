@@ -10,7 +10,7 @@ export default {
   ],
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,
-  printWidth: 89,
+  printWidth: 80,
   tabWidth: 2,
   trailingComma: "all",
   singleQuote: false,

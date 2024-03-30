@@ -47,7 +47,9 @@ export const useSearchResults = (
     const newfilteredItems = newItems.filter(markers.filter)
     // Update state
     setAllItems(newItems)
-    markers.set(Array.from(new Set(newItems.map((item) => item.markers).flat())))
+    markers.set(
+      Array.from(new Set(newItems.map((item) => item.markers).flat())),
+    )
     // Initialize search engine
     engine.addAllAsync(newItems).catch((error) => {
       console.error("failed to add items to search engine: ", error)

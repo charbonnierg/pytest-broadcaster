@@ -27,13 +27,20 @@ export const computeStats = (items: TestItem[]): Statistics => {
     totalModules: uniqueCount(items, "module"),
     // Suites count
     totalSuites: Array.from(
-      new Set(items.map((item) => item.parent || item.module || item.file || item.name)),
+      new Set(
+        items.map(
+          (item) => item.parent || item.module || item.file || item.name,
+        ),
+      ),
     ).length,
   }
   return stats
 }
 
-const uniqueCount = <K extends string>(items: HasField<K>[], field: K): number => {
+const uniqueCount = <K extends string>(
+  items: HasField<K>[],
+  field: K,
+): number => {
   const unique = new Set(items.map((item) => item[field]))
   return Array.from(unique).filter((value) => value !== null).length
 }

@@ -5,7 +5,9 @@ import type { DiscoveryResult } from "../types/discovery_result"
 
 export const useReport = (repository: ReportRepository) => {
   const initial = repository.loadReport()
-  const [filename, setFilename] = useState<string | undefined>(initial?.filename)
+  const [filename, setFilename] = useState<string | undefined>(
+    initial?.filename,
+  )
   const [result, setResult] = useState<DiscoveryResult | null>(
     initial ? initial.result : null,
   )
