@@ -69,6 +69,10 @@ export const SearchResults = ({
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   })
+  // Reset offset when items change
+  useEffect(() => {
+    setOffset(0)
+  }, [items])
   // Load more items on offset change
   useEffect(() => {
     if (offset > 0) {
