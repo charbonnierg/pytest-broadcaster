@@ -1,4 +1,5 @@
 import SlAnimation from "@shoelace-style/shoelace/dist/react/animation/index.js"
+import SlButton from "@shoelace-style/shoelace/dist/react/button/index.js"
 import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner/index.js"
 import { useEffect, useState } from "react"
 
@@ -24,6 +25,29 @@ const LoadingIndicator = ({ loading }: { loading: boolean }) => {
   )
 }
 
+const GoUp = () => {
+  const [position, setPosition] = useState(0)
+  const handleGoUp = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
+  // Observe position
+  useEffect(() => {
+    const handleScroll = () => setPosition(window.scrollY)
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+  // Render
+  return (
+    <SlButton
+      onClick={handleGoUp}
+      className="go-up"
+      style={{ display: position > 100 ? "block" : "none" }}
+    >
+      Go up
+    </SlButton>
+  )
+}
+
 export const SearchResults = ({
   items,
   pageSize,
@@ -31,7 +55,9 @@ export const SearchResults = ({
 }: SearchResultsProps) => {
   const delay = 1000
   // Create a state to hold displayed items
-  const [displayed, setDisplayed] = useState<TestItem[]>(items.slice(0, pageSize))
+  const [displayed, setDisplayed] = useState<TestItem[]>(
+    items.slice(0, pageSize),
+  )
   // Create a state to hold offset and loading state
   const [offset, setOffset] = useState(0)
   const [loading, setLoading] = useState(false)
@@ -58,6 +84,7 @@ export const SearchResults = ({
   // Render
   return (
     <div>
+      {!loading && <GoUp></GoUp>}
       <LoadingIndicator loading={loading}></LoadingIndicator>
       <ul role="list" className="card-grid">
         {displayed.map((item) => (

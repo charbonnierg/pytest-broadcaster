@@ -14,6 +14,13 @@
   font-weight: normal;
 }
 
+.go-up {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+}
+
 .loader {
   --track-width: 0.25rem;
   font-size: 3rem;
