@@ -10,11 +10,7 @@ interface SearchResultsProps {
 export const SearchResults = ({ items, onItemClicked }: SearchResultsProps) => (
   <ul role="list" className="card-grid">
     {items.map((item) => (
-      <TestItemPreview
-        key={item.node_id}
-        properties={item}
-        onClick={onItemClicked}
-      />
+      <TestItemPreview key={item.node_id} properties={item} onClick={onItemClicked} />
     ))}
     <div></div>
   </ul>

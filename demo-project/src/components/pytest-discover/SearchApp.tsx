@@ -5,9 +5,12 @@ import SlInput, {
 import { useEffect, useState } from "react"
 
 import { useSearchResults } from "../../hooks/use-search-results"
+import { useTree } from "../../hooks/use-tree.tsx"
+import type { Node } from "../../lib/files.ts"
 import { newLocalStorageReportRepository } from "../../lib/repository"
 import type { DiscoveryResult } from "../../types/discovery_result"
 import type { TestItem } from "../../types/test_item"
+import FileNavigation from "./file-navigation/FileNavigation"
 import MarkersFilters from "./markers-filters/MarkersFilters"
 import { PaginationControl } from "./pagination/PaginationControl"
 import { SearchResults } from "./search-results/SearchResults"
@@ -38,23 +41,31 @@ export const SearchApp = () => {
     results,
     markers,
     statistics,
-    report: discoveryResult,
+    report,
   } = useSearchResults(repository, 5000, 20)
 
+  // Get tree nodes
+  const { nodes } = useTree(report.result)
+  useEffect(() => {
+    console.log(`Report (${report.result?.items.length} items):`, report.result)
+    console.log(`File tree (${nodes.length} nodes):`, nodes)
+  }, [nodes, report.result])
   // Open settings if there is no discovery result
   useEffect(() => {
-    if (discoveryResult == null) {
+    if (report.result == null) {
       setSettingsOpened(true)
     }
-  }, [discoveryResult])
+  }, [report.result])
 
   return (
     <div>
+      {/* {report.result && <FileNavigation nodes={nodes} />} */}
+
       <SettingsButton onClick={() => setSettingsOpened(true)} />
       <SettingsBar
         opened={settingsOpened}
         onClose={() => setSettingsOpened(false)}
-        result={discoveryResult.get()}
+        result={report.get()}
         setReport={setReport}
         onClear={() => {
           repository.clearReport()

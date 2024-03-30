@@ -1,7 +1,5 @@
 import type { TestItem } from "../types/test_item"
 
-var regexp = /(\w*)*(\[.*\])/g
-
 export enum NodeType {
   Directory = "directory",
   File = "file",
@@ -126,7 +124,7 @@ export const newInMemoryTree = ({
   get: () => Node[]
   set: (nodes: Node[]) => void
 }): Tree => {
-  const addOnce = (snapshot: Record<string, Node>, item: TestItem) => {
+  const addOne = (snapshot: Record<string, Node>, item: TestItem) => {
     // Ignore items without filenames for the moment
     if (!item.file) {
       return
@@ -148,7 +146,7 @@ export const newInMemoryTree = ({
       // Create new directory
       const directory = makeDirectory({
         name,
-        parent: parent ? parent : undefined,
+        parent,
       })
       // Append the directory to the list of children to create
       snapshot[directory.path] = directory
@@ -177,6 +175,7 @@ export const newInMemoryTree = ({
       parent = child.path
     }
     // Extract the matrix
+    const regexp = /(\w*)(\[.*\])/g
     const match = regexp.exec(item.node_id)
     if (match != null && match.length == 2) {
       const [_, matrix_name] = match
@@ -201,10 +200,13 @@ export const newInMemoryTree = ({
   const add = (...items: TestItem[]) => {
     // Initialze nodes to add
     const next = {} as Record<string, Node>
+    const current = get()
     // Add the current nodes to the list of nodes to add
-    get().forEach((node) => (next[node.path] = node))
+    current.forEach((node) => (next[node.path] = node))
     // Add the new nodes to the list of nodes to add
-    items.forEach((item) => addOnce(next, item))
+    items.forEach((item) => {
+      addOne(next, item)
+    })
     // Save the updated tree
     set(Object.values(next))
   }
