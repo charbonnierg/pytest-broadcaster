@@ -14,7 +14,6 @@ import MarkersFilters from "./markers-filters/MarkersFilters"
 import { SearchResults } from "./search-results/SearchResults"
 import { ReportFooter } from "./settings/ReportFooter.tsx"
 import { TestItemFocused } from "./test-item-focused/TestItemFocused"
-import { TestStats } from "./test-stats/TestStats"
 
 export interface SearchAppProps {
   report: DiscoveryResult
@@ -29,17 +28,8 @@ export const SearchApp = () => {
   const [focusOpened, setFocusOpened] = useState<boolean>(false)
   const [focusedItem, setFocusedItem] = useState<TestItem | null>(null)
   // Initialize search state
-  const {
-    setTerms,
-    setReport,
-    // nextPage,
-    // prevPage,
-    terms,
-    results,
-    markers,
-    statistics,
-    report,
-  } = useSearchResults(repository, 5000)
+  const { setTerms, terms, results, markers, statistics, report } =
+    useSearchResults(repository, 5000)
 
   // Get tree nodes
   const { nodes } = useTree(report.result)
@@ -56,9 +46,9 @@ export const SearchApp = () => {
 
   return (
     <div className="search-app">
-      <div className="navigation-sidebar">
-        {/* {report.result && <FileNavigation nodes={nodes} />} */}
-      </div>
+      {/* <div className="navigation-sidebar">
+        {report.result && <FileNavigation nodes={nodes} />}
+      </div> */}
       <div className="search-focus">
         <TestItemFocused
           opened={focusOpened}
@@ -67,9 +57,6 @@ export const SearchApp = () => {
         />
       </div>
       <div className="search-body">
-        <div className="report-statistics">
-          <TestStats stats={statistics} />
-        </div>
         <div className="search-input">
           <SlInput
             helpText="Enter some text"
@@ -103,6 +90,7 @@ export const SearchApp = () => {
           open={settingsOpened}
           setOpen={setSettingsOpened}
           report={report.get()}
+          statistics={statistics}
           setReport={(value) => {
             report.set(value)
             if (value == null) {

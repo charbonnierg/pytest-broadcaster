@@ -5,6 +5,7 @@ import SlIcon from "@shoelace-style/shoelace/dist/react/icon/index.js"
 import { useEffect, useRef, useState } from "react"
 
 import type { Report } from "../../../lib/repository"
+import type { Statistics } from "../../../lib/stats"
 import { newJSONReader } from "../../../lib/upload"
 import type { DiscoveryResult } from "../../../types/discovery_result"
 import "./ReportFooter.css"
@@ -22,6 +23,7 @@ interface ReportFooterProps {
   setOpen: (open: boolean) => void
   report: Report | null
   setReport: (report: Report | null) => void
+  statistics: Statistics | null
 }
 
 const ReportFile = ({
@@ -87,28 +89,62 @@ const ReportFile = ({
     </div>
   )
 }
-const ReportErrors = ({ result }: { result: DiscoveryResult }) => {
+
+const ReportTotalCount = ({ stats }: { stats: Statistics }) => {
   return (
     <div>
-      <button
-        className="report-meta"
-        data-state={result.errors.length > 0 ? "error" : "success"}
-      >
-        <SlIcon name="x-circle"></SlIcon>
-        <span>{result.errors.length}</span>
+      <button className="report-meta">
+        <SlIcon name="box"></SlIcon>
+        <span>{stats.totalCount}</span>
       </button>
     </div>
   )
 }
-const ReportWarnings = ({ result }: { result: DiscoveryResult }) => {
+
+const ReportFileCount = ({ stats }: { stats: Statistics }) => {
+  return (
+    <div>
+      <button className="report-meta">
+        <SlIcon name="filetype-py"></SlIcon>
+        <span>{stats.totalFiles}</span>
+      </button>
+    </div>
+  )
+}
+
+const ReportSuitesCount = ({ stats }: { stats: Statistics }) => {
+  return (
+    <div>
+      <button className="report-meta">
+        <SlIcon name="book"></SlIcon>
+        <span>{stats.totalSuites}</span>
+      </button>
+    </div>
+  )
+}
+
+const ReportErrors = ({ stats }: { stats: Statistics }) => {
   return (
     <div>
       <button
         className="report-meta"
-        data-state={result.warnings.length > 0 ? "warning" : "success"}
+        data-state={stats.totalErrors > 0 ? "error" : "success"}
+      >
+        <SlIcon name="x-circle"></SlIcon>
+        <span>{stats.totalErrors}</span>
+      </button>
+    </div>
+  )
+}
+const ReportWarnings = ({ stats }: { stats: Statistics }) => {
+  return (
+    <div>
+      <button
+        className="report-meta"
+        data-state={stats.totalWarnings > 0 ? "warning" : "success"}
       >
         <SlIcon name="exclamation-triangle"></SlIcon>
-        <span>{result.warnings.length}</span>
+        <span>{stats.totalWarnings}</span>
       </button>
     </div>
   )
@@ -199,6 +235,7 @@ export const ReportFooter = ({
   setOpen,
   report,
   setReport,
+  statistics,
 }: ReportFooterProps) => {
   return (
     <div>
@@ -246,10 +283,17 @@ export const ReportFooter = ({
         <ReportFile report={report} setReport={setReport} />
         {report != null && (
           <>
-            <ReportErrors result={report.result} />
-            <ReportWarnings result={report.result} />
             <PytestVersion result={report.result} />
             <PluginVersion result={report.result} />
+            {statistics && (
+              <>
+                <ReportErrors stats={statistics} />
+                <ReportWarnings stats={statistics} />
+                <ReportFileCount stats={statistics} />
+                <ReportSuitesCount stats={statistics} />
+                <ReportTotalCount stats={statistics} />
+              </>
+            )}
           </>
         )}
       </div>

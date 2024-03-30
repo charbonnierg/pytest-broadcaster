@@ -1,4 +1,5 @@
 /* stats.ts exposes utilities to compute statistics from discovery results.*/
+import type { DiscoveryResult } from "../types/discovery_result"
 import type { TestItem } from "../types/test_item"
 
 // I'm sure something like that already exists in the TS standard library
@@ -11,24 +12,30 @@ export interface Statistics {
   totalCount: number
   totalMarkersCount: number
   totalFiles: number
+  totalErrors: number
+  totalWarnings: number
   totalModules: number
   totalSuites: number
 }
 
-export const computeStats = (items: TestItem[]): Statistics => {
+export const computeStats = (result: DiscoveryResult): Statistics => {
   const stats = {
     // Total count
-    totalCount: items.length,
+    totalCount: result.items.length,
+    // Total errors
+    totalErrors: result.errors.length,
+    // Total warnings
+    totalWarnings: result.warnings.length,
     // Markers count
-    totalMarkersCount: uniqueMultiCount(items, "markers"),
+    totalMarkersCount: uniqueMultiCount(result.items, "markers"),
     // Files count
-    totalFiles: uniqueCount(items, "file"),
+    totalFiles: uniqueCount(result.items, "file"),
     // Modules count
-    totalModules: uniqueCount(items, "module"),
+    totalModules: uniqueCount(result.items, "module"),
     // Suites count
     totalSuites: Array.from(
       new Set(
-        items.map(
+        result.items.map(
           (item) => item.parent || item.module || item.file || item.name,
         ),
       ),

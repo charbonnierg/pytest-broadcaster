@@ -17,6 +17,7 @@ sl-drawer::part(header) {
   margin: 0 0;
   border-radius: 0;
   box-shadow: none;
+  background-color: transparent;
 }
 
 .report-meta sl-icon {
