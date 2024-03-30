@@ -9,10 +9,10 @@ import { useTree } from "../../hooks/use-tree.tsx"
 import { newLocalStorageReportRepository } from "../../lib/repository"
 import type { DiscoveryResult } from "../../types/discovery_result"
 import type { TestItem } from "../../types/test_item"
+import "./SearchApp.css"
 import MarkersFilters from "./markers-filters/MarkersFilters"
 import { SearchResults } from "./search-results/SearchResults"
-import { SettingsBar } from "./settings/SettingsBar"
-import { SettingsButton } from "./settings/SettingsButton"
+import { ReportFooter } from "./settings/ReportFooter.tsx"
 import { TestItemFocused } from "./test-item-focused/TestItemFocused"
 import { TestStats } from "./test-stats/TestStats"
 
@@ -59,19 +59,6 @@ export const SearchApp = () => {
       <div className="navigation-sidebar">
         {/* {report.result && <FileNavigation nodes={nodes} />} */}
       </div>
-      <div className="settings-sidebar">
-        <SettingsButton onClick={() => setSettingsOpened(true)} />
-        <SettingsBar
-          opened={settingsOpened}
-          onClose={() => setSettingsOpened(false)}
-          result={report.get()}
-          setReport={setReport}
-          onClear={() => {
-            repository.clearReport()
-            setReport(null)
-          }}
-        />
-      </div>
       <div className="search-focus">
         <TestItemFocused
           opened={focusOpened}
@@ -79,35 +66,48 @@ export const SearchApp = () => {
           item={focusedItem}
         />
       </div>
-      <div className="report-statistics">
-        <TestStats stats={statistics} />
-      </div>
-      <div className="search-input">
-        <SlInput
-          helpText="Enter some text"
-          value={terms}
-          onSlInput={(event: SlInputEvent) =>
-            setTerms((event.target as SlInputElement).value)
-          }
-        />
-        <MarkersFilters
-          choices={markers.values}
-          get={markers.get}
-          onClick={(marker: string) => markers.toggle(marker)}
-        />
-      </div>
-      <div className="search-results">
-        <SearchResults
-          items={results}
-          pageSize={20}
-          onItemClicked={(item: TestItem) => {
-            if (focusOpened) {
-              return
+      <div className="search-body">
+        <div className="report-statistics">
+          <TestStats stats={statistics} />
+        </div>
+        <div className="search-input">
+          <SlInput
+            helpText="Enter some text"
+            value={terms}
+            onSlInput={(event: SlInputEvent) =>
+              setTerms((event.target as SlInputElement).value)
             }
-            setFocusedItem(item)
-            setFocusOpened(true)
+          />
+          <MarkersFilters
+            choices={markers.values}
+            get={markers.get}
+            onClick={(marker: string) => markers.toggle(marker)}
+          />
+        </div>
+        <div className="search-results">
+          <SearchResults
+            items={results}
+            pageSize={20}
+            onItemClicked={(item: TestItem) => {
+              if (focusOpened) {
+                return
+              }
+              setFocusedItem(item)
+              setFocusOpened(true)
+            }}
+          />
+        </div>
+      </div>
+      <div className="search-footer">
+        <ReportFooter
+          report={report.get()}
+          setReport={(value) => {
+            report.set(value)
+            if (value == null) {
+              repository.clearReport()
+            }
           }}
-        />
+        ></ReportFooter>
       </div>
     </div>
   )

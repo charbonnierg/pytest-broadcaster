@@ -1,0 +1,7 @@
+.search-body {
+  margin: auto;
+  max-width: calc(100% - 2rem);
+  width: 1024px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
