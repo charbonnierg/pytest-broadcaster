@@ -100,6 +100,8 @@ export const SearchApp = () => {
       </div>
       <div className="search-footer">
         <ReportFooter
+          open={settingsOpened}
+          setOpen={setSettingsOpened}
           report={report.get()}
           setReport={(value) => {
             report.set(value)

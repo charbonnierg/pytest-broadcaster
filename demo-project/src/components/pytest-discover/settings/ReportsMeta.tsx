@@ -11,14 +11,6 @@ import "./ReportsMeta.css"
 
 interface ReportMetaProps {
   result: Report
-  children: JSX.Element
-}
-
-const getFileName = (result: Report) => {
-  let parts = result.filename.split("/")
-  let name = parts[parts.length - 1]
-  parts = name.split("\\")
-  return parts[parts.length - 1]
 }
 
 const errorsItems = (errors: ErrorMessage[]) => {
@@ -81,10 +73,8 @@ const warningItems = (warnings: WarningMessage[]) => {
   )
 }
 
-export const ReportMeta = ({ result, children }: ReportMetaProps) => (
+export const ReportMeta = ({ result }: ReportMetaProps) => (
   <div className="filename">
-    <h2>{getFileName(result)}</h2>
-    {children}
     <SlTree>
       <SlTreeItem>
         <p>
