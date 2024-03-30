@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
 import type { ReportRepository } from "../lib/repository"
 import { newSearchEngine, sanitize, search } from "../lib/search"
@@ -10,27 +10,27 @@ import { useReport } from "./use-report"
 export const useSearchResults = (
   repository: ReportRepository,
   defaultLimit: number,
-  defaultPageSize: number,
+  // defaultPageSize: number,
 ) => {
   const markers = useMarkersFilters()
   const report = useReport(repository)
   const [engine] = useState(newSearchEngine())
   const [terms, setTerms] = useState<string>("")
-  const [offset, setOffset] = useState<number>(0)
+  // const [offset, setOffset] = useState<number>(0)
   const [limit] = useState<number>(defaultLimit)
-  const [pageSize] = useState<number>(defaultPageSize)
+  // const [pageSize] = useState<number>(defaultPageSize)
   const [allItems, setAllItems] = useState<TestItem[]>([])
   const [matchingItems, setMatchingItems] = useState<TestItem[]>([])
-  const [results, setResults] = useState<TestItem[]>([])
+  // const [results, setResults] = useState<TestItem[]>([])
   const [statistics, setStatistics] = useState<Statistics | null>(null)
 
-  const nextPage = useCallback(() => {
-    setOffset(Math.min(matchingItems.length - pageSize, offset + pageSize))
-  }, [matchingItems, offset, pageSize])
+  // const nextPage = useCallback(() => {
+  //   setOffset(Math.min(matchingItems.length - pageSize, offset + pageSize))
+  // }, [matchingItems, offset, pageSize])
 
-  const prevPage = useCallback(() => {
-    setOffset(Math.max(0, offset - pageSize))
-  }, [offset, pageSize])
+  // const prevPage = useCallback(() => {
+  //   setOffset(Math.max(0, offset - pageSize))
+  // }, [offset, pageSize])
 
   // Observe test results and update state
   useEffect(() => {
@@ -39,7 +39,7 @@ export const useSearchResults = (
       markers.set([])
       setStatistics(null)
       setMatchingItems([])
-      setResults([])
+      // setResults([])
       return
     }
     // Gather all items
@@ -65,7 +65,7 @@ export const useSearchResults = (
 
   // Observe search terms and update filtered items
   useEffect(() => {
-    setOffset(0)
+    // setOffset(0)
     if (terms === "") {
       const newfilteredItems = allItems.filter(markers.filter)
       setStatistics(computeStats(newfilteredItems))
@@ -82,28 +82,28 @@ export const useSearchResults = (
   }, [terms, allItems, markers.filter, markers.values])
 
   // Observe filtered items and set displayed items
-  useEffect(() => {
-    setResults(matchingItems.slice(offset, offset + pageSize))
-  }, [matchingItems, offset, pageSize])
+  // useEffect(() => {
+  //   setResults(matchingItems.slice(offset, offset + pageSize))
+  // }, [matchingItems, offset, pageSize])
 
   return {
     report,
-    offset,
+    // offset,
     limit,
     markers,
-    results,
+    results: matchingItems,
     statistics,
     terms,
     setReport: report.set,
     setTerms,
-    nextPage,
-    prevPage,
+    // nextPage,
+    // prevPage,
     reset: () => {
       setAllItems([])
       markers.set([])
       setStatistics(null)
       setMatchingItems([])
-      setResults([])
+      // setResults([])
       engine.removeAll()
     },
   }

@@ -6,13 +6,10 @@ import { useEffect, useState } from "react"
 
 import { useSearchResults } from "../../hooks/use-search-results"
 import { useTree } from "../../hooks/use-tree.tsx"
-import type { Node } from "../../lib/files.ts"
 import { newLocalStorageReportRepository } from "../../lib/repository"
 import type { DiscoveryResult } from "../../types/discovery_result"
 import type { TestItem } from "../../types/test_item"
-import FileNavigation from "./file-navigation/FileNavigation"
 import MarkersFilters from "./markers-filters/MarkersFilters"
-import { PaginationControl } from "./pagination/PaginationControl"
 import { SearchResults } from "./search-results/SearchResults"
 import { SettingsBar } from "./settings/SettingsBar"
 import { SettingsButton } from "./settings/SettingsButton"
@@ -35,14 +32,14 @@ export const SearchApp = () => {
   const {
     setTerms,
     setReport,
-    nextPage,
-    prevPage,
+    // nextPage,
+    // prevPage,
     terms,
     results,
     markers,
     statistics,
     report,
-  } = useSearchResults(repository, 5000, 20)
+  } = useSearchResults(repository, 5000)
 
   // Get tree nodes
   const { nodes } = useTree(report.result)
@@ -96,6 +93,7 @@ export const SearchApp = () => {
 
       <SearchResults
         items={results}
+        pageSize={20}
         onItemClicked={(item: TestItem) => {
           if (focusOpened) {
             return
@@ -105,7 +103,7 @@ export const SearchApp = () => {
         }}
       />
 
-      <PaginationControl prev={prevPage} next={nextPage} />
+      {/* <PaginationControl prev={prevPage} next={nextPage} /> */}
     </div>
   )
 }

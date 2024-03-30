@@ -1,9 +1,7 @@
 import SlBreadcrumbItem from "@shoelace-style/shoelace/dist/react/breadcrumb-item/index.js"
 import SlBreadcrumb from "@shoelace-style/shoelace/dist/react/breadcrumb/index.js"
-import { useCallback, useEffect, useState } from "react"
 
-import { type Node, NodeType, newInMemoryTree } from "../../../lib/files"
-import type { TestItem } from "../../../types/test_item"
+import { type Node } from "../../../lib/files"
 
 interface FileNavigationProps {
   nodes: Node[]
