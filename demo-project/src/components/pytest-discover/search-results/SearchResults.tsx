@@ -1,3 +1,4 @@
+import SlAnimation from "@shoelace-style/shoelace/dist/react/animation/index.js"
 import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner/index.js"
 import { useEffect, useState } from "react"
 
@@ -16,7 +17,11 @@ interface SearchResultsProps {
 }
 
 const LoadingIndicator = ({ loading }: { loading: boolean }) => {
-  return <SlSpinner className="loader" data-loading={loading} />
+  return (
+    <SlAnimation playbackRate={1.5} name="tada" duration={3600} play={loading}>
+      <SlSpinner className="loader" data-loading={loading} />
+    </SlAnimation>
+  )
 }
 
 export const SearchResults = ({
@@ -24,10 +29,9 @@ export const SearchResults = ({
   pageSize,
   onItemClicked,
 }: SearchResultsProps) => {
+  const delay = 1000
   // Create a state to hold displayed items
-  const [displayed, setDisplayed] = useState<TestItem[]>(
-    items.slice(0, pageSize),
-  )
+  const [displayed, setDisplayed] = useState<TestItem[]>(items.slice(0, pageSize))
   // Create a state to hold offset and loading state
   const [offset, setOffset] = useState(0)
   const [loading, setLoading] = useState(false)
@@ -46,7 +50,7 @@ export const SearchResults = ({
       setTimeout(() => {
         setLoading(false)
         setDisplayed(items.slice(0, offset + pageSize))
-      }, 500)
+      }, delay)
       return
     }
     setDisplayed(items.slice(0, pageSize))
@@ -63,7 +67,6 @@ export const SearchResults = ({
             onClick={onItemClicked}
           />
         ))}
-        <div></div>
       </ul>
     </div>
   )
