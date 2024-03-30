@@ -55,55 +55,60 @@ export const SearchApp = () => {
   }, [report.result])
 
   return (
-    <div>
-      {/* {report.result && <FileNavigation nodes={nodes} />} */}
-
-      <SettingsButton onClick={() => setSettingsOpened(true)} />
-      <SettingsBar
-        opened={settingsOpened}
-        onClose={() => setSettingsOpened(false)}
-        result={report.get()}
-        setReport={setReport}
-        onClear={() => {
-          repository.clearReport()
-          setReport(null)
-        }}
-      />
-      <TestItemFocused
-        opened={focusOpened}
-        close={() => setFocusOpened(false)}
-        item={focusedItem}
-      />
-
-      <TestStats stats={statistics} />
-
-      <SlInput
-        helpText="Enter some text"
-        value={terms}
-        onSlInput={(event: SlInputEvent) =>
-          setTerms((event.target as SlInputElement).value)
-        }
-      />
-
-      <MarkersFilters
-        choices={markers.values}
-        get={markers.get}
-        onClick={(marker: string) => markers.toggle(marker)}
-      />
-
-      <SearchResults
-        items={results}
-        pageSize={20}
-        onItemClicked={(item: TestItem) => {
-          if (focusOpened) {
-            return
+    <div className="search-app">
+      <div className="navigation-sidebar">
+        {/* {report.result && <FileNavigation nodes={nodes} />} */}
+      </div>
+      <div className="settings-sidebar">
+        <SettingsButton onClick={() => setSettingsOpened(true)} />
+        <SettingsBar
+          opened={settingsOpened}
+          onClose={() => setSettingsOpened(false)}
+          result={report.get()}
+          setReport={setReport}
+          onClear={() => {
+            repository.clearReport()
+            setReport(null)
+          }}
+        />
+      </div>
+      <div className="search-focus">
+        <TestItemFocused
+          opened={focusOpened}
+          close={() => setFocusOpened(false)}
+          item={focusedItem}
+        />
+      </div>
+      <div className="report-statistics">
+        <TestStats stats={statistics} />
+      </div>
+      <div className="search-input">
+        <SlInput
+          helpText="Enter some text"
+          value={terms}
+          onSlInput={(event: SlInputEvent) =>
+            setTerms((event.target as SlInputElement).value)
           }
-          setFocusedItem(item)
-          setFocusOpened(true)
-        }}
-      />
-
-      {/* <PaginationControl prev={prevPage} next={nextPage} /> */}
+        />
+        <MarkersFilters
+          choices={markers.values}
+          get={markers.get}
+          onClick={(marker: string) => markers.toggle(marker)}
+        />
+      </div>
+      <div className="search-results">
+        <SearchResults
+          items={results}
+          pageSize={20}
+          onItemClicked={(item: TestItem) => {
+            if (focusOpened) {
+              return
+            }
+            setFocusedItem(item)
+            setFocusOpened(true)
+          }}
+        />
+      </div>
     </div>
   )
 }

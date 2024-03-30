@@ -45,11 +45,11 @@ export const SearchResults = ({
       setLoading(true)
       setTimeout(() => {
         setLoading(false)
+        setDisplayed(items.slice(0, offset + pageSize))
       }, 500)
+      return
     }
-    setTimeout(() => {
-      setDisplayed(items.slice(0, offset + pageSize))
-    }, 500)
+    setDisplayed(items.slice(0, pageSize))
   }, [offset, items, pageSize])
   // Render
   return (
