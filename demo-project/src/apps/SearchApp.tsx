@@ -22,18 +22,11 @@ export const SearchApp = (props: PropsWithChildren) => {
   const [footerOpened, setFooterOpened] = useState<boolean>(false)
   const [focusOpened, setFocusOpened] = useState<boolean>(false)
   const [focusedItem, setFocusedItem] = useState<TestItem | null>(null)
+  // Initialize file tree state
+  const [position, setPosition] = useState<string | null>(null)
   // Initialize search state
-  const {
-    setTerms,
-    filter,
-    setFilter,
-    terms,
-    results,
-    markers,
-    statistics,
-    report,
-    setReport,
-  } = useSearchResults(newLocalStorageReportRepository(), 5000)
+  const { setTerms, terms, results, markers, statistics, report, setReport } =
+    useSearchResults(newLocalStorageReportRepository(), position, 5000)
   // Open settings if there is no discovery result
   useEffect(() => {
     if (report == null) {
@@ -46,18 +39,22 @@ export const SearchApp = (props: PropsWithChildren) => {
     [report],
   )
   return (
+    // Application is wrapped in a single div
     <div className="search-app">
+      {/* The sidebar */}
       <div className="search-navigation" data-open={navigationOpened}>
         {
           <FileTree
             open={navigationOpened}
-            filter={filter}
-            setFilter={setFilter}
+            filter={position}
+            setFilter={setPosition}
             setOpen={setNavigationOpened}
             report={report}
           />
         }
       </div>
+
+      {/* The main content of the page */}
       <div className="search-container">
         <header>{props.children}</header>
         <div className="search-body">
@@ -75,6 +72,7 @@ export const SearchApp = (props: PropsWithChildren) => {
           />
         </div>
       </div>
+
       {/* The sticky footer at the bottom of the page */}
       <StickyFooter open={footerOpened} setOpen={setFooterOpened}>
         {/* The content of the footer when closed */}
@@ -90,14 +88,19 @@ export const SearchApp = (props: PropsWithChildren) => {
             icon="trash3"
             disabled={report == null}
             value={filename()}
-            onClick={() => setReport(null)}
+            onClick={() => {
+              setReport(null)
+              setPosition(null)
+            }}
           />
         </StickyFooter.Title>
+
         {/* The body of the footer when opened */}
         <StickyFooter.Body>
           <ReportDetails report={report} setReport={setReport} />
         </StickyFooter.Body>
       </StickyFooter>
+
       {/* A drawer opened from the bottom of the page which focuses on a test item */}
       <BottomDrawer opened={focusOpened} close={() => setFocusOpened(false)}>
         <TestItemDetails item={focusedItem} />

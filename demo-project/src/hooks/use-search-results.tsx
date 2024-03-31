@@ -10,6 +10,7 @@ import { useStats } from "./use-stats"
 /* Hook to perform search on test report */
 export const useSearchResults = (
   repository: ReportRepository,
+  filter: string | null,
   defaultLimit: number,
 ) => {
   const markers = useMarkersFilters()
@@ -17,7 +18,6 @@ export const useSearchResults = (
   const [engine] = useState(newSearchEngine())
   const [terms, setTerms] = useState<string>("")
   const [limit] = useState<number>(defaultLimit)
-  const [filter, setFilter] = useState<string | null>(null)
   const [allItems, setAllItems] = useState<TestItem[]>([])
   const [results, setResults] = useState<TestItem[]>([])
   const statistics = useStats(report)
@@ -39,7 +39,6 @@ export const useSearchResults = (
       setAllItems([])
       markers.set([])
       setResults([])
-      setFilter(null)
       return
     }
     // Gather all items
@@ -87,8 +86,6 @@ export const useSearchResults = (
     statistics,
     terms,
     setTerms,
-    filter,
-    setFilter,
     reset: () => {
       setAllItems([])
       markers.set([])

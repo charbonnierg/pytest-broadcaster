@@ -120,15 +120,7 @@ export const FileNavigation = ({
           </SlTreeItem>
         )
       case NodeType.Case:
-        return (
-          <SlTreeItem
-            onClick={() => {
-              setFilter(v.path)
-            }}
-          >
-            {sanitizeName(v.name)}
-          </SlTreeItem>
-        )
+        return null
     }
   }
   if (views == null) {
