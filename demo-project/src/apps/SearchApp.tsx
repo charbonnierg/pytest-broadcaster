@@ -54,8 +54,8 @@ export const SearchApp = (props: PropsWithChildren) => {
         <LeftSidebar.Extension open={navigationOpened}>
           {navigationOpened && (
             <FileTree
-              filter={position}
-              setFilter={setPosition}
+              position={position}
+              setPosition={setPosition}
               report={report}
             />
           )}
