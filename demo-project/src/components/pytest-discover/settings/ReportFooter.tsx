@@ -238,7 +238,7 @@ export const ReportFooter = ({
   statistics,
 }: ReportFooterProps) => {
   return (
-    <div>
+    <>
       <SlDrawer
         placement="bottom"
         open={open}
@@ -297,6 +297,6 @@ export const ReportFooter = ({
           </>
         )}
       </div>
-    </div>
+    </>
   )
 }

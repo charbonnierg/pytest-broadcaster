@@ -13,11 +13,8 @@ const copy = (value: string) => (e: any) => {
 }
 
 /* Format a test item name */
-export const sanitizeName = (item: TestItem): string => {
-  if (item.name == null || item.name == "") {
-    return ""
-  }
-  return item.name.replaceAll("_", " ")
+export const sanitizeName = (name: string): string => {
+  return name.replaceAll("_", " ")
 }
 
 /* Format a test item docstring */

@@ -7,30 +7,6 @@ import LogoDarkMode from "../assets/pytest-discover-logo-darkmode-transparent.sv
 ---
 
 <style>
-  main {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-  }
-  h1 {
-    font-size: 3rem;
-    font-weight: 700;
-    text-align: left;
-  }
-
-  header {
-    margin: auto;
-    max-width: calc(100% - 2rem);
-    width: 1024px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
-    margin-bottom: 0rem;
-  }
-
   .logo {
     height: 4em;
     width: 4em;
@@ -38,18 +14,16 @@ import LogoDarkMode from "../assets/pytest-discover-logo-darkmode-transparent.sv
     margin-right: 1em;
   }
 </style>
-
 <ShoelaceLayout title="pytest-discover">
-  <header>
-    <Image class="logo only-light" src={Logo} alt="pytest-discover logo" />
-    <Image
-      class="logo only-dark"
-      src={LogoDarkMode}
-      alt="pytest-discover logo"
-    />
-    <h1>pytest-discover</h1>
-  </header>
   <main>
-    <SearchApp client:only="react" />
+    <SearchApp client:only="react">
+      <Image class="logo only-light" src={Logo} alt="pytest-discover logo" />
+      <Image
+        class="logo only-dark"
+        src={LogoDarkMode}
+        alt="pytest-discover logo"
+      />
+      <h1>pytest-discover</h1>
+    </SearchApp>
   </main>
 </ShoelaceLayout>

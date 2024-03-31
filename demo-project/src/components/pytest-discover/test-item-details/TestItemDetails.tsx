@@ -18,7 +18,7 @@ export const TestItemDetails = (item: TestItemDetailsProps) => {
   return (
     <>
       <h2>{formatNodeId(item.properties)}</h2>
-      <h3>{sanitizeName(item.properties)}</h3>
+      <h3>{sanitizeName(item.properties.name)}</h3>
       <p>{item.properties.name}</p>
       <div>
         <table>

@@ -1,42 +1,165 @@
-import SlBreadcrumbItem from "@shoelace-style/shoelace/dist/react/breadcrumb-item/index.js"
-import SlBreadcrumb from "@shoelace-style/shoelace/dist/react/breadcrumb/index.js"
+import SlIcon from "@shoelace-style/shoelace/dist/react/icon/index.js"
+import SlTreeItem from "@shoelace-style/shoelace/dist/react/tree-item/index.js"
+import SlTree from "@shoelace-style/shoelace/dist/react/tree/index.js"
+import { useEffect, useState } from "react"
 
-import { type Node } from "../../../lib/files"
+import { NodeType, type View, makeNodes, makeView } from "../../../lib/files"
+import { type Report } from "../../../lib/repository"
+import { sanitizeName } from "../format"
+import "./FileNavigation.css"
 
 interface FileNavigationProps {
-  nodes: Node[]
+  report: Report | null
+  open: boolean
+  setOpen: (open: boolean) => void
+  filter: string | null
+  setFilter: (node: string) => void
 }
 
-const formatPath = (node: Node) => {
-  const parts = node.path.split("/")
-  const filename = parts.pop()
-  const otherParts = filename?.split("::")
-  if (otherParts) {
-    parts.push(...otherParts)
+export const FileNavigation = ({
+  report,
+  open,
+  setOpen,
+  filter,
+  setFilter,
+}: FileNavigationProps) => {
+  const [views, setViews] = useState<View[]>([])
+  useEffect(() => {
+    if (report == null) {
+      setViews([])
+      return
+    }
+    const nodes = makeNodes(...report.result.items)
+    const views = makeView(nodes)
+    setViews(views)
+  }, [report])
+  // List all children of a view
+  const children = (v: View) => {
+    switch (v.type) {
+      case NodeType.Directory:
+        return [...v.directories, ...v.files]
+      case NodeType.File:
+        return [...v.suites, ...v.matrices, ...v.cases]
+      case NodeType.Suite:
+        return [...v.suites, ...v.matrices, ...v.cases]
+      case NodeType.Matrix:
+        return [...v.cases]
+      default:
+        return [v]
+    }
+  }
+  const display = (
+    v: View,
+    filter: string,
+    setFilter: (node: string) => void,
+  ) => {
+    if (filter != "") {
+      if (!v.path.startsWith(filter) && v.type !== NodeType.Directory) {
+        return null
+      }
+    }
+    if (filter == "") {
+      if (v.type !== NodeType.Directory) {
+        return null
+      }
+    }
+    switch (v.type) {
+      case NodeType.Directory:
+        return (
+          <SlTreeItem
+            onClick={() => {
+              setFilter(v.path)
+            }}
+          >
+            <SlIcon name="folder"></SlIcon>
+            {v.name}
+            {filter !== "" ? (
+              children(v).map((child) => display(child, filter, setFilter))
+            ) : (
+              <SlTreeItem>...</SlTreeItem>
+            )}
+          </SlTreeItem>
+        )
+      case NodeType.File:
+        return (
+          <SlTreeItem
+            onClick={() => {
+              setFilter(v.path)
+            }}
+          >
+            <SlIcon name="filetype-py"></SlIcon>
+            {v.name}
+            {children(v).map((child) => display(child, filter, setFilter))}
+          </SlTreeItem>
+        )
+      case NodeType.Suite:
+        return (
+          <SlTreeItem
+            onClick={() => {
+              setFilter(v.path)
+            }}
+          >
+            {sanitizeName(v.name)}
+            {children(v).map((child) => display(child, filter, setFilter))}
+          </SlTreeItem>
+        )
+      case NodeType.Matrix:
+        return (
+          <SlTreeItem
+            onClick={() => {
+              setFilter(v.path)
+            }}
+          >
+            {v.name}
+            {children(v).map((child) => display(child, filter, setFilter))}
+          </SlTreeItem>
+        )
+      case NodeType.Case:
+        return (
+          <SlTreeItem
+            onClick={() => {
+              setFilter(v.path)
+            }}
+          >
+            {sanitizeName(v.name)}
+          </SlTreeItem>
+        )
+    }
+  }
+  if (views == null) {
+    return "No view available"
   }
   return (
-    <SlBreadcrumb
-      key={node.path}
-      onClick={() => {
-        alert(JSON.stringify(node))
-      }}
-    >
-      {parts.map((part) => {
-        return (
-          <SlBreadcrumbItem key={`${node.path}-${part}`}>
-            {part}
-          </SlBreadcrumbItem>
-        )
-      })}
-    </SlBreadcrumb>
-  )
-}
-
-export const FileNavigation = ({ nodes }: FileNavigationProps) => {
-  return (
-    <div>
-      <h3>File Navigation</h3>
-      <ul>{nodes.slice(0, 100).map((node) => formatPath(node))}</ul>
+    <div className="bar">
+      <div className="icons">
+        {!open && (
+          <SlIcon
+            className="icon"
+            name="arrow-right"
+            data-open={open}
+            onClick={() => {
+              setOpen(!open)
+            }}
+          ></SlIcon>
+        )}
+      </div>
+      <div className="view">
+        {open && (
+          <>
+            <SlIcon
+              className="icon"
+              name="arrow-left"
+              data-open={open}
+              onClick={() => {
+                setOpen(!open)
+              }}
+            ></SlIcon>
+            <SlTree data-open={open}>
+              {views.map((child) => display(child, filter || "", setFilter))}
+            </SlTree>
+          </>
+        )}
+      </div>
     </div>
   )
 }

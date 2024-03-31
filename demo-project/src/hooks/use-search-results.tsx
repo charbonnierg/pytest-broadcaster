@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 import type { ReportRepository } from "../lib/repository"
 import { newSearchEngine, sanitize, search } from "../lib/search"
@@ -12,25 +12,38 @@ export const useSearchResults = (
   defaultLimit: number,
 ) => {
   const markers = useMarkersFilters()
-  const report = useReport(repository)
+  const [report, setReport] = useReport(repository)
   const [engine] = useState(newSearchEngine())
   const [terms, setTerms] = useState<string>("")
   const [limit] = useState<number>(defaultLimit)
+  const [filter, setFilter] = useState<string | null>(null)
   const [allItems, setAllItems] = useState<TestItem[]>([])
-  const [matchingItems, setMatchingItems] = useState<TestItem[]>([])
-  const statistics = useStats(report.result)
-
+  const [results, setResults] = useState<TestItem[]>([])
+  const statistics = useStats(report)
+  const filterFunc = useCallback(
+    (item: TestItem): boolean => {
+      if (filter == null || filter == "") {
+        return markers.filter(item)
+      }
+      if (!item.node_id.startsWith(filter)) {
+        return false
+      }
+      return markers.filter(item)
+    },
+    [filter, markers.filter],
+  )
   // Observe test results and update state
   useEffect(() => {
-    if (!report.result || !report.filename) {
+    if (!report) {
       setAllItems([])
       markers.set([])
-      setMatchingItems([])
+      setResults([])
+      setFilter(null)
       return
     }
     // Gather all items
     const newItems = report.result.items.map(sanitize)
-    const newfilteredItems = newItems.filter(markers.filter)
+    const newfilteredItems = newItems.filter(filterFunc)
     // Update state
     setAllItems(newItems)
     markers.set(
@@ -41,40 +54,44 @@ export const useSearchResults = (
       console.error("failed to add items to search engine: ", error)
     })
     // Update state
-    setMatchingItems(newfilteredItems)
+    setResults(newfilteredItems)
     // Cleanup search engine on unmount
     return () => {
       engine.removeAll()
     }
-  }, [report.result])
+  }, [report])
 
   // Observe search terms and update filtered items
   useEffect(() => {
+    console.log("updatng search results")
     if (terms === "") {
-      const newfilteredItems = allItems.filter(markers.filter)
-      setMatchingItems(newfilteredItems)
+      const newfilteredItems = allItems.filter(filterFunc)
+      setResults(newfilteredItems)
       return
     }
     const newfilteredItems = search(engine, terms, {
       boost: { node_id: 2 },
-      filter: markers.filter,
+      filter: filterFunc,
       limit: limit,
     })
-    setMatchingItems(newfilteredItems)
-  }, [terms, allItems, markers.filter, markers.values])
+    setResults(newfilteredItems)
+  }, [terms, allItems, filterFunc])
 
   return {
     report,
+    setReport,
     limit,
     markers,
-    results: matchingItems,
+    results,
     statistics,
     terms,
     setTerms,
+    filter,
+    setFilter,
     reset: () => {
       setAllItems([])
       markers.set([])
-      setMatchingItems([])
+      setResults([])
       engine.removeAll()
     },
   }

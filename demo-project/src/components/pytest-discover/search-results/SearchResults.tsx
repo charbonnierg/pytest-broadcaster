@@ -76,6 +76,9 @@ export const SearchResults = ({
   // Load more items on offset change
   useEffect(() => {
     if (offset > 0) {
+      if (offset + pageSize > items.length) {
+        return
+      }
       setLoading(true)
       setTimeout(() => {
         setLoading(false)

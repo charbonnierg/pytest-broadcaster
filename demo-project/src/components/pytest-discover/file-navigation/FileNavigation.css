@@ -1,0 +1,32 @@
+.bar {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+sl-tree {
+  overflow: hidden;
+}
+
+.icons {
+  margin-top: 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.view {
+  margin-top: 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.icon {
+  margin-left: 1rem;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  color: var(--sl-color-neutral-600);
+  transition: color 0.15s ease;
+}

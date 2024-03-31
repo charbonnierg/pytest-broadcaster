@@ -25,7 +25,7 @@ export const TestItemPreview = (item: TestItemPreviewProps) => {
           item.onClick(item.properties)
         }}
       >
-        <h3>{sanitizeName(item.properties)}</h3>
+        <h3>{sanitizeName(item.properties.name)}</h3>
         {formatMarkers(item.properties)}
         <p>{formatFile(item.properties)}</p>
         {truncateDescription(item.properties.doc)}

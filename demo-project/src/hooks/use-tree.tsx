@@ -1,26 +1,26 @@
 import { useEffect, useState } from "react"
 
-import { type Node, newInMemoryTree } from "../lib/files"
-import type { DiscoveryResult } from "../types/discovery_result"
-import type { TestItem } from "../types/test_item"
+import { type Node, type View, makeNodes, makeView } from "../lib/files"
+import type { Report } from "../lib/repository"
 
-export const useTree = (result: DiscoveryResult | null) => {
-  const [nodes, set] = useState<Node[]>([])
-  const [tree] = useState(
-    newInMemoryTree({
-      get: () => nodes,
-      set,
-    }),
-  )
+export const useTree = (report: Report | null) => {
+  const [nodes, setNodes] = useState<Node[]>([])
+  const [view, setView] = useState<View[] | null>(null)
   useEffect(() => {
-    if (result == null) {
+    if (report == null) {
       return
     }
-    console.log("Adding items to tree", result.items.length)
-    tree.add(...result.items)
-  }, [result, tree])
+    console.log("Adding items to tree", report.result.items.length)
+    const current = makeNodes(...report.result.items)
+    setNodes(current)
+    setView(makeView(current))
+  }, [report])
   return {
-    add: (...items: TestItem[]) => tree.add(...items),
     nodes,
+    view,
+    clear: () => {
+      setNodes([])
+      setView(null)
+    },
   }
 }
