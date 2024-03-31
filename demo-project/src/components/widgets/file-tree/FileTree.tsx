@@ -38,25 +38,19 @@ const children = (v: View) => {
 }
 
 const TreeNode = ({ view }: { view: View }) => {
-  const [loading, setLoading] = useState(false)
   const [childView, setChildView] = useState<View[] | null>(null)
-  useEffect(() => {
-    if (!loading) {
+  const [lazy, setLazy] = useState(true)
+  const onLazyLoad = () => {
+    if (childView !== null) {
       return
     }
-    const update = children(view)
-    setChildView(update)
-  }, [loading])
-  const onExpand = useCallback(
-    (e: SlExpandEvent) => {
-      setLoading(!loading)
-    },
-    [loading],
-  )
+    setChildView(children(view))
+    setLazy(false)
+  }
   switch (view.type) {
     case NodeType.Directory:
       return (
-        <SlTreeItem data-path={view.path} lazy onSlLazyLoad={onExpand}>
+        <SlTreeItem data-path={view.path} lazy={lazy} onSlLazyLoad={onLazyLoad}>
           <SlIcon name="folder"></SlIcon>
           {view.name}
           {childView !== null ? (
@@ -67,15 +61,12 @@ const TreeNode = ({ view }: { view: View }) => {
         </SlTreeItem>
       )
     case NodeType.File:
-      const fileHasChild =
-        view.cases.length > 0 ||
-        view.matrices.length > 0 ||
-        view.suites.length > 0
+      const fileHasChild = view.matrices.length > 0 || view.suites.length > 0
       return (
         <SlTreeItem
           data-path={view.path}
-          lazy={fileHasChild}
-          onSlLazyLoad={onExpand}
+          lazy={fileHasChild && lazy}
+          onSlLazyLoad={onLazyLoad}
         >
           <SlIcon name="filetype-py"></SlIcon>
           {view.name}
@@ -89,8 +80,8 @@ const TreeNode = ({ view }: { view: View }) => {
       return (
         <SlTreeItem
           data-path={view.path}
-          lazy={suiteHasChild}
-          onSlLazyLoad={onExpand}
+          lazy={suiteHasChild && lazy}
+          onSlLazyLoad={onLazyLoad}
         >
           <SlIcon name="book"></SlIcon>
           {sanitizeName(view.name)}
@@ -101,7 +92,7 @@ const TreeNode = ({ view }: { view: View }) => {
       )
     case NodeType.Matrix:
       return (
-        <SlTreeItem data-path={view.path} onSlExpand={onExpand}>
+        <SlTreeItem data-path={view.path} onSlExpand={onLazyLoad}>
           <SlIcon name="gear"></SlIcon>
           {view.name}
           {childView !== null &&
