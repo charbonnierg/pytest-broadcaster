@@ -3,9 +3,10 @@ sl-drawer::part(header) {
 }
 
 .sticky-footer-opener {
-  margin-right: 0.5rem;
-  margin-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
   margin-top: 0.5rem;
+  width: 2.75rem;
   cursor: pointer;
 }
 

@@ -9,8 +9,10 @@ export const MainContainerHeader = ({ children }: { children: ReactNode }) => {
 
 export const MainContainer = ({
   children,
+  ref,
 }: {
   children: Iterable<ReactNode>
+  ref?: React.RefObject<HTMLDivElement>
 }) => {
   let head = null
   let remaining = [] as ReactNode[]
@@ -25,7 +27,7 @@ export const MainContainer = ({
     }
   }
   return (
-    <div className="main-container">
+    <div ref={ref} className="main-container">
       <header>{head}</header>
       <div className="main-container-body">{remaining}</div>
     </div>
