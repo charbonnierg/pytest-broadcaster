@@ -1,8 +1,9 @@
-import SlTreeItemElement from "@shoelace-style/shoelace/dist/components/tree-item/tree-item.js"
 import SlIcon from "@shoelace-style/shoelace/dist/react/icon/index.js"
-import SlTreeItem from "@shoelace-style/shoelace/dist/react/tree-item/index.js"
+import SlTreeItem, {
+  type SlExpandEvent,
+} from "@shoelace-style/shoelace/dist/react/tree-item/index.js"
 import SlTree from "@shoelace-style/shoelace/dist/react/tree/index.js"
-import { type MouseEvent, useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 import {
   NodeType,
@@ -46,8 +47,8 @@ const TreeNode = ({ view }: { view: View }) => {
     const update = children(view)
     setChildView(update)
   }, [loading])
-  const onClick = useCallback(
-    (e: MouseEvent<SlTreeItemElement>) => {
+  const onExpand = useCallback(
+    (e: SlExpandEvent) => {
       setLoading(!loading)
     },
     [loading],
@@ -55,7 +56,7 @@ const TreeNode = ({ view }: { view: View }) => {
   switch (view.type) {
     case NodeType.Directory:
       return (
-        <SlTreeItem data-path={view.path} onClick={onClick}>
+        <SlTreeItem data-path={view.path} lazy onSlLazyLoad={onExpand}>
           <SlIcon name="folder"></SlIcon>
           {view.name}
           {childView !== null ? (
@@ -66,32 +67,41 @@ const TreeNode = ({ view }: { view: View }) => {
         </SlTreeItem>
       )
     case NodeType.File:
+      const fileHasChild =
+        view.cases.length > 0 ||
+        view.matrices.length > 0 ||
+        view.suites.length > 0
       return (
-        <SlTreeItem data-path={view.path} onClick={onClick}>
+        <SlTreeItem
+          data-path={view.path}
+          lazy={fileHasChild}
+          onSlLazyLoad={onExpand}
+        >
           <SlIcon name="filetype-py"></SlIcon>
           {view.name}
           {childView !== null
             ? childView.map((v) => <TreeNode key={v.path} view={v} />)
-            : view.cases.length > 0 ||
-              view.suites.length > 0 ||
-              (view.matrices.length > 0 && <SlTreeItem>...</SlTreeItem>)}
+            : fileHasChild === true && <SlTreeItem>...</SlTreeItem>}
         </SlTreeItem>
       )
     case NodeType.Suite:
+      const suiteHasChild = view.matrices.length > 0 || view.suites.length > 0
       return (
-        <SlTreeItem data-path={view.path} onClick={onClick}>
+        <SlTreeItem
+          data-path={view.path}
+          lazy={suiteHasChild}
+          onSlLazyLoad={onExpand}
+        >
           <SlIcon name="book"></SlIcon>
           {sanitizeName(view.name)}
           {childView !== null
             ? childView.map((v) => <TreeNode key={v.path} view={v} />)
-            : view.cases.length > 0 ||
-              view.matrices.length > 0 ||
-              (view.suites.length > 0 && <SlTreeItem>...</SlTreeItem>)}
+            : suiteHasChild === true && <SlTreeItem>...</SlTreeItem>}
         </SlTreeItem>
       )
     case NodeType.Matrix:
       return (
-        <SlTreeItem data-path={view.path} onClick={onClick}>
+        <SlTreeItem data-path={view.path} onSlExpand={onExpand}>
           <SlIcon name="gear"></SlIcon>
           {view.name}
           {childView !== null &&
