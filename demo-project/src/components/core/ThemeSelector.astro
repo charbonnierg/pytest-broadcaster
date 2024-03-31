@@ -1,0 +1,131 @@
+---
+// A component to select a theme (light or dark)
+---
+
+<sl-dropdown id="theme-selector" placement="bottom-end" distance="3">
+  <sl-button
+    slot="trigger"
+    size="small"
+    variant="text"
+    caret
+    title="Toggle theme"
+  >
+    <sl-icon class="only-light" name="sun-fill"></sl-icon>
+    <sl-icon class="only-dark" name="moon-fill"></sl-icon>
+  </sl-button>
+  <sl-menu>
+    <sl-menu-item type="checkbox" value="light">Light</sl-menu-item>
+    <sl-menu-item type="checkbox" value="dark">Dark</sl-menu-item>
+    <sl-divider></sl-divider>
+    <sl-menu-item type="checkbox" value="auto">System</sl-menu-item>
+  </sl-menu>
+</sl-dropdown>
+
+<style>
+  #theme-selector sl-menu {
+    /* Set an initial size to prevent width being too small when first opening on small screen width */
+    width: 140px;
+  }
+
+  #theme-selector sl-button {
+    transition: 250ms scale ease;
+  }
+
+  #theme-selector sl-button::part(base) {
+    color: var(--sl-color-neutral-1000);
+  }
+
+  #theme-selector sl-button::part(label) {
+    display: flex;
+    padding: 0.5rem;
+  }
+
+  #theme-selector sl-icon {
+    font-size: var(--sl-font-size-large);
+  }
+
+  .sl-theme-dark #theme-selector sl-button::part(base) {
+    color: var(--sl-color-neutral-1000);
+  }
+
+  #theme-selector sl-button:hover {
+    scale: 1.25;
+  }
+</style>
+
+<script>
+  /* Get the current theme from local storage */
+  function getTheme(): string {
+    return localStorage.getItem("theme") || "auto"
+  }
+
+  /* Return true if current theme is "dark */
+  function isDark(): boolean {
+    if (theme === "auto") {
+      return window.matchMedia("(prefers-color-scheme: dark)").matches
+    }
+    return theme === "dark"
+  }
+
+  /* Set the current theme in local storage and UI */
+  function setTheme(newTheme: string) {
+    theme = newTheme
+
+    // Save the theme to local storage
+    localStorage.setItem("theme", theme)
+    // Update the UI
+    updateSelection()
+    // Toggle the dark mode class
+    document.documentElement.classList.toggle("sl-theme-dark", isDark())
+  }
+
+  /* Update the selection in the theme selector dropdown */
+  function updateSelection() {
+    // Query the theme selector menu element
+    const menu = document.querySelector("#theme-selector sl-menu")
+    // If the menu is not found, ignore
+    if (!menu) return // Update the value attribute found in the menu item
+    ;[...menu.querySelectorAll("sl-menu-item")].map(
+      (item) => (item.checked = item.getAttribute("value") === theme),
+    )
+  }
+
+  // Get the current theme
+  let theme = getTheme()
+
+  // Listen for dropdown show events
+  document.addEventListener("sl-show", (event) => {
+    // Get element that triggered the event
+    const el = event?.target as Element | undefined
+    // Get the theme selector that contains the element
+    const themeSelector = el?.closest("#theme-selector")
+    // If the event was not triggered by the theme selector, ignore it
+    if (!themeSelector) return
+    // Update the selection
+    updateSelection()
+  })
+
+  // Listen for selections
+  document.addEventListener("sl-select", (event) => {
+    // Get element that triggered the event
+    const el = event?.target as Element | undefined
+    // Get the theme selector menu that contains the element
+    const menu = el?.closest("#theme-selector sl-menu")
+    // If the event was not triggered by the theme selector, ignore it
+    if (!menu) return
+    // Set the theme to the selected value
+    setTheme(event.detail.item.value)
+  })
+
+  // Update the theme when the preference changes in the OS
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", () => setTheme(theme))
+
+  window
+    .matchMedia("(prefers-color-scheme: light)")
+    .addEventListener("change", () => setTheme(theme))
+
+  // Set the initial theme and sync the UI
+  setTheme(theme)
+</script>

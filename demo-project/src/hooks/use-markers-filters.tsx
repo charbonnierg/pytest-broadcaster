@@ -6,6 +6,7 @@ import {
 } from "../lib/filter"
 import type { TestItem } from "../types/test_item"
 
+/* Weird hook: To review */
 export const useMarkersFilters = () => {
   const [values, set] = useState<string[]>([])
   const [includedMarkers, setIncludedMarkers] = useState<string[]>([])

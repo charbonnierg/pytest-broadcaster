@@ -1,0 +1,67 @@
+.search-app {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+}
+
+.search-navigation {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background-color: var(--sl-color-neutral-100);
+  /* Only when not opened */
+  width: 60px;
+}
+
+.search-navigation[data-open="true"] {
+  width: 300px;
+}
+
+.search-container {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  width: 100%;
+  max-width: calc(100% - 2rem);
+}
+
+.search-body {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  max-width: calc(100% - 2rem);
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-bottom: 2rem;
+}
+
+header {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  margin-bottom: 0rem;
+  margin-left: 2rem;
+  display: flex;
+  flex-direction: row;
+}
+
+header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: left;
+}
+
+.report-title {
+  display: flex;
+  flex-direction: row;
+}
+
+sl-button.hover-danger-button::part(base):hover {
+  color: var(--sl-color-neutral-800);
+  border-color: var(--sl-color-neutral-400);
+  background-color: var(--sl-color-danger-100);
+  box-shadow: var(--shadow-lg);
+}

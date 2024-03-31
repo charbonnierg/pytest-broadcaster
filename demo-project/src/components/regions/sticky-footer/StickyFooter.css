@@ -1,0 +1,68 @@
+sl-drawer::part(header) {
+  display: none;
+}
+
+.sticky-footer-opener {
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
+  margin-top: 0.5rem;
+  cursor: pointer;
+}
+
+.sticky-footer-exit {
+  margin-left: auto;
+  margin-right: 1rem;
+}
+
+.sticky-footer-container {
+  position: fixed;
+  z-index: 500;
+  display: flex;
+  justify-content: start;
+  padding-bottom: 0;
+  padding-top: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: var(--sl-color-neutral-200);
+}
+
+html.sl-theme-dark .sticky-footer-container {
+  background-color: var(--sl-color-neutral-100);
+}
+
+.sticky-footer-container button {
+  display: inline-block;
+  border-width: 0;
+  margin: 0 0;
+  border-radius: 0;
+  height: 2rem;
+  box-shadow: none;
+}
+
+.sticky-footer-container sl-icon {
+  display: inline-block;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.sticky-footer-buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  line-height: 1.5rem;
+  font-size: 1rem;
+}
+
+.sticky-footer-expanded {
+  display: flex;
+  flex-direction: column;
+}
+
+.sticky-footer-expanded-header {
+  display: flex;
+  flex-direction: row;
+}
+
+.sticky-footer-expanded-title h2 {
+  margin-top: 0;
+}

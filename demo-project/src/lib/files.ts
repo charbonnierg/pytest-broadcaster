@@ -1,5 +1,17 @@
 import type { TestItem } from "../types/test_item"
 
+/* Format a test item name */
+export const sanitizeName = (name: string): string => {
+  return name.replaceAll("_", " ")
+}
+
+export const getFilename = (path: string): string => {
+  let parts = path.split("/")
+  let name = parts[parts.length - 1]
+  parts = name.split("\\")
+  return parts[parts.length - 1]
+}
+
 export enum NodeType {
   Directory = "directory",
   File = "file",

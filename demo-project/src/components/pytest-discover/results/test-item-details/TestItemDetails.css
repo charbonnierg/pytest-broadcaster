@@ -1,0 +1,29 @@
+.test-item-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.test-item-details ul {
+  padding-left: 0rem;
+}
+
+.test-item-details ul li {
+  display: inline;
+  margin-right: 0.5rem;
+  margin-left: 0rem;
+}
+
+.test-item-details table ul {
+  padding-top: 0rem;
+  padding-bottom: 0rem;
+  margin-top: 0rem;
+  margin-bottom: 0rem;
+}
+
+.test-item-details sl-tag {
+  cursor: pointer;
+}
+
+.test-item-details sl-tag sl-icon {
+  padding-right: 0.25rem;
+}

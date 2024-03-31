@@ -7,6 +7,7 @@ import { useMarkersFilters } from "./use-markers-filters"
 import { useReport } from "./use-report"
 import { useStats } from "./use-stats"
 
+/* Hook to perform search on test report */
 export const useSearchResults = (
   repository: ReportRepository,
   defaultLimit: number,
