@@ -1,6 +1,6 @@
 import SlCard from "@shoelace-style/shoelace/dist/react/card/index.js"
 
-import { sanitizeName } from "../../../../lib/files.ts"
+import { getFilename, sanitizeName } from "../../../../lib/files.ts"
 import type { TestItem } from "../../../../types/test_item"
 import { CopyBadge } from "../../../widgets/copy-badge/CopyBadge.tsx"
 import { MarkersList } from "../markers-list/MarkersList.tsx"
@@ -22,10 +22,14 @@ export const TestItemCard = (item: TestItemCardProps) => {
       }}
     >
       <h3>{sanitizeName(item.properties.name)}</h3>
-      <p>
-        <CopyBadge value={item.properties.file} icon="filetype-py" />
-      </p>
       <MarkersList item={item.properties} />
+      <p>
+        <CopyBadge
+          label={getFilename(item.properties.file)}
+          value={item.properties.file}
+          icon="filetype-py"
+        />
+      </p>
       {truncateDescription(item.properties.doc)}
     </SlCard>
   )

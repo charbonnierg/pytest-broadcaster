@@ -1,10 +1,4 @@
-import {
-  type PropsWithChildren,
-  type ReactNode,
-  useCallback,
-  useEffect,
-  useState,
-} from "react"
+import { type PropsWithChildren, useCallback, useEffect, useState } from "react"
 
 import FileTree from "../components/pytest-discover/file-tree/FileTree.tsx"
 import { SearchInput } from "../components/pytest-discover/input/SearchInput.tsx"
@@ -23,11 +17,9 @@ import "./SearchApp.css"
 
 /* A search component for test items. */
 export const SearchApp = (props: PropsWithChildren) => {
-  // Create new repository
-  const repository = newLocalStorageReportRepository()
   // Initialize UI state
   const [navigationOpened, setNavigationOpened] = useState<boolean>(false)
-  const [settingsOpened, setSettingsOpened] = useState<boolean>(false)
+  const [footerOpened, setFooterOpened] = useState<boolean>(false)
   const [focusOpened, setFocusOpened] = useState<boolean>(false)
   const [focusedItem, setFocusedItem] = useState<TestItem | null>(null)
   // Initialize search state
@@ -41,11 +33,11 @@ export const SearchApp = (props: PropsWithChildren) => {
     statistics,
     report,
     setReport,
-  } = useSearchResults(repository, 5000)
+  } = useSearchResults(newLocalStorageReportRepository(), 5000)
   // Open settings if there is no discovery result
   useEffect(() => {
     if (report == null) {
-      setSettingsOpened(true)
+      setFooterOpened(true)
       return
     }
   }, [report])
@@ -84,7 +76,7 @@ export const SearchApp = (props: PropsWithChildren) => {
         </div>
       </div>
       {/* The sticky footer at the bottom of the page */}
-      <StickyFooter open={settingsOpened} setOpen={setSettingsOpened}>
+      <StickyFooter open={footerOpened} setOpen={setFooterOpened}>
         {/* The content of the footer when closed */}
         <ReportStatus
           report={report}
@@ -96,6 +88,7 @@ export const SearchApp = (props: PropsWithChildren) => {
           <ActionLabel
             as="h2"
             icon="trash3"
+            disabled={report == null}
             value={filename()}
             onClick={() => setReport(null)}
           />

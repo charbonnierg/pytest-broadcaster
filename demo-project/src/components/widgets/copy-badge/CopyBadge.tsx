@@ -6,10 +6,12 @@ import "./CopyBadge.css"
 
 /* Format a file name */
 export const CopyBadge = ({
+  label,
   value,
   icon,
 }: {
   value?: string
+  label?: string
   icon: string
 }): JSX.Element | null => {
   if (value == null || value == "") {
@@ -19,7 +21,7 @@ export const CopyBadge = ({
     <p className="copy-badge-widget">
       <SlTag onClick={copy(value)}>
         <SlIcon name={icon}></SlIcon>
-        {value}
+        {label == null ? value : label}
       </SlTag>
     </p>
   )

@@ -5,7 +5,10 @@ export const sanitizeName = (name: string): string => {
   return name.replaceAll("_", " ")
 }
 
-export const getFilename = (path: string): string => {
+export const getFilename = (path?: string): string => {
+  if (path == null) {
+    return ""
+  }
   let parts = path.split("/")
   let name = parts[parts.length - 1]
   parts = name.split("\\")
