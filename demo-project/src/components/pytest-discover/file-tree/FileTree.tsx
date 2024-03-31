@@ -15,16 +15,12 @@ import "./FileTree.css"
 
 interface FileNavigationProps {
   report: Report | null
-  open: boolean
-  setOpen: (open: boolean) => void
   filter: string | null
   setFilter: (node: string) => void
 }
 
 export const FileNavigation = ({
   report,
-  open,
-  setOpen,
   filter,
   setFilter,
 }: FileNavigationProps) => {
@@ -127,25 +123,9 @@ export const FileNavigation = ({
     return "No view available"
   }
   return (
-    <div className="bar">
-      <div className="icons">
-        <SlIcon
-          className="icon"
-          name="filter-circle"
-          data-open={open}
-          onClick={() => {
-            setOpen(!open)
-          }}
-        ></SlIcon>
-      </div>
-      <div className="view" data-open={open}>
-        {open && (
-          <SlTree data-open={open}>
-            {views.map((child) => display(child, filter || "", setFilter))}
-          </SlTree>
-        )}
-      </div>
-    </div>
+    <SlTree data-open={open}>
+      {views.map((child) => display(child, filter || "", setFilter))}
+    </SlTree>
   )
 }
 

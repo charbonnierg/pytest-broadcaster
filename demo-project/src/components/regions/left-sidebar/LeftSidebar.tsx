@@ -1,11 +1,10 @@
 import SlIcon from "@shoelace-style/shoelace/dist/react/icon/index.js"
-import type { ReactNode } from "react"
+import { type ReactElement, type ReactNode, isValidElement } from "react"
 
 import "./LeftSidebar.css"
 
 interface LeftSidebarProps {
-  open: boolean
-  children: ReactNode
+  children: ReactNode[]
 }
 
 export const LeftSideBarButton = ({
@@ -16,12 +15,41 @@ export const LeftSideBarButton = ({
   onClick: () => void
 }) => <SlIcon className="icon" name={icon} onClick={onClick}></SlIcon>
 
-export const LeftSidebar = ({ children, open }: LeftSidebarProps) => {
+export const LeftSidebarExtension = ({
+  children,
+  open,
+}: {
+  children: ReactNode
+  open: boolean
+}) => {
   return (
-    <div className="left-sidebar" data-open={open}>
+    <div data-open={open} className="left-sidebar-extension">
       {children}
     </div>
   )
 }
 
+export const LeftSidebar = ({ children }: LeftSidebarProps) => {
+  let extension = null as ReactNode
+  let buttons = [] as ReactNode[]
+  children
+    .filter((child) => isValidElement(child))
+    .forEach((child) => {
+      if ((child as ReactElement).type === LeftSidebarExtension) {
+        extension = child
+      } else {
+        buttons.push(child)
+      }
+    })
+  return (
+    <>
+      <div className="left-sidebar">
+        <div className="left-sidebar-buttons">{buttons}</div>
+      </div>
+      {extension}
+    </>
+  )
+}
+
 LeftSidebar.Button = LeftSideBarButton
+LeftSidebar.Extension = LeftSidebarExtension

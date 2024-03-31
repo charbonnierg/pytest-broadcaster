@@ -44,14 +44,22 @@ export const SearchApp = (props: PropsWithChildren) => {
     // Application is wrapped in a single div
     <div className="search-app">
       {/* The sidebar */}
-      <LeftSidebar open={navigationOpened}>
-        <FileTree
-          open={navigationOpened}
-          filter={position}
-          setFilter={setPosition}
-          setOpen={setNavigationOpened}
-          report={report}
+      <LeftSidebar>
+        <LeftSidebar.Button
+          icon="filter-circle"
+          onClick={() => {
+            setNavigationOpened(!navigationOpened)
+          }}
         />
+        <LeftSidebar.Extension open={navigationOpened}>
+          {navigationOpened && (
+            <FileTree
+              filter={position}
+              setFilter={setPosition}
+              report={report}
+            />
+          )}
+        </LeftSidebar.Extension>
       </LeftSidebar>
 
       {/* The main content of the page */}

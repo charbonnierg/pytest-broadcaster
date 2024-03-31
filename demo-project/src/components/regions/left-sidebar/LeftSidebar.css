@@ -4,11 +4,38 @@
   width: fit-content;
   align-items: stretch;
   background-color: var(--sl-color-neutral-100);
-  /* Only when not opened */
   width: 60px;
 }
 
-.left-sidebar[data-open="true"] {
+.left-sidebar-buttons {
+  margin-top: 4rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+}
+
+.left-sidebar-extension {
+  display: none;
   width: fit-content;
   max-width: 100%;
+}
+
+.left-sidebar-extension {
+  margin-top: 4rem;
+  transition: width 0.3s;
+}
+
+.left-sidebar-extension[data-open="true"] {
+  display: flex;
+  flex-direction: column;
+}
+
+.icon {
+  align-self: center;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  color: var(--sl-color-neutral-600);
+  transition: color 0.15s ease;
 }
