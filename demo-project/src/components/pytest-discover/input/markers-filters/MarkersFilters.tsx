@@ -16,7 +16,12 @@ export const MarkersFilters = ({
   return (
     <div className="markers-filters">
       {Array.from(choices).map((marker) => (
-        <FilterBadge value={marker} status={get(marker)} onClick={onClick} />
+        <FilterBadge
+          key={marker}
+          value={marker}
+          status={get(marker)}
+          onClick={onClick}
+        />
       ))}
     </div>
   )

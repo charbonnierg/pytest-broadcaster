@@ -5,6 +5,12 @@
   margin-left: auto;
   width: 1024px;
   max-width: calc(100% - 2rem);
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+.main-container::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
 }
 
 .main-container-body {

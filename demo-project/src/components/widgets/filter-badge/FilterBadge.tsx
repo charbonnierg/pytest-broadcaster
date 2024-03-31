@@ -39,7 +39,6 @@ export const FilterBadge = ({
 }) => {
   return (
     <SlTag
-      key={value}
       pill
       variant={variant(status)}
       onClick={() => onClick(value)}

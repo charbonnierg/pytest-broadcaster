@@ -1,15 +1,8 @@
-import type { SlInputEvent } from "@shoelace-style/shoelace"
 import SlTreeItemElement from "@shoelace-style/shoelace/dist/components/tree-item/tree-item.js"
 import SlIcon from "@shoelace-style/shoelace/dist/react/icon/index.js"
 import SlTreeItem from "@shoelace-style/shoelace/dist/react/tree-item/index.js"
 import SlTree from "@shoelace-style/shoelace/dist/react/tree/index.js"
-import {
-  type MouseEvent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react"
+import { type MouseEvent, useCallback, useEffect, useState } from "react"
 
 import {
   NodeType,
@@ -135,10 +128,9 @@ export const FileNavigation = ({
       onSlSelectionChange={(e) => {
         const selected = e.detail.selection[0]
         if (selected == null) {
-          console.warn("selected is null")
+          return
         }
         const value = selected.getAttribute("data-path")
-        console.log("selection change: " + value)
         if (selected != null) {
           value && setPosition(value)
         }

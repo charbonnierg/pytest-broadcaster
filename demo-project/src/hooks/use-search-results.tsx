@@ -63,7 +63,6 @@ export const useSearchResults = (
 
   // Observe search terms and update filtered items
   useEffect(() => {
-    console.log("updatng search results")
     if (terms === "") {
       const newfilteredItems = allItems.filter(filterFunc)
       setResults(newfilteredItems)

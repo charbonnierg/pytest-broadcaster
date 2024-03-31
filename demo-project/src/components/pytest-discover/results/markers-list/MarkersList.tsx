@@ -15,9 +15,10 @@ export const MarkersList = ({
     return null
   }
   const key = (marker: string) => `${item.id}-detail-${marker}`
+  const markers = Array.from(new Set(item.markers))
   return (
     <ul className="markers-list">
-      {item.markers.map((marker) => {
+      {markers.map((marker) => {
         return (
           <li key={key(marker)}>
             <SlTag

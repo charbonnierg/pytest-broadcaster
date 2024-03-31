@@ -18,12 +18,17 @@ export const ActionLabel = ({
     return null
   }
   const children = [] as ReactNode[]
-  children.push(<span className="action-label-value">{value}</span>)
+  children.push(
+    <span key={`action-${value}`} className="action-label-value">
+      {value}
+    </span>,
+  )
   if (disabled !== true) {
     children.push(
       <SlIconButton
         className="action-label-icon"
         name={icon}
+        key={`action-${value}-icon`}
         onClick={onClick}
       ></SlIconButton>,
     )

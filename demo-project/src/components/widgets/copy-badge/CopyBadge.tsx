@@ -18,11 +18,9 @@ export const CopyBadge = ({
     return null
   }
   return (
-    <p className="copy-badge-widget">
-      <SlTag onClick={copy(value)}>
-        <SlIcon name={icon}></SlIcon>
-        {label == null ? value : label}
-      </SlTag>
-    </p>
+    <SlTag className="copy-badge-widget" onClick={copy(value)}>
+      <SlIcon name={icon}></SlIcon>
+      {label == null ? value : label}
+    </SlTag>
   )
 }

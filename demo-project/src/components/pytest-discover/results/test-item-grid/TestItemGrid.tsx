@@ -1,15 +1,16 @@
 import SlAnimation from "@shoelace-style/shoelace/dist/react/animation/index.js"
 import SlButton from "@shoelace-style/shoelace/dist/react/button/index.js"
 import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner/index.js"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import type { TestItem } from "../../../../types/discovery_result"
 import TestItemCard from "../test-item-card/TestItemCard"
 import "./TestItemGrid.css"
 
 // Check if at bottom of an element
-const isAtBottom = (el: HTMLElement): boolean =>
-  Math.abs(el.scrollHeight - el.scrollTop - el.clientHeight) < 1
+const isAtBottom = (): boolean =>
+  window.innerHeight + window.scrollY >= document.body.offsetHeight - 2
+// Math.abs(el.scrollHeight - el.scrollTop - el.clientHeight) < 1
 
 interface TestItemGridProps {
   items: TestItem[]
@@ -54,6 +55,7 @@ export const TestItemGrid = ({
   onItemClicked,
 }: TestItemGridProps) => {
   const delay = 1000
+  const ref = useRef<HTMLDivElement>(null)
   // Create a state to hold displayed items
   const [displayed, setDisplayed] = useState<TestItem[]>(
     items.slice(0, pageSize),
@@ -62,8 +64,7 @@ export const TestItemGrid = ({
   const [offset, setOffset] = useState(0)
   const [loading, setLoading] = useState(false)
   // Handle scroll event by increasing offset when at bottom
-  const handleScroll = () =>
-    isAtBottom(document.documentElement) && setOffset(offset + pageSize)
+  const handleScroll = () => isAtBottom() && setOffset(offset + pageSize)
   // Increase on scroll down
   useEffect(() => {
     window.addEventListener("scroll", handleScroll)
@@ -90,7 +91,7 @@ export const TestItemGrid = ({
   }, [offset, items, pageSize])
   // Render
   return (
-    <div>
+    <div ref={ref}>
       {!loading && <GoUp></GoUp>}
       <LoadingIndicator loading={loading}></LoadingIndicator>
       <ul role="list" className="card-grid">

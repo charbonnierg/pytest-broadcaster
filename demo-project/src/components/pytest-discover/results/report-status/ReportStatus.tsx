@@ -93,11 +93,6 @@ const ReportFilename = ({
           type="file"
           id="file-upload"
           onChange={(evt) => {
-            console.warn(
-              "file upload event",
-              evt.target.value,
-              evt.target.files,
-            )
             const input = evt.target
             reader(input)
           }}
