@@ -1,10 +1,4 @@
-import {
-  type PropsWithChildren,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react"
+import { type PropsWithChildren, useCallback, useEffect, useState } from "react"
 
 import { SearchInput } from "../components/pytest-discover/input/SearchInput.tsx"
 import { ReportDetails } from "../components/pytest-discover/results/report-details/ReportDetails.tsx"

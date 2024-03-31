@@ -1,9 +1,7 @@
 import SlIcon from "@shoelace-style/shoelace/dist/react/icon/index.js"
-import SlTreeItem, {
-  type SlExpandEvent,
-} from "@shoelace-style/shoelace/dist/react/tree-item/index.js"
+import SlTreeItem from "@shoelace-style/shoelace/dist/react/tree-item/index.js"
 import SlTree from "@shoelace-style/shoelace/dist/react/tree/index.js"
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
 import {
   NodeType,

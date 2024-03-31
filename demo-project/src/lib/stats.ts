@@ -1,6 +1,5 @@
 /* stats.ts exposes utilities to compute statistics from discovery results.*/
 import type { DiscoveryResult } from "../types/discovery_result"
-import type { TestItem } from "../types/test_item"
 
 // I'm sure something like that already exists in the TS standard library
 // but I can't find it 😭
