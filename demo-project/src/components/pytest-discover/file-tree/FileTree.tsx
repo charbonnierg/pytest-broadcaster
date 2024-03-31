@@ -129,32 +129,20 @@ export const FileNavigation = ({
   return (
     <div className="bar">
       <div className="icons">
-        {!open && (
-          <SlIcon
-            className="icon"
-            name="arrow-right"
-            data-open={open}
-            onClick={() => {
-              setOpen(!open)
-            }}
-          ></SlIcon>
-        )}
+        <SlIcon
+          className="icon"
+          name="filter-circle"
+          data-open={open}
+          onClick={() => {
+            setOpen(!open)
+          }}
+        ></SlIcon>
       </div>
-      <div className="view">
+      <div className="view" data-open={open}>
         {open && (
-          <>
-            <SlIcon
-              className="icon"
-              name="arrow-left"
-              data-open={open}
-              onClick={() => {
-                setOpen(!open)
-              }}
-            ></SlIcon>
-            <SlTree data-open={open}>
-              {views.map((child) => display(child, filter || "", setFilter))}
-            </SlTree>
-          </>
+          <SlTree data-open={open}>
+            {views.map((child) => display(child, filter || "", setFilter))}
+          </SlTree>
         )}
       </div>
     </div>

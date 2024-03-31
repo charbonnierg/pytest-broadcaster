@@ -1,0 +1,14 @@
+.left-sidebar {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  align-items: stretch;
+  background-color: var(--sl-color-neutral-100);
+  /* Only when not opened */
+  width: 60px;
+}
+
+.left-sidebar[data-open="true"] {
+  width: fit-content;
+  max-width: 100%;
+}
