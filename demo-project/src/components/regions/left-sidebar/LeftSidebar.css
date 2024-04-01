@@ -1,10 +1,10 @@
 .left-sidebar {
   display: flex;
   flex-direction: column;
-  width: fit-content;
+  width: 100%;
+  max-width: 60px;
   align-items: stretch;
   background-color: var(--sl-color-neutral-100);
-  width: 60px;
 }
 
 .left-sidebar-buttons {
@@ -13,7 +13,8 @@
   display: flex;
   flex-direction: column;
   justify-items: center;
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: visible;
   -ms-overflow-style: none; /* Internet Explorer 10+ */
   scrollbar-width: none; /* Firefox */
 }
@@ -23,9 +24,10 @@
 
 .left-sidebar-extension {
   display: none;
-  width: fit-content;
-  max-width: 100%;
-  overflow: scroll;
+  width: 100%;
+  max-width: fit-content;
+  overflow-y: scroll;
+  overflow-x: visible;
   margin-bottom: 2rem;
   -ms-overflow-style: none; /* Internet Explorer 10+ */
   scrollbar-width: none;

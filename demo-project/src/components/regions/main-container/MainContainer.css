@@ -3,8 +3,8 @@
   flex-direction: column;
   margin-right: auto;
   margin-left: auto;
-  width: 1024px;
-  max-width: calc(100% - 2rem);
+  width: 100%;
+  max-width: min(1024px, calc(100% - 2rem));
   overflow-y: scroll;
   -ms-overflow-style: none; /* Internet Explorer 10+ */
   scrollbar-width: none; /* Firefox */
@@ -23,12 +23,9 @@
 }
 
 .main-container header {
-  padding-left: 1rem;
-  padding-right: 1rem;
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
-  margin-bottom: 0rem;
-  margin-left: 2rem;
+  margin-left: 0.5rem;
   display: flex;
   flex-direction: row;
 }
