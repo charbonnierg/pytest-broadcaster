@@ -39,6 +39,7 @@ html.sl-theme-dark .report-meta[data-state="warning"] {
 .report-filename {
   background-color: var(--sl-color-primary-600);
   color: var(--sl-color-neutral-100);
+  cursor: pointer;
 }
 
 html.sl-theme-dark .report-filename {
