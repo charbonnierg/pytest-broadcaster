@@ -4,9 +4,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import List, Optional, Union
 
-from . import test_item
+from . import test_case, test_directory
 
 
 @dataclass
@@ -15,7 +15,7 @@ class CollectReport:
     Pytest Collect Report
     """
 
-    items: List[test_item.TestItem]
+    items: List[Union[test_directory.TestDirectory, test_case.TestCase]]
     """
     The collected items
     """

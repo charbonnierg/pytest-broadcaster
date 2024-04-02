@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from warnings import WarningMessage
 
 import pytest
 
@@ -26,7 +27,7 @@ class NodeID:
         return self.value
 
 
-def make_node_id(item: pytest.Item) -> NodeID:
+def make_node_id(item: pytest.Item | pytest.Directory) -> NodeID:
     mod, cls, func, params = parse_node_id(item.nodeid)
     name = "%s[%s]" % (func, params) if params else func
     return NodeID(
@@ -47,12 +48,22 @@ def field_doc(item: pytest.Item) -> str:
     return get_test_doc(item).strip()
 
 
-def field_markers(item: pytest.Item) -> list[str]:
-    return [
-        format_mark(mark)
-        for mark in sorted(get_test_markers(item), key=lambda mark: mark.name)
-    ]
+def field_markers(item: pytest.Item | pytest.Directory) -> list[str]:
+    return list(
+        set(
+            [
+                format_mark(mark)
+                for mark in sorted(get_test_markers(item), key=lambda mark: mark.name)
+            ]
+        )
+    )
 
 
 def field_parameters(item: pytest.Item) -> dict[str, str]:
     return {k: type(v).__name__ for k, v in sorted(get_test_args(item).items())}
+
+
+def make_warning_message(warning: WarningMessage) -> str:
+    if isinstance(warning.message, str):
+        return warning.message
+    return str(warning.message)

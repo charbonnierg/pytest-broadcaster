@@ -36,7 +36,7 @@ def get_test_args(item: pytest.Item) -> dict[str, Any]:
         return {}
 
 
-def get_test_markers(item: pytest.Item) -> list[pytest.Mark]:
+def get_test_markers(item: pytest.Item | pytest.Directory) -> list[pytest.Mark]:
     return list(item.iter_markers())
 
 

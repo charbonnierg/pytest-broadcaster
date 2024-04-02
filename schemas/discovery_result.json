@@ -5,12 +5,12 @@
   "description": "Pytest Discover Result",
   "type": "object",
   "required": [
+    "exit_status",
     "pytest_version",
     "plugin_version",
-    "items",
     "warnings",
     "errors",
-    "exit_status"
+    "collect_reports"
   ],
   "properties": {
     "pytest_version": {
@@ -39,11 +39,11 @@
         "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/warning_message.json"
       }
     },
-    "items": {
+    "collect_reports": {
       "type": "array",
-      "description": "The collected items",
+      "description": "Collect reports generated during the discovery process",
       "items": {
-        "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_item.json"
+        "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/collect_report.json"
       }
     }
   }

@@ -7,6 +7,8 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Optional
 
+from . import location
+
 
 class When(Enum):
     """
@@ -28,14 +30,11 @@ class WarningMessage:
     """
     When the warning message is emitted
     """
-    filename: str
+    node_id: str
     """
-    The filename of the file where the warning message is emitted
+    The node ID of the node where the warning message is emitted
     """
-    lineno: int
-    """
-    The line number of the file where the warning message is emitted
-    """
+    location: location.Location
     message: str
     """
     The warning message

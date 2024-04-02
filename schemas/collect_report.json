@@ -21,7 +21,14 @@
       "type": "array",
       "description": "The collected items",
       "items": {
-        "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_item.json"
+        "oneOf": [
+          {
+            "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_directory.json"
+          },
+          {
+            "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case.json"
+          }
+        ]
       }
     }
   }

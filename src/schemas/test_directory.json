@@ -1,0 +1,39 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "test_directory.json",
+    "title": "TestDirectory",
+    "description": "Pytest Test Directory",
+    "type": "object",
+    "required": [
+      "node_id",
+      "name",
+      "path",
+      "markers",
+      "node_type"
+    ],
+    "properties": {
+      "node_id": {
+        "type": "string",
+        "description": "Node ID"
+      },
+      "node_type": {
+        "const": "directory",
+        "description": "Node Type"
+      },
+      "name": {
+        "type": "string",
+        "description": "Test Name"
+      },
+      "path": {
+        "type": "string",
+        "description": "Directory path"
+      },
+      "markers": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Test markers"
+      }
+    }
+  }

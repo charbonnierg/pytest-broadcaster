@@ -41,6 +41,7 @@ dev-dependencies = [
     "datamodel-code-generator>=0.25.5",
     "pyright>=1.1.355",
     "tomli>=2.0.1 ; python_version < '3.12'",
+    "fake-lib @ file:///home/charbonnierg/github/charbonnierg/pytest-discover/tests/fake_lib",
 ]
 
 [tool.rye.scripts]
@@ -70,7 +71,7 @@ __format-models = "rye fmt src/pytest_discover/models"
 __format-models-check = "rye fmt check"
 
 [tool.pytest.ini_options]
-markers=["basic", "markers", "parametrization", "buildmeta"]
+markers=["basic", "filetree", "suites", "markers", "parametrization", "buildmeta"]
 testpaths = ["tests"]
 
 [tool.pyright]

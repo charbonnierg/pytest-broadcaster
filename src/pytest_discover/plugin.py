@@ -9,6 +9,10 @@ import pytest
 from _pytest.pathlib import Path  # pyright: ignore[reportPrivateImportUsage]
 from _pytest.terminal import TerminalReporter
 
+from pytest_discover.models.location import Location
+from pytest_discover.models.test_case import TestCase
+from pytest_discover.models.test_directory import TestDirectory
+
 from .__about__ import __version__
 from .internal import _fields as api
 from .models.collect_report import CollectReport
@@ -16,7 +20,6 @@ from .models.discovery_result import DiscoveryResult
 from .models.error_message import ErrorMessage
 from .models.session_finish import SessionFinish
 from .models.session_start import SessionStart
-from .models.test_item import TestItem
 from .models.warning_message import WarningMessage
 
 if TYPE_CHECKING:
@@ -126,7 +129,7 @@ class PytestDiscoverPlugin:
             exit_status=0,
             warnings=[],
             errors=[],
-            items=[],
+            collect_reports=[],
         )
 
     def open(self) -> None:
@@ -189,10 +192,13 @@ class PytestDiscoverPlugin:
             category=warning_message.category.__name__
             if warning_message.category
             else None,
-            filename=warning_message.filename,
-            lineno=warning_message.lineno,
-            message=repr(warning_message.message),
-            when=when,  # type: ignore[arg-type]
+            location=Location(
+                filename=warning_message.filename,
+                lineno=warning_message.lineno,
+            ),
+            message=api.make_warning_message(warning_message),
+            when=when,  # type: ignore[arg-type],
+            node_id=nodeid,
         )
         self._result.warnings.append(event)
         self._write_event(event)
@@ -225,13 +231,23 @@ class PytestDiscoverPlugin:
         # TODO: Don't emit event when test collection fails
         if report.failed:
             return
-        items: list[TestItem] = []
+        items: list[TestCase | TestDirectory] = []
         # Format all test items discovered
         for result in report.result:
+            if isinstance(result, pytest.Directory):
+                item = TestDirectory(
+                    node_id=result.nodeid,
+                    name=result.path.name,
+                    path=result.path.as_posix(),
+                    markers=api.field_markers(result),
+                )
+                items.append(item)
+                continue
             if not isinstance(result, pytest.Item):
+                # raise Exception(result)
                 continue
             node_id = api.make_node_id(result)
-            item = TestItem(
+            item = TestCase(
                 node_id=node_id.value,
                 name=node_id.name,
                 module=node_id.module,
@@ -251,8 +267,8 @@ class PytestDiscoverPlugin:
             items=items,
             node_id=report.nodeid or None,
         )
-        # Append items to the result object.
-        self._result.items.extend(items)
+        # Append repot to the result object.
+        self._result.collect_reports.append(data)
         # Write the event to the output file.
         self._write_event(data)
 

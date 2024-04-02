@@ -23,6 +23,7 @@ email-validator==2.1.1
     # via pydantic
 exceptiongroup==1.2.0
     # via pytest
+fake-lib @ file:///home/charbonnierg/github/charbonnierg/pytest-discover/tests/fake_lib
 genson==1.2.2
     # via datamodel-code-generator
 idna==3.6

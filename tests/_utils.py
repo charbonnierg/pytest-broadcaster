@@ -12,8 +12,8 @@ class CommonTestSetup:
     def setup(
         self, pytester: pytest.Pytester, tmp_path: Path, pytestconfig: pytest.Config
     ):
-        self.test_dir = pytester
         self.tmp_path = tmp_path
+        self.test_dir = pytester
         self.pytestconfig = pytestconfig
         self.json_file = self.tmp_path.joinpath("collect.json")
         self.json_lines_file = self.tmp_path.joinpath("collect.jsonl")
@@ -28,10 +28,10 @@ class CommonTestSetup:
             if line.strip()
         ]
 
-    def make_testfile(self, filename: str, content: str) -> None:
+    def make_testfile(self, filename: str, content: str) -> Path:
         if filename.endswith(".py"):
             filename = filename[:-3]
         else:
             raise ValueError("Filename must end with '.py'")
         kwargs = {filename: content}
-        self.test_dir.makepyfile(**kwargs)
+        return self.test_dir.makepyfile(**kwargs)

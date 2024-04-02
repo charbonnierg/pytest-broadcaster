@@ -7,9 +7,9 @@
   "required": [
     "event",
     "when",
-    "filename",
-    "lineno",
-    "message"
+    "location",
+    "message",
+    "node_id"
   ],
   "properties": {
     "event": {
@@ -24,13 +24,12 @@
       ],
       "description": "When the warning message is emitted"
     },
-    "filename": {
+    "node_id": {
       "type": "string",
-      "description": "The filename of the file where the warning message is emitted"
+      "description": "The node ID of the node where the warning message is emitted"
     },
-    "lineno": {
-      "type": "integer",
-      "description": "The line number of the file where the warning message is emitted"
+    "location": {
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/location.json#"
     },
     "category": {
       "type": "string",

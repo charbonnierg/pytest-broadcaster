@@ -6,7 +6,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import List
 
-from . import error_message, test_item, warning_message
+from . import collect_report, error_message, warning_message
 
 
 @dataclass
@@ -35,7 +35,7 @@ class DiscoveryResult:
     """
     Warnings generated during the discovery process
     """
-    items: List[test_item.TestItem]
+    collect_reports: List[collect_report.CollectReport]
     """
-    The collected items
+    Collect reports generated during the discovery process
     """

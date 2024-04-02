@@ -21,7 +21,10 @@
       "type": "array",
       "description": "The collected items",
       "items": {
-        "$ref": "test_item.json/#"
+        "oneOf": [
+          {"$ref": "test_directory.json/#"},
+          {"$ref": "test_case.json/#"}
+        ]
       }
     }
   }

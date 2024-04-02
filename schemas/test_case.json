@@ -1,11 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_item.json",
-  "title": "TestItem",
-  "description": "Pytest Test Item",
+  "$id": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case.json",
+  "title": "TestCase",
+  "description": "Pytest Test Case",
   "type": "object",
   "required": [
     "node_id",
+    "node_type",
     "name",
     "doc",
     "markers",
@@ -15,6 +16,10 @@
     "node_id": {
       "type": "string",
       "description": "Node ID"
+    },
+    "node_type": {
+      "const": "case",
+      "description": "Node Type"
     },
     "file": {
       "type": "string",
