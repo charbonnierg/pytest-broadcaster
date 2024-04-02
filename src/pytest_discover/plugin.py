@@ -12,6 +12,9 @@ from _pytest.terminal import TerminalReporter
 from pytest_discover.models.location import Location
 from pytest_discover.models.test_case import TestCase
 from pytest_discover.models.test_directory import TestDirectory
+from pytest_discover.models.test_module import TestModule
+from pytest_discover.models.test_suite import TestSuite
+from pytest_discover.models.traceback import Traceback
 
 from .__about__ import __version__
 from .internal import _fields as api
@@ -214,13 +217,19 @@ class PytestDiscoverPlugin:
         # Skip if the report is not a test report.
         if isinstance(report, pytest.TestReport):
             return
-        assert call.excinfo, "exception info is missing"
+        exc_info: pytest.ExceptionInfo[BaseException] | None = call.excinfo
+        assert exc_info, "exception info is missing"
+        exc_repr = exc_info.getrepr()
+        assert exc_repr.reprcrash, "exception crash repr is missing"
         msg = ErrorMessage(
             when=call.when,  # type: ignore[arg-type]
-            filename=call.excinfo.tb.tb_frame.f_code.co_filename,
-            lineno=call.excinfo.tb.tb_lineno,
-            exception_type=call.excinfo.typename,
-            exception_value=call.excinfo.exconly(True),
+            location=Location(
+                filename=exc_repr.reprcrash.path,
+                lineno=exc_repr.reprcrash.lineno,
+            ),
+            traceback=Traceback(str(exc_repr.reprcrash).splitlines()),
+            exception_type=exc_info.typename,
+            exception_value=str(exc_info.value),
         )
         self._result.errors.append(msg)
         self._write_event(msg)
@@ -228,40 +237,59 @@ class PytestDiscoverPlugin:
     # Collector finished collecting.
     # Ref: https://docs.pytest.org/en/latest/reference/reference.html#pytest.hookspec.pytest_collectreport
     def pytest_collectreport(self, report: pytest.CollectReport) -> None:
-        # TODO: Don't emit event when test collection fails
         if report.failed:
             return
-        items: list[TestCase | TestDirectory] = []
+        items: list[TestCase | TestDirectory | TestModule | TestSuite] = []
         # Format all test items discovered
         for result in report.result:
             if isinstance(result, pytest.Directory):
-                item = TestDirectory(
-                    node_id=result.nodeid,
-                    name=result.path.name,
-                    path=result.path.as_posix(),
+                items.append(
+                    TestDirectory(
+                        node_id=result.nodeid,
+                        name=result.path.name,
+                        path=result.path.as_posix(),
+                    )
+                )
+                continue
+            if isinstance(result, pytest.Module):
+                items.append(
+                    TestModule(
+                        node_id=result.nodeid,
+                        name=result.name,
+                        path=result.path.as_posix(),
+                        markers=api.field_markers(result),
+                        doc=api.field_doc(result),
+                    )
+                )
+                continue
+            if isinstance(result, pytest.Class):
+                node_id = api.make_node_id(result)
+                assert node_id.module
+                items.append(
+                    TestSuite(
+                        node_id=result.nodeid,
+                        name=result.name,
+                        module=node_id.module,
+                        path=result.path.as_posix(),
+                        doc=api.field_doc(result),
+                        markers=api.field_markers(result),
+                    )
+                )
+                continue
+            if isinstance(result, pytest.Function):
+                node_id = api.make_node_id(result)
+                item = TestCase(
+                    node_id=node_id.value,
+                    name=node_id.name,
+                    module=node_id.module,
+                    suite=node_id.suite(),
+                    function=node_id.func,
+                    path=api.field_file(result),
+                    doc=api.field_doc(result),
                     markers=api.field_markers(result),
+                    parameters=api.field_parameters(result),
                 )
                 items.append(item)
-                continue
-            if not isinstance(result, pytest.Item):
-                # raise Exception(result)
-                continue
-            node_id = api.make_node_id(result)
-            item = TestCase(
-                node_id=node_id.value,
-                name=node_id.name,
-                module=node_id.module,
-                parent=node_id.parent,
-                function=node_id.func,
-                file=api.field_file(result),
-                doc=api.field_doc(result),
-                markers=api.field_markers(result),
-                parameters=api.field_parameters(result),
-            )
-            items.append(item)
-        # Don't emit event when no test are discovered
-        if not items:
-            return
         # Generate a collect report event.
         data = CollectReport(
             items=items,

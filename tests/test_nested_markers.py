@@ -51,7 +51,6 @@ class TestNestedMarker(CommonTestSetup):
                             "node_type": "directory",
                             "name": directory.name,
                             "path": directory.as_posix(),
-                            "markers": [],
                         }
                     ],
                 },
@@ -66,11 +65,40 @@ class TestNestedMarker(CommonTestSetup):
                             "doc": "",
                             "markers": ["skip"],
                             "parameters": {},
-                            "file": "test_markers.py",
+                            "path": "test_markers.py",
                             "module": "test_markers",
-                            "parent": "TestMarked",
+                            "suite": "TestMarked",
                             "function": "test_marked",
                         },
+                    ],
+                },
+                {
+                    "event": "CollectReport",
+                    "node_id": "test_markers.py",
+                    "items": [
+                        {
+                            "node_id": "test_markers.py::TestMarked",
+                            "node_type": "suite",
+                            "name": "TestMarked",
+                            "path": directory.joinpath("test_markers.py").as_posix(),
+                            "module": "test_markers",
+                            "doc": "",
+                            "markers": ["skip"],
+                        }
+                    ],
+                },
+                {
+                    "event": "CollectReport",
+                    "node_id": ".",
+                    "items": [
+                        {
+                            "node_id": "test_markers.py",
+                            "node_type": "module",
+                            "name": "test_markers.py",
+                            "path": directory.joinpath("test_markers.py").as_posix(),
+                            "doc": "",
+                            "markers": [],
+                        }
                     ],
                 },
             ],
@@ -100,7 +128,6 @@ class TestNestedMarker(CommonTestSetup):
                         "node_type": "directory",
                         "name": directory.name,
                         "path": directory.as_posix(),
-                        "markers": [],
                     }
                 ],
             },
@@ -115,11 +142,40 @@ class TestNestedMarker(CommonTestSetup):
                         "doc": "",
                         "markers": ["skip"],
                         "parameters": {},
-                        "file": "test_markers.py",
+                        "path": "test_markers.py",
                         "module": "test_markers",
-                        "parent": "TestMarked",
+                        "suite": "TestMarked",
                         "function": "test_marked",
                     },
+                ],
+            },
+            {
+                "event": "CollectReport",
+                "node_id": "test_markers.py",
+                "items": [
+                    {
+                        "node_id": "test_markers.py::TestMarked",
+                        "node_type": "suite",
+                        "name": "TestMarked",
+                        "path": directory.joinpath("test_markers.py").as_posix(),
+                        "module": "test_markers",
+                        "doc": "",
+                        "markers": ["skip"],
+                    }
+                ],
+            },
+            {
+                "event": "CollectReport",
+                "node_id": ".",
+                "items": [
+                    {
+                        "node_id": "test_markers.py",
+                        "node_type": "module",
+                        "name": "test_markers.py",
+                        "path": directory.joinpath("test_markers.py").as_posix(),
+                        "doc": "",
+                        "markers": [],
+                    }
                 ],
             },
             {"exit_status": 0, "event": "SessionFinish"},

@@ -7,8 +7,7 @@
   "required": [
     "event",
     "when",
-    "filename",
-    "lineno",
+    "traceback",
     "exception_type",
     "exception_value"
   ],
@@ -25,13 +24,13 @@
       ],
       "description": "When the error message is emitted"
     },
-    "filename": {
-      "type": "string",
-      "description": "The filename of the file where the error message is emitted"
+    "location": {
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/location.json",
+      "description": "The location of the error"
     },
-    "lineno": {
-      "type": "integer",
-      "description": "The line number of the file where the error message is emitted"
+    "traceback": {
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/traceback.json",
+      "description": "The traceback of the error"
     },
     "exception_type": {
       "type": "string",

@@ -22,7 +22,7 @@ def parse_node_id(node_id: str) -> tuple[str, str, str, str]:
     raise Exception('Failed parsing pytest node id: "%s"' % node_id)
 
 
-def get_test_doc(item: pytest.Item) -> str:
+def get_test_doc(item: pytest.Item | pytest.Module | pytest.Class) -> str:
     try:
         return item.obj.__doc__ or ""  # type: ignore
     except AttributeError:
@@ -36,7 +36,9 @@ def get_test_args(item: pytest.Item) -> dict[str, Any]:
         return {}
 
 
-def get_test_markers(item: pytest.Item | pytest.Directory) -> list[pytest.Mark]:
+def get_test_markers(
+    item: pytest.Item | pytest.Directory | pytest.Module | pytest.Class,
+) -> list[pytest.Mark]:
     return list(item.iter_markers())
 
 

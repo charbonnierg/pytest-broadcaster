@@ -1,0 +1,44 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "test_module.json",
+    "title": "Test Module",
+    "description": "Pytest Test Module",
+    "type": "object",
+    "required": [
+      "node_id",
+      "node_type",
+      "name",
+      "path",
+      "doc",
+      "markers"
+    ],
+    "properties": {
+      "node_id": {
+        "type": "string",
+        "description": "Node ID"
+      },
+      "node_type": {
+        "const": "module",
+        "description": "Node Type"
+      },
+      "name": {
+        "type": "string",
+        "description": "Module name"
+      },
+      "path": {
+        "type": "string",
+        "description": "File path"
+      },
+      "doc": {
+        "type": "string",
+        "description": "Module docstring"
+      },
+      "markers": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Test markers"
+      }
+    }
+  }

@@ -37,7 +37,7 @@ class TestCase:
     """
     Node Type
     """
-    file: Optional[str] = None
+    path: Optional[str] = None
     """
     File path
     """
@@ -45,9 +45,9 @@ class TestCase:
     """
     Module name
     """
-    parent: Optional[str] = None
+    suite: Optional[str] = None
     """
-    Class name
+    Parent suite
     """
     function: Optional[str] = None
     """

@@ -15,7 +15,7 @@ class TestBasicMarker(CommonTestSetup):
 
     def make_test_directory(self) -> Path:
         return self.make_testfile(
-            "test_basic.py",
+            "test_basic_marker.py",
             """
             import pytest
 
@@ -50,26 +50,41 @@ class TestBasicMarker(CommonTestSetup):
                             "node_type": "directory",
                             "name": directory.name,
                             "path": directory.as_posix(),
-                            "markers": [],
                         }
                     ],
                 },
                 {
                     "event": "CollectReport",
-                    "node_id": "test_basic.py",
+                    "node_id": "test_basic_marker.py",
                     "items": [
                         {
-                            "node_id": "test_basic.py::test_ok",
+                            "node_id": "test_basic_marker.py::test_ok",
                             "node_type": "case",
                             "name": "test_ok",
                             "doc": "",
                             "markers": ["skip"],
                             "parameters": {},
-                            "file": "test_basic.py",
-                            "module": "test_basic",
-                            "parent": None,
+                            "path": "test_basic_marker.py",
+                            "module": "test_basic_marker",
+                            "suite": None,
                             "function": "test_ok",
                         },
+                    ],
+                },
+                {
+                    "event": "CollectReport",
+                    "node_id": ".",
+                    "items": [
+                        {
+                            "node_id": "test_basic_marker.py",
+                            "name": "test_basic_marker.py",
+                            "path": directory.joinpath(
+                                "test_basic_marker.py"
+                            ).as_posix(),
+                            "markers": [],
+                            "doc": "",
+                            "node_type": "module",
+                        }
                     ],
                 },
             ],
@@ -99,26 +114,39 @@ class TestBasicMarker(CommonTestSetup):
                         "node_type": "directory",
                         "name": directory.name,
                         "path": directory.as_posix(),
-                        "markers": [],
                     }
                 ],
             },
             {
                 "event": "CollectReport",
-                "node_id": "test_basic.py",
+                "node_id": "test_basic_marker.py",
                 "items": [
                     {
-                        "node_id": "test_basic.py::test_ok",
+                        "node_id": "test_basic_marker.py::test_ok",
                         "node_type": "case",
                         "name": "test_ok",
                         "doc": "",
                         "markers": ["skip"],
                         "parameters": {},
-                        "file": "test_basic.py",
-                        "module": "test_basic",
-                        "parent": None,
+                        "path": "test_basic_marker.py",
+                        "module": "test_basic_marker",
+                        "suite": None,
                         "function": "test_ok",
                     },
+                ],
+            },
+            {
+                "event": "CollectReport",
+                "node_id": ".",
+                "items": [
+                    {
+                        "node_id": "test_basic_marker.py",
+                        "node_type": "module",
+                        "name": "test_basic_marker.py",
+                        "path": directory.joinpath("test_basic_marker.py").as_posix(),
+                        "doc": "",
+                        "markers": [],
+                    }
                 ],
             },
             {"exit_status": 0, "event": "SessionFinish"},

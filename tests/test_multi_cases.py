@@ -14,7 +14,7 @@ class TestMultiCases(CommonTestSetup):
 
     def make_test_directory(self) -> Path:
         return self.make_testfile(
-            "test_basic.py",
+            "test_multi_cases.py",
             """
             def test_1():
                 '''This is a test docstring.'''
@@ -51,38 +51,53 @@ class TestMultiCases(CommonTestSetup):
                             "node_type": "directory",
                             "name": directory.name,
                             "path": directory.as_posix(),
-                            "markers": [],
                         }
                     ],
                 },
                 {
                     "event": "CollectReport",
-                    "node_id": "test_basic.py",
+                    "node_id": "test_multi_cases.py",
                     "items": [
                         {
-                            "node_id": "test_basic.py::test_1",
+                            "node_id": "test_multi_cases.py::test_1",
                             "node_type": "case",
                             "name": "test_1",
                             "doc": "This is a test docstring.",
                             "markers": [],
                             "parameters": {},
-                            "file": "test_basic.py",
-                            "module": "test_basic",
-                            "parent": None,
+                            "path": "test_multi_cases.py",
+                            "module": "test_multi_cases",
+                            "suite": None,
                             "function": "test_1",
                         },
                         {
-                            "node_id": "test_basic.py::test_2",
+                            "node_id": "test_multi_cases.py::test_2",
                             "node_type": "case",
                             "name": "test_2",
                             "doc": "This is a test docstring.",
                             "markers": [],
                             "parameters": {},
-                            "file": "test_basic.py",
-                            "module": "test_basic",
-                            "parent": None,
+                            "path": "test_multi_cases.py",
+                            "module": "test_multi_cases",
+                            "suite": None,
                             "function": "test_2",
                         },
+                    ],
+                },
+                {
+                    "event": "CollectReport",
+                    "node_id": ".",
+                    "items": [
+                        {
+                            "node_id": "test_multi_cases.py",
+                            "node_type": "module",
+                            "name": "test_multi_cases.py",
+                            "path": directory.joinpath(
+                                "test_multi_cases.py"
+                            ).as_posix(),
+                            "doc": "",
+                            "markers": [],
+                        }
                     ],
                 },
             ],
@@ -112,39 +127,52 @@ class TestMultiCases(CommonTestSetup):
                         "node_type": "directory",
                         "name": directory.name,
                         "path": directory.as_posix(),
-                        "markers": [],
                     }
                 ],
             },
             {
                 "items": [
                     {
-                        "node_id": "test_basic.py::test_1",
+                        "node_id": "test_multi_cases.py::test_1",
                         "node_type": "case",
                         "name": "test_1",
                         "doc": "This is a test docstring.",
                         "markers": [],
                         "parameters": {},
-                        "file": "test_basic.py",
-                        "module": "test_basic",
-                        "parent": None,
+                        "path": "test_multi_cases.py",
+                        "module": "test_multi_cases",
+                        "suite": None,
                         "function": "test_1",
                     },
                     {
-                        "node_id": "test_basic.py::test_2",
+                        "node_id": "test_multi_cases.py::test_2",
                         "node_type": "case",
                         "name": "test_2",
                         "doc": "This is a test docstring.",
                         "markers": [],
                         "parameters": {},
-                        "file": "test_basic.py",
-                        "module": "test_basic",
-                        "parent": None,
+                        "path": "test_multi_cases.py",
+                        "module": "test_multi_cases",
+                        "suite": None,
                         "function": "test_2",
                     },
                 ],
                 "event": "CollectReport",
-                "node_id": "test_basic.py",
+                "node_id": "test_multi_cases.py",
+            },
+            {
+                "event": "CollectReport",
+                "node_id": ".",
+                "items": [
+                    {
+                        "node_id": "test_multi_cases.py",
+                        "node_type": "module",
+                        "name": "test_multi_cases.py",
+                        "path": directory.joinpath("test_multi_cases.py").as_posix(),
+                        "doc": "",
+                        "markers": [],
+                    }
+                ],
             },
             {"exit_status": 0, "event": "SessionFinish"},
         ]

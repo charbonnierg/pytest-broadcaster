@@ -23,6 +23,8 @@
       "items": {
         "oneOf": [
           {"$ref": "test_directory.json/#"},
+          {"$ref": "test_module.json/#"},
+          {"$ref": "test_suite.json/#"},
           {"$ref": "test_case.json/#"}
         ]
       }

@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional
 
 
 @dataclass
@@ -20,8 +19,4 @@ class Location:
     lineno: int
     """
     Line number
-    """
-    function: Optional[str] = None
-    """
-    Function name
     """

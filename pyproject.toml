@@ -58,7 +58,7 @@ diff = { chain = ["__generate-models-check", "__format-models-check", "__generat
 # Generate version file
 version = "hatch --quiet build --hooks-only"
 # Private tasks used for chaining
-__typecheck = "pyright"
+__typecheck = { cmd = "pyright", env =  {PYRIGHT_PYTHON_FORCE_VERSION="latest" }}
 __lint = "rye lint"
 __test = "rye test"
 __format = "rye fmt"

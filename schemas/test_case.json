@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
   "$id": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case.json",
-  "title": "TestCase",
+  "title": "Test Case",
   "description": "Pytest Test Case",
   "type": "object",
   "required": [
@@ -21,7 +21,7 @@
       "const": "case",
       "description": "Node Type"
     },
-    "file": {
+    "path": {
       "type": "string",
       "description": "File path"
     },
@@ -29,9 +29,9 @@
       "type": "string",
       "description": "Module name"
     },
-    "parent": {
+    "suite": {
       "type": "string",
-      "description": "Class name"
+      "description": "Parent suite"
     },
     "function": {
       "type": "string",

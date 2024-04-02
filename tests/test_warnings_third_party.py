@@ -48,7 +48,6 @@ class TestWarningsThirdParty(CommonTestSetup):
                     "location": {
                         "filename": filename("with_warnings.py"),
                         "lineno": 3,
-                        "function": None,
                     },
                     "message": "Hey, you've been warned",
                     "event": "WarningMessage",
@@ -62,7 +61,6 @@ class TestWarningsThirdParty(CommonTestSetup):
                     "location": {
                         "filename": filename("with_warnings.py"),
                         "lineno": 4,
-                        "function": None,
                     },
                     "category": "UserWarning",
                 },
@@ -77,7 +75,6 @@ class TestWarningsThirdParty(CommonTestSetup):
                             "node_type": "directory",
                             "name": directory.name,
                             "path": directory.as_posix(),
-                            "markers": [],
                         }
                     ],
                 },
@@ -92,10 +89,24 @@ class TestWarningsThirdParty(CommonTestSetup):
                             "doc": "This is a test docstring.",
                             "markers": [],
                             "parameters": {},
-                            "file": "test_warnings.py",
+                            "path": "test_warnings.py",
                             "module": "test_warnings",
-                            "parent": None,
+                            "suite": None,
                             "function": "test_warn",
+                        }
+                    ],
+                },
+                {
+                    "event": "CollectReport",
+                    "node_id": ".",
+                    "items": [
+                        {
+                            "node_id": "test_warnings.py",
+                            "node_type": "module",
+                            "name": "test_warnings.py",
+                            "path": directory.joinpath("test_warnings.py").as_posix(),
+                            "doc": "",
+                            "markers": [],
                         }
                     ],
                 },
@@ -126,7 +137,6 @@ class TestWarningsThirdParty(CommonTestSetup):
                         "node_type": "directory",
                         "name": directory.name,
                         "path": directory.as_posix(),
-                        "markers": [],
                     }
                 ],
             },
@@ -141,11 +151,25 @@ class TestWarningsThirdParty(CommonTestSetup):
                         "doc": "This is a test docstring.",
                         "markers": [],
                         "parameters": {},
-                        "file": "test_warnings.py",
+                        "path": "test_warnings.py",
                         "module": "test_warnings",
-                        "parent": None,
+                        "suite": None,
                         "function": "test_warn",
                     },
+                ],
+            },
+            {
+                "event": "CollectReport",
+                "node_id": ".",
+                "items": [
+                    {
+                        "node_id": "test_warnings.py",
+                        "node_type": "module",
+                        "name": "test_warnings.py",
+                        "path": directory.joinpath("test_warnings.py").as_posix(),
+                        "doc": "",
+                        "markers": [],
+                    }
                 ],
             },
             {
@@ -154,7 +178,6 @@ class TestWarningsThirdParty(CommonTestSetup):
                 "location": {
                     "filename": filename("with_warnings.py"),
                     "lineno": 3,
-                    "function": None,
                 },
                 "message": "Hey, you've been warned",
                 "event": "WarningMessage",
@@ -166,7 +189,6 @@ class TestWarningsThirdParty(CommonTestSetup):
                 "location": {
                     "filename": filename("with_warnings.py"),
                     "lineno": 4,
-                    "function": None,
                 },
                 "message": "Hey, you've been warned twice !",
                 "event": "WarningMessage",

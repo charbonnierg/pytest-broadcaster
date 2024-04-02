@@ -18,7 +18,7 @@ class TestMultiSuite(CommonTestSetup):
             "test_module_1.py",
             """
             class TestSuite1:
-                '''This is a suite docstring'''
+                '''This is a suite docstring.'''
                 def test_1():
                     '''This is a first docstring.'''
                     pass
@@ -26,7 +26,7 @@ class TestMultiSuite(CommonTestSetup):
                     '''This is a second docstring.'''
                     pass
             class TestSuite2:
-                '''This is a suite docstring'''
+                '''This is a suite docstring.'''
                 def test_3():
                     '''This is a third docstring.'''
                     pass
@@ -39,7 +39,7 @@ class TestMultiSuite(CommonTestSetup):
             "test_module_2.py",
             """
             class TestSuite3:
-                '''This is a suite docstring'''
+                '''This is a suite docstring.'''
                 def test_5():
                     '''This is a fifth docstring.'''
                     pass
@@ -47,7 +47,7 @@ class TestMultiSuite(CommonTestSetup):
                     '''This is a sixth docstring.'''
                     pass
             class TestSuite4:
-                '''This is a suite docstring'''
+                '''This is a suite docstring.'''
                 def test_7():
                     '''This is a seventh docstring.'''
                     pass
@@ -82,7 +82,6 @@ class TestMultiSuite(CommonTestSetup):
                             "node_type": "directory",
                             "name": directory.name,
                             "path": directory.as_posix(),
-                            "markers": [],
                         }
                     ],
                 },
@@ -97,9 +96,9 @@ class TestMultiSuite(CommonTestSetup):
                             "doc": "This is a first docstring.",
                             "markers": [],
                             "parameters": {},
-                            "file": "test_module_1.py",
+                            "path": "test_module_1.py",
                             "module": "test_module_1",
-                            "parent": "TestSuite1",
+                            "suite": "TestSuite1",
                             "function": "test_1",
                         },
                         {
@@ -109,9 +108,9 @@ class TestMultiSuite(CommonTestSetup):
                             "doc": "This is a second docstring.",
                             "markers": [],
                             "parameters": {},
-                            "file": "test_module_1.py",
+                            "path": "test_module_1.py",
                             "module": "test_module_1",
-                            "parent": "TestSuite1",
+                            "suite": "TestSuite1",
                             "function": "test_2",
                         },
                     ],
@@ -127,9 +126,9 @@ class TestMultiSuite(CommonTestSetup):
                             "doc": "This is a third docstring.",
                             "markers": [],
                             "parameters": {},
-                            "file": "test_module_1.py",
+                            "path": "test_module_1.py",
                             "module": "test_module_1",
-                            "parent": "TestSuite2",
+                            "suite": "TestSuite2",
                             "function": "test_3",
                         },
                         {
@@ -139,10 +138,34 @@ class TestMultiSuite(CommonTestSetup):
                             "doc": "This is a fourth docstring.",
                             "markers": [],
                             "parameters": {},
-                            "file": "test_module_1.py",
+                            "path": "test_module_1.py",
                             "module": "test_module_1",
-                            "parent": "TestSuite2",
+                            "suite": "TestSuite2",
                             "function": "test_4",
+                        },
+                    ],
+                },
+                {
+                    "event": "CollectReport",
+                    "node_id": "test_module_1.py",
+                    "items": [
+                        {
+                            "node_id": "test_module_1.py::TestSuite1",
+                            "node_type": "suite",
+                            "name": "TestSuite1",
+                            "path": directory.joinpath("test_module_1.py").as_posix(),
+                            "module": "test_module_1",
+                            "markers": [],
+                            "doc": "This is a suite docstring.",
+                        },
+                        {
+                            "node_id": "test_module_1.py::TestSuite2",
+                            "node_type": "suite",
+                            "name": "TestSuite2",
+                            "path": directory.joinpath("test_module_1.py").as_posix(),
+                            "module": "test_module_1",
+                            "doc": "This is a suite docstring.",
+                            "markers": [],
                         },
                     ],
                 },
@@ -157,9 +180,9 @@ class TestMultiSuite(CommonTestSetup):
                             "doc": "This is a fifth docstring.",
                             "markers": [],
                             "parameters": {},
-                            "file": "test_module_2.py",
+                            "path": "test_module_2.py",
                             "module": "test_module_2",
-                            "parent": "TestSuite3",
+                            "suite": "TestSuite3",
                             "function": "test_5",
                         },
                         {
@@ -169,9 +192,9 @@ class TestMultiSuite(CommonTestSetup):
                             "doc": "This is a sixth docstring.",
                             "markers": [],
                             "parameters": {},
-                            "file": "test_module_2.py",
+                            "path": "test_module_2.py",
                             "module": "test_module_2",
-                            "parent": "TestSuite3",
+                            "suite": "TestSuite3",
                             "function": "test_6",
                         },
                     ],
@@ -187,9 +210,9 @@ class TestMultiSuite(CommonTestSetup):
                             "doc": "This is a seventh docstring.",
                             "markers": [],
                             "parameters": {},
-                            "file": "test_module_2.py",
+                            "path": "test_module_2.py",
                             "module": "test_module_2",
-                            "parent": "TestSuite4",
+                            "suite": "TestSuite4",
                             "function": "test_7",
                         },
                         {
@@ -199,10 +222,56 @@ class TestMultiSuite(CommonTestSetup):
                             "doc": "This is a eighth docstring.",
                             "markers": [],
                             "parameters": {},
-                            "file": "test_module_2.py",
+                            "path": "test_module_2.py",
                             "module": "test_module_2",
-                            "parent": "TestSuite4",
+                            "suite": "TestSuite4",
                             "function": "test_8",
+                        },
+                    ],
+                },
+                {
+                    "event": "CollectReport",
+                    "node_id": "test_module_2.py",
+                    "items": [
+                        {
+                            "node_id": "test_module_2.py::TestSuite3",
+                            "node_type": "suite",
+                            "name": "TestSuite3",
+                            "path": directory.joinpath("test_module_2.py").as_posix(),
+                            "module": "test_module_2",
+                            "doc": "This is a suite docstring.",
+                            "markers": [],
+                        },
+                        {
+                            "node_id": "test_module_2.py::TestSuite4",
+                            "node_type": "suite",
+                            "name": "TestSuite4",
+                            "path": directory.joinpath("test_module_2.py").as_posix(),
+                            "module": "test_module_2",
+                            "doc": "This is a suite docstring.",
+                            "markers": [],
+                        },
+                    ],
+                },
+                {
+                    "event": "CollectReport",
+                    "node_id": ".",
+                    "items": [
+                        {
+                            "node_id": "test_module_1.py",
+                            "node_type": "module",
+                            "name": "test_module_1.py",
+                            "path": directory.joinpath("test_module_1.py").as_posix(),
+                            "doc": "",
+                            "markers": [],
+                        },
+                        {
+                            "node_id": "test_module_2.py",
+                            "node_type": "module",
+                            "name": "test_module_2.py",
+                            "path": directory.joinpath("test_module_2.py").as_posix(),
+                            "doc": "",
+                            "markers": [],
                         },
                     ],
                 },
@@ -233,7 +302,6 @@ class TestMultiSuite(CommonTestSetup):
                         "node_type": "directory",
                         "name": directory.name,
                         "path": directory.as_posix(),
-                        "markers": [],
                     }
                 ],
             },
@@ -248,9 +316,9 @@ class TestMultiSuite(CommonTestSetup):
                         "doc": "This is a first docstring.",
                         "markers": [],
                         "parameters": {},
-                        "file": "test_module_1.py",
+                        "path": "test_module_1.py",
                         "module": "test_module_1",
-                        "parent": "TestSuite1",
+                        "suite": "TestSuite1",
                         "function": "test_1",
                     },
                     {
@@ -260,9 +328,9 @@ class TestMultiSuite(CommonTestSetup):
                         "doc": "This is a second docstring.",
                         "markers": [],
                         "parameters": {},
-                        "file": "test_module_1.py",
+                        "path": "test_module_1.py",
                         "module": "test_module_1",
-                        "parent": "TestSuite1",
+                        "suite": "TestSuite1",
                         "function": "test_2",
                     },
                 ],
@@ -278,9 +346,9 @@ class TestMultiSuite(CommonTestSetup):
                         "doc": "This is a third docstring.",
                         "markers": [],
                         "parameters": {},
-                        "file": "test_module_1.py",
+                        "path": "test_module_1.py",
                         "module": "test_module_1",
-                        "parent": "TestSuite2",
+                        "suite": "TestSuite2",
                         "function": "test_3",
                     },
                     {
@@ -290,10 +358,34 @@ class TestMultiSuite(CommonTestSetup):
                         "doc": "This is a fourth docstring.",
                         "markers": [],
                         "parameters": {},
-                        "file": "test_module_1.py",
+                        "path": "test_module_1.py",
                         "module": "test_module_1",
-                        "parent": "TestSuite2",
+                        "suite": "TestSuite2",
                         "function": "test_4",
+                    },
+                ],
+            },
+            {
+                "event": "CollectReport",
+                "node_id": "test_module_1.py",
+                "items": [
+                    {
+                        "node_id": "test_module_1.py::TestSuite1",
+                        "node_type": "suite",
+                        "name": "TestSuite1",
+                        "path": directory.joinpath("test_module_1.py").as_posix(),
+                        "module": "test_module_1",
+                        "doc": "This is a suite docstring.",
+                        "markers": [],
+                    },
+                    {
+                        "node_id": "test_module_1.py::TestSuite2",
+                        "node_type": "suite",
+                        "name": "TestSuite2",
+                        "path": directory.joinpath("test_module_1.py").as_posix(),
+                        "module": "test_module_1",
+                        "doc": "This is a suite docstring.",
+                        "markers": [],
                     },
                 ],
             },
@@ -308,9 +400,9 @@ class TestMultiSuite(CommonTestSetup):
                         "doc": "This is a fifth docstring.",
                         "markers": [],
                         "parameters": {},
-                        "file": "test_module_2.py",
+                        "path": "test_module_2.py",
                         "module": "test_module_2",
-                        "parent": "TestSuite3",
+                        "suite": "TestSuite3",
                         "function": "test_5",
                     },
                     {
@@ -320,9 +412,9 @@ class TestMultiSuite(CommonTestSetup):
                         "doc": "This is a sixth docstring.",
                         "markers": [],
                         "parameters": {},
-                        "file": "test_module_2.py",
+                        "path": "test_module_2.py",
                         "module": "test_module_2",
-                        "parent": "TestSuite3",
+                        "suite": "TestSuite3",
                         "function": "test_6",
                     },
                 ],
@@ -338,9 +430,9 @@ class TestMultiSuite(CommonTestSetup):
                         "doc": "This is a seventh docstring.",
                         "markers": [],
                         "parameters": {},
-                        "file": "test_module_2.py",
+                        "path": "test_module_2.py",
                         "module": "test_module_2",
-                        "parent": "TestSuite4",
+                        "suite": "TestSuite4",
                         "function": "test_7",
                     },
                     {
@@ -350,10 +442,56 @@ class TestMultiSuite(CommonTestSetup):
                         "doc": "This is a eighth docstring.",
                         "markers": [],
                         "parameters": {},
-                        "file": "test_module_2.py",
+                        "path": "test_module_2.py",
                         "module": "test_module_2",
-                        "parent": "TestSuite4",
+                        "suite": "TestSuite4",
                         "function": "test_8",
+                    },
+                ],
+            },
+            {
+                "event": "CollectReport",
+                "node_id": "test_module_2.py",
+                "items": [
+                    {
+                        "node_id": "test_module_2.py::TestSuite3",
+                        "node_type": "suite",
+                        "name": "TestSuite3",
+                        "path": directory.joinpath("test_module_2.py").as_posix(),
+                        "module": "test_module_2",
+                        "doc": "This is a suite docstring.",
+                        "markers": [],
+                    },
+                    {
+                        "node_id": "test_module_2.py::TestSuite4",
+                        "node_type": "suite",
+                        "name": "TestSuite4",
+                        "path": directory.joinpath("test_module_2.py").as_posix(),
+                        "module": "test_module_2",
+                        "doc": "This is a suite docstring.",
+                        "markers": [],
+                    },
+                ],
+            },
+            {
+                "event": "CollectReport",
+                "node_id": ".",
+                "items": [
+                    {
+                        "node_id": "test_module_1.py",
+                        "node_type": "module",
+                        "name": "test_module_1.py",
+                        "path": directory.joinpath("test_module_1.py").as_posix(),
+                        "doc": "",
+                        "markers": [],
+                    },
+                    {
+                        "node_id": "test_module_2.py",
+                        "node_type": "module",
+                        "name": "test_module_2.py",
+                        "path": directory.joinpath("test_module_2.py").as_posix(),
+                        "doc": "",
+                        "markers": [],
                     },
                 ],
             },

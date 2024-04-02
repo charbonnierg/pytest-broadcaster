@@ -5,6 +5,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
+from typing import Optional
+
+from . import location, traceback
 
 
 class When(Enum):
@@ -27,13 +30,9 @@ class ErrorMessage:
     """
     When the error message is emitted
     """
-    filename: str
+    traceback: traceback.Traceback
     """
-    The filename of the file where the error message is emitted
-    """
-    lineno: int
-    """
-    The line number of the file where the error message is emitted
+    The traceback of the error
     """
     exception_type: str
     """
@@ -46,4 +45,8 @@ class ErrorMessage:
     event: str = "ErrorMessage"
     """
     The event type
+    """
+    location: Optional[location.Location] = None
+    """
+    The location of the error
     """

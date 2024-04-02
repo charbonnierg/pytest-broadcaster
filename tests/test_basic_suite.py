@@ -15,10 +15,11 @@ class TestBasicSuite(CommonTestSetup):
 
     def make_test_directory(self) -> Path:
         return self.make_testfile(
-            "test_basic.py",
+            "test_basic_suite.py",
             """
+            '''This is a module docstring.'''
             class TestOk:
-                '''This is a suite docstring'''
+                '''This is a suite docstring.'''
                 def test_1():
                     '''This is a first docstring.'''
                     pass
@@ -53,38 +54,70 @@ class TestBasicSuite(CommonTestSetup):
                             "node_type": "directory",
                             "name": directory.name,
                             "path": directory.as_posix(),
+                        }
+                    ],
+                },
+                {
+                    "event": "CollectReport",
+                    "node_id": "test_basic_suite.py::TestOk",
+                    "items": [
+                        {
+                            "node_id": "test_basic_suite.py::TestOk::test_1",
+                            "node_type": "case",
+                            "name": "test_1",
+                            "doc": "This is a first docstring.",
+                            "markers": [],
+                            "parameters": {},
+                            "path": "test_basic_suite.py",
+                            "module": "test_basic_suite",
+                            "suite": "TestOk",
+                            "function": "test_1",
+                        },
+                        {
+                            "node_id": "test_basic_suite.py::TestOk::test_2",
+                            "node_type": "case",
+                            "name": "test_2",
+                            "doc": "This is a second docstring.",
+                            "markers": [],
+                            "parameters": {},
+                            "path": "test_basic_suite.py",
+                            "module": "test_basic_suite",
+                            "suite": "TestOk",
+                            "function": "test_2",
+                        },
+                    ],
+                },
+                {
+                    "event": "CollectReport",
+                    "node_id": "test_basic_suite.py",
+                    "items": [
+                        {
+                            "node_id": "test_basic_suite.py::TestOk",
+                            "node_type": "suite",
+                            "name": "TestOk",
+                            "path": directory.joinpath(
+                                "test_basic_suite.py"
+                            ).as_posix(),
+                            "module": "test_basic_suite",
+                            "doc": "This is a suite docstring.",
                             "markers": [],
                         }
                     ],
                 },
                 {
                     "event": "CollectReport",
-                    "node_id": "test_basic.py::TestOk",
+                    "node_id": ".",
                     "items": [
                         {
-                            "node_id": "test_basic.py::TestOk::test_1",
-                            "node_type": "case",
-                            "name": "test_1",
-                            "doc": "This is a first docstring.",
+                            "node_id": "test_basic_suite.py",
+                            "node_type": "module",
+                            "name": "test_basic_suite.py",
+                            "path": directory.joinpath(
+                                "test_basic_suite.py"
+                            ).as_posix(),
+                            "doc": "This is a module docstring.",
                             "markers": [],
-                            "parameters": {},
-                            "file": "test_basic.py",
-                            "module": "test_basic",
-                            "parent": "TestOk",
-                            "function": "test_1",
-                        },
-                        {
-                            "node_id": "test_basic.py::TestOk::test_2",
-                            "node_type": "case",
-                            "name": "test_2",
-                            "doc": "This is a second docstring.",
-                            "markers": [],
-                            "parameters": {},
-                            "file": "test_basic.py",
-                            "module": "test_basic",
-                            "parent": "TestOk",
-                            "function": "test_2",
-                        },
+                        }
                     ],
                 },
             ],
@@ -114,38 +147,66 @@ class TestBasicSuite(CommonTestSetup):
                         "node_type": "directory",
                         "name": directory.name,
                         "path": directory.as_posix(),
+                    }
+                ],
+            },
+            {
+                "event": "CollectReport",
+                "node_id": "test_basic_suite.py::TestOk",
+                "items": [
+                    {
+                        "node_id": "test_basic_suite.py::TestOk::test_1",
+                        "node_type": "case",
+                        "name": "test_1",
+                        "doc": "This is a first docstring.",
+                        "markers": [],
+                        "parameters": {},
+                        "path": "test_basic_suite.py",
+                        "module": "test_basic_suite",
+                        "suite": "TestOk",
+                        "function": "test_1",
+                    },
+                    {
+                        "node_id": "test_basic_suite.py::TestOk::test_2",
+                        "node_type": "case",
+                        "name": "test_2",
+                        "doc": "This is a second docstring.",
+                        "markers": [],
+                        "parameters": {},
+                        "path": "test_basic_suite.py",
+                        "module": "test_basic_suite",
+                        "suite": "TestOk",
+                        "function": "test_2",
+                    },
+                ],
+            },
+            {
+                "event": "CollectReport",
+                "node_id": "test_basic_suite.py",
+                "items": [
+                    {
+                        "node_id": "test_basic_suite.py::TestOk",
+                        "node_type": "suite",
+                        "name": "TestOk",
+                        "path": directory.joinpath("test_basic_suite.py").as_posix(),
+                        "doc": "This is a suite docstring.",
+                        "module": "test_basic_suite",
                         "markers": [],
                     }
                 ],
             },
             {
                 "event": "CollectReport",
-                "node_id": "test_basic.py::TestOk",
+                "node_id": ".",
                 "items": [
                     {
-                        "node_id": "test_basic.py::TestOk::test_1",
-                        "node_type": "case",
-                        "name": "test_1",
-                        "doc": "This is a first docstring.",
+                        "node_id": "test_basic_suite.py",
+                        "node_type": "module",
+                        "name": "test_basic_suite.py",
+                        "path": directory.joinpath("test_basic_suite.py").as_posix(),
+                        "doc": "This is a module docstring.",
                         "markers": [],
-                        "parameters": {},
-                        "file": "test_basic.py",
-                        "module": "test_basic",
-                        "parent": "TestOk",
-                        "function": "test_1",
-                    },
-                    {
-                        "node_id": "test_basic.py::TestOk::test_2",
-                        "node_type": "case",
-                        "name": "test_2",
-                        "doc": "This is a second docstring.",
-                        "markers": [],
-                        "parameters": {},
-                        "file": "test_basic.py",
-                        "module": "test_basic",
-                        "parent": "TestOk",
-                        "function": "test_2",
-                    },
+                    }
                 ],
             },
             {"exit_status": 0, "event": "SessionFinish"},

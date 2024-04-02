@@ -1,16 +1,17 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "test_case.json",
-  "title": "Test Case",
-  "description": "Pytest Test Case",
+  "$id": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_suite.json",
+  "title": "Test Suite",
+  "description": "Pytest Test Suite",
   "type": "object",
   "required": [
     "node_id",
     "node_type",
     "name",
+    "module",
+    "path",
     "doc",
-    "markers",
-    "parameters"
+    "markers"
   ],
   "properties": {
     "node_id": {
@@ -18,32 +19,24 @@
       "description": "Node ID"
     },
     "node_type": {
-      "const": "case",
+      "const": "suite",
       "description": "Node Type"
     },
-    "path": {
+    "name": {
       "type": "string",
-      "description": "File path"
+      "description": "Suite name"
     },
     "module": {
       "type": "string",
       "description": "Module name"
     },
-    "suite": {
+    "path": {
       "type": "string",
-      "description": "Parent suite"
-    },
-    "function": {
-      "type": "string",
-      "description": "Function name"
-    },
-    "name": {
-      "type": "string",
-      "description": "Test Name"
+      "description": "File path"
     },
     "doc": {
       "type": "string",
-      "description": "Test docstring"
+      "description": "Suite documentation"
     },
     "markers": {
       "type": "array",
@@ -51,13 +44,6 @@
         "type": "string"
       },
       "description": "Test markers"
-    },
-    "parameters": {
-      "type": "object",
-      "description": "Test parameters names and types",
-      "additionalProperties": {
-        "type": "string"
-      }
     }
   }
 }

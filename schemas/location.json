@@ -16,10 +16,6 @@
     "lineno": {
       "type": "integer",
       "description": "Line number"
-    },
-    "function": {
-      "type": "string",
-      "description": "Function name"
     }
   }
 }

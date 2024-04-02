@@ -16,6 +16,8 @@ class TestBasic(CommonTestSetup):
         return self.make_testfile(
             "test_basic.py",
             """
+            '''This is a module docstring.'''
+
             def test_ok():
                 '''This is a test docstring.'''
                 pass
@@ -44,10 +46,9 @@ class TestBasic(CommonTestSetup):
                     "items": [
                         {
                             "node_id": ".",
+                            "node_type": "directory",
                             "name": directory.name,
                             "path": directory.as_posix(),
-                            "markers": [],
-                            "node_type": "directory",
                         }
                     ],
                 },
@@ -62,10 +63,24 @@ class TestBasic(CommonTestSetup):
                             "doc": "This is a test docstring.",
                             "markers": [],
                             "parameters": {},
-                            "file": "test_basic.py",
+                            "path": "test_basic.py",
                             "module": "test_basic",
-                            "parent": None,
+                            "suite": None,
                             "function": "test_ok",
+                        }
+                    ],
+                },
+                {
+                    "event": "CollectReport",
+                    "node_id": ".",
+                    "items": [
+                        {
+                            "node_id": "test_basic.py",
+                            "name": "test_basic.py",
+                            "path": directory.joinpath("test_basic.py").as_posix(),
+                            "doc": "This is a module docstring.",
+                            "markers": [],
+                            "node_type": "module",
                         }
                     ],
                 },
@@ -93,10 +108,9 @@ class TestBasic(CommonTestSetup):
                 "items": [
                     {
                         "node_id": ".",
+                        "node_type": "directory",
                         "name": directory.name,
                         "path": directory.as_posix(),
-                        "markers": [],
-                        "node_type": "directory",
                     }
                 ],
             },
@@ -111,11 +125,25 @@ class TestBasic(CommonTestSetup):
                         "doc": "This is a test docstring.",
                         "markers": [],
                         "parameters": {},
-                        "file": "test_basic.py",
+                        "path": "test_basic.py",
                         "module": "test_basic",
-                        "parent": None,
+                        "suite": None,
                         "function": "test_ok",
                     },
+                ],
+            },
+            {
+                "event": "CollectReport",
+                "node_id": ".",
+                "items": [
+                    {
+                        "node_id": "test_basic.py",
+                        "name": "test_basic.py",
+                        "path": directory.joinpath("test_basic.py").as_posix(),
+                        "doc": "This is a module docstring.",
+                        "markers": [],
+                        "node_type": "module",
+                    }
                 ],
             },
             {"exit_status": 0, "event": "SessionFinish"},

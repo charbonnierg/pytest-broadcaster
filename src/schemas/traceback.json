@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "traceback.json",
+  "title": "Traceback",
+  "description": "Error traceback",
+  "type": "object",
+  "required": [
+    "lines"
+  ],
+  "properties": {
+    "lines": {
+      "type": "array",
+      "description": "Traceback entries",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

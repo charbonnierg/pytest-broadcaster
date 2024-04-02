@@ -15,7 +15,7 @@ class TestBasicParametrization(CommonTestSetup):
 
     def make_test_directory(self) -> Path:
         return self.make_testfile(
-            "test_basic.py",
+            "test_basic_parametrization.py",
             """
             import pytest
 
@@ -50,50 +50,65 @@ class TestBasicParametrization(CommonTestSetup):
                             "node_type": "directory",
                             "name": directory.name,
                             "path": directory.as_posix(),
-                            "markers": [],
                         }
                     ],
                 },
                 {
                     "event": "CollectReport",
-                    "node_id": "test_basic.py",
+                    "node_id": "test_basic_parametrization.py",
                     "items": [
                         {
-                            "node_id": "test_basic.py::test_ok[1]",
+                            "node_id": "test_basic_parametrization.py::test_ok[1]",
                             "node_type": "case",
                             "name": "test_ok[1]",
                             "doc": "",
                             "markers": ["parametrize"],
                             "parameters": {"arg": "int"},
-                            "file": "test_basic.py",
-                            "module": "test_basic",
-                            "parent": None,
+                            "path": "test_basic_parametrization.py",
+                            "module": "test_basic_parametrization",
+                            "suite": None,
                             "function": "test_ok",
                         },
                         {
-                            "node_id": "test_basic.py::test_ok[2]",
+                            "node_id": "test_basic_parametrization.py::test_ok[2]",
                             "node_type": "case",
                             "name": "test_ok[2]",
                             "doc": "",
                             "markers": ["parametrize"],
                             "parameters": {"arg": "int"},
-                            "file": "test_basic.py",
-                            "module": "test_basic",
-                            "parent": None,
+                            "path": "test_basic_parametrization.py",
+                            "module": "test_basic_parametrization",
+                            "suite": None,
                             "function": "test_ok",
                         },
                         {
-                            "node_id": "test_basic.py::test_ok[3]",
+                            "node_id": "test_basic_parametrization.py::test_ok[3]",
                             "node_type": "case",
                             "name": "test_ok[3]",
                             "doc": "",
                             "markers": ["parametrize"],
                             "parameters": {"arg": "int"},
-                            "file": "test_basic.py",
-                            "module": "test_basic",
-                            "parent": None,
+                            "path": "test_basic_parametrization.py",
+                            "module": "test_basic_parametrization",
+                            "suite": None,
                             "function": "test_ok",
                         },
+                    ],
+                },
+                {
+                    "event": "CollectReport",
+                    "node_id": ".",
+                    "items": [
+                        {
+                            "node_id": "test_basic_parametrization.py",
+                            "name": "test_basic_parametrization.py",
+                            "path": directory.joinpath(
+                                "test_basic_parametrization.py"
+                            ).as_posix(),
+                            "doc": "",
+                            "markers": [],
+                            "node_type": "module",
+                        }
                     ],
                 },
             ],
@@ -123,51 +138,66 @@ class TestBasicParametrization(CommonTestSetup):
                         "node_type": "directory",
                         "name": directory.name,
                         "path": directory.as_posix(),
-                        "markers": [],
                     }
                 ],
             },
             {
                 "items": [
                     {
-                        "node_id": "test_basic.py::test_ok[1]",
+                        "node_id": "test_basic_parametrization.py::test_ok[1]",
                         "node_type": "case",
                         "name": "test_ok[1]",
                         "doc": "",
                         "markers": ["parametrize"],
                         "parameters": {"arg": "int"},
-                        "file": "test_basic.py",
-                        "module": "test_basic",
-                        "parent": None,
+                        "path": "test_basic_parametrization.py",
+                        "module": "test_basic_parametrization",
+                        "suite": None,
                         "function": "test_ok",
                     },
                     {
-                        "node_id": "test_basic.py::test_ok[2]",
+                        "node_id": "test_basic_parametrization.py::test_ok[2]",
                         "node_type": "case",
                         "name": "test_ok[2]",
                         "doc": "",
                         "markers": ["parametrize"],
                         "parameters": {"arg": "int"},
-                        "file": "test_basic.py",
-                        "module": "test_basic",
-                        "parent": None,
+                        "path": "test_basic_parametrization.py",
+                        "module": "test_basic_parametrization",
+                        "suite": None,
                         "function": "test_ok",
                     },
                     {
-                        "node_id": "test_basic.py::test_ok[3]",
+                        "node_id": "test_basic_parametrization.py::test_ok[3]",
                         "node_type": "case",
                         "name": "test_ok[3]",
                         "doc": "",
                         "markers": ["parametrize"],
                         "parameters": {"arg": "int"},
-                        "file": "test_basic.py",
-                        "module": "test_basic",
-                        "parent": None,
+                        "path": "test_basic_parametrization.py",
+                        "module": "test_basic_parametrization",
+                        "suite": None,
                         "function": "test_ok",
                     },
                 ],
                 "event": "CollectReport",
-                "node_id": "test_basic.py",
+                "node_id": "test_basic_parametrization.py",
+            },
+            {
+                "event": "CollectReport",
+                "node_id": ".",
+                "items": [
+                    {
+                        "node_id": "test_basic_parametrization.py",
+                        "name": "test_basic_parametrization.py",
+                        "path": directory.joinpath(
+                            "test_basic_parametrization.py"
+                        ).as_posix(),
+                        "doc": "",
+                        "markers": [],
+                        "node_type": "module",
+                    }
+                ],
             },
             {"exit_status": 0, "event": "SessionFinish"},
         ]

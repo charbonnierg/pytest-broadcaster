@@ -50,7 +50,6 @@ class TestWarnings(CommonTestSetup):
                     "location": {
                         "filename": directory.joinpath("test_warnings.py").as_posix(),
                         "lineno": 3,
-                        "function": None,
                     },
                     "message": "HEY, YOU'BE BEEN WARNED",
                     "event": "WarningMessage",
@@ -64,7 +63,6 @@ class TestWarnings(CommonTestSetup):
                     "location": {
                         "filename": directory.joinpath("test_warnings.py").as_posix(),
                         "lineno": 4,
-                        "function": None,
                     },
                     "category": "UserWarning",
                 },
@@ -80,10 +78,9 @@ class TestWarnings(CommonTestSetup):
                             "items": [
                                 {
                                     "node_id": ".",
-                                    "name": "test_jsonl0",
-                                    "file": directory.as_posix(),
-                                    "markers": [],
                                     "node_type": "directory",
+                                    "name": directory.name,
+                                    "path": directory.as_posix(),
                                 }
                             ],
                         },
@@ -94,13 +91,27 @@ class TestWarnings(CommonTestSetup):
                             "doc": "This is a test docstring.",
                             "markers": [],
                             "parameters": {},
-                            "file": "test_warnings.py",
+                            "path": "test_warnings.py",
                             "module": "test_warnings",
-                            "parent": None,
+                            "suite": None,
                             "function": "test_warn",
                         },
                     ],
-                }
+                },
+                {
+                    "event": "CollectReport",
+                    "node_id": ".",
+                    "items": [
+                        {
+                            "node_id": "test_warnings.py",
+                            "node_type": "module",
+                            "name": "test_warnings.py",
+                            "path": directory.joinpath("test_warnings.py").as_posix(),
+                            "doc": "",
+                            "markers": [],
+                        }
+                    ],
+                },
             ],
         }
 
@@ -128,7 +139,6 @@ class TestWarnings(CommonTestSetup):
                         "node_type": "directory",
                         "name": directory.name,
                         "path": directory.as_posix(),
-                        "markers": [],
                     }
                 ],
             },
@@ -143,11 +153,25 @@ class TestWarnings(CommonTestSetup):
                         "doc": "This is a test docstring.",
                         "markers": [],
                         "parameters": {},
-                        "file": "test_warnings.py",
+                        "path": "test_warnings.py",
                         "module": "test_warnings",
-                        "parent": None,
+                        "suite": None,
                         "function": "test_warn",
                     },
+                ],
+            },
+            {
+                "event": "CollectReport",
+                "node_id": ".",
+                "items": [
+                    {
+                        "node_id": "test_warnings.py",
+                        "node_type": "module",
+                        "name": "test_warnings.py",
+                        "path": directory.joinpath("test_warnings.py").as_posix(),
+                        "doc": "",
+                        "markers": [],
+                    }
                 ],
             },
             {
@@ -156,7 +180,6 @@ class TestWarnings(CommonTestSetup):
                 "location": {
                     "filename": directory.joinpath("test_warnings.py").as_posix(),
                     "lineno": 3,
-                    "function": None,
                 },
                 "message": "HEY, YOU'BE BEEN WARNED",
                 "event": "WarningMessage",
@@ -168,7 +191,6 @@ class TestWarnings(CommonTestSetup):
                 "location": {
                     "filename": directory.joinpath("test_warnings.py").as_posix(),
                     "lineno": 4,
-                    "function": None,
                 },
                 "message": "HEY, YOU'BE BEEN WARNED TWICE !",
                 "event": "WarningMessage",

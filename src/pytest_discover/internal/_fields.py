@@ -16,8 +16,9 @@ from ._utils import (
 
 @dataclass
 class NodeID:
+    filename: str | None
     module: str | None
-    parent: str | None
+    classes: list[str] | None
     func: str
     params: str | None
     name: str
@@ -26,13 +27,24 @@ class NodeID:
     def __str__(self) -> str:
         return self.value
 
+    def suite(self) -> str | None:
+        if self.classes:
+            return "::".join(self.classes)
+        return None
 
-def make_node_id(item: pytest.Item | pytest.Directory) -> NodeID:
+
+def make_node_id(
+    item: pytest.Item | pytest.Directory | pytest.Module | pytest.Class,
+) -> NodeID:
     mod, cls, func, params = parse_node_id(item.nodeid)
     name = "%s[%s]" % (func, params) if params else func
+    filename = mod.split("/")[-1] if mod else None
+    module = filename.replace(".py", "") if filename else None
+    classes = cls.split("::") if cls else None
     return NodeID(
-        module=mod or None,
-        parent=cls or None,
+        filename=filename,
+        module=module,
+        classes=classes,
         func=func,
         params=params or None,
         name=name,
@@ -44,11 +56,13 @@ def field_file(item: pytest.Item) -> str | None:
     return item.location[0]
 
 
-def field_doc(item: pytest.Item) -> str:
+def field_doc(item: pytest.Item | pytest.Module | pytest.Class) -> str:
     return get_test_doc(item).strip()
 
 
-def field_markers(item: pytest.Item | pytest.Directory) -> list[str]:
+def field_markers(
+    item: pytest.Item | pytest.Directory | pytest.Module | pytest.Class,
+) -> list[str]:
     return list(
         set(
             [
