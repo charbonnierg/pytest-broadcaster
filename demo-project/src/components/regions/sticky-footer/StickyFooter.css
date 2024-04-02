@@ -7,6 +7,7 @@ sl-drawer::part(header) {
   padding-left: 0.5rem;
   margin-top: 0.5rem;
   width: 2.75rem;
+  min-width: 2.75rem;
   cursor: pointer;
 }
 
