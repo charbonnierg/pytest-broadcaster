@@ -48,7 +48,10 @@ Python tools can also use the [`DiscoveryEvent` dataclass](https://github.com/ch
 - [`ErrorMessage` dataclass](https://github.com/charbonnierg/pytest-discover/tree/main/src/pytest_discover/models/error_message.py)
 - [`CollectReport` dataclass](https://github.com/charbonnierg/pytest-discover/tree/main/src/pytest_discover/models/collect_report.py)
 - [`SessionFinish` dataclass](https://github.com/charbonnierg/pytest-discover/tree/main/src/pytest_discover/models/session_finish.py)
-- [`TestItem` dataclass](./src/pytest_discover/models/test_item.py)
+- [`TestCase` dataclass](./src/pytest_discover/models/test_case.py)
+- [`TestDirectory` dataclass](./src/pytest_discover/models/test_directory.py)
+- [`TestModule` dataclass](./src/pytest_discover/models/test_module.py)
+- [`TestSuite` dataclass](./src/pytest_discover/models/test_suite.py)
 
 > Note: The code generation task is automated using `rye run generate-models` project script.
 
