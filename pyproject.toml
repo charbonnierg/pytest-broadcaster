@@ -70,6 +70,7 @@ __format-models = "rye fmt src/pytest_discover/models"
 __format-models-check = "rye fmt check"
 
 [tool.pytest.ini_options]
+markers=["basic", "markers", "parametrization", "buildmeta"]
 testpaths = ["tests"]
 
 [tool.pyright]

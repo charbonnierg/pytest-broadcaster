@@ -1,0 +1,86 @@
+{
+  "pytest_version": "8.1.1",
+  "plugin_version": "0.4.1.dev1+gd38fa2c.d20240327",
+  "exit_status": 0,
+  "errors": [],
+  "warnings": [],
+  "items": [
+    {
+      "node_id": "tests/test_basics.py::TestBasics::test_json",
+      "name": "test_json",
+      "doc": "Test JSON report for basic test file.",
+      "markers": ["basic"],
+      "parameters": {},
+      "file": "tests/test_basics.py",
+      "module": "tests.test_basics",
+      "parent": "TestBasics",
+      "function": "test_json"
+    },
+    {
+      "node_id": "tests/test_basics.py::TestBasics::test_jsonl",
+      "name": "test_jsonl",
+      "doc": "Test JSON Lines report for basic test file.",
+      "markers": ["basic"],
+      "parameters": {},
+      "file": "tests/test_basics.py",
+      "module": "tests.test_basics",
+      "parent": "TestBasics",
+      "function": "test_jsonl"
+    },
+    {
+      "node_id": "tests/test_simple_marker.py::TestSimpleMarker::test_json",
+      "name": "test_json",
+      "doc": "Test JSON report for a test file with a single test case with a marker.",
+      "markers": ["markers"],
+      "parameters": {},
+      "file": "tests/test_simple_marker.py",
+      "module": "tests.test_simple_marker",
+      "parent": "TestSimpleMarker",
+      "function": "test_json"
+    },
+    {
+      "node_id": "tests/test_simple_marker.py::TestSimpleMarker::test_jsonl",
+      "name": "test_jsonl",
+      "doc": "Test JSON Lines report for a test file with a single test case with a marker.",
+      "markers": ["markers"],
+      "parameters": {},
+      "file": "tests/test_simple_marker.py",
+      "module": "tests.test_simple_marker",
+      "parent": "TestSimpleMarker",
+      "function": "test_jsonl"
+    },
+    {
+      "node_id": "tests/test_simple_parametrize.py::TestParametrize::test_json",
+      "name": "test_json",
+      "doc": "Test JSON report for a test file with a single test case with parametrize.",
+      "markers": ["parametrization"],
+      "parameters": {},
+      "file": "tests/test_simple_parametrize.py",
+      "module": "tests.test_simple_parametrize",
+      "parent": "TestParametrize",
+      "function": "test_json"
+    },
+    {
+      "node_id": "tests/test_simple_parametrize.py::TestParametrize::test_jsonl",
+      "name": "test_jsonl",
+      "doc": "Test JSON Lines report for a test file with a single test case with parametrize.",
+      "markers": ["parametrization"],
+      "parameters": {},
+      "file": "tests/test_simple_parametrize.py",
+      "module": "tests.test_simple_parametrize",
+      "parent": "TestParametrize",
+      "function": "test_jsonl"
+    },
+    {
+      "node_id": "tests/test_version.py::test_pytest_discover_version",
+      "name": "test_pytest_discover_version",
+      "doc": "Test pytest_discover version is generated.",
+      "markers": ["buildmeta"],
+      "parameters": {},
+      "file": "tests/test_version.py",
+      "module": "tests.test_version",
+      "parent": null,
+      "function": "test_pytest_discover_version"
+    }
+  ]
+}

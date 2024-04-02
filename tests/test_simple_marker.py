@@ -6,8 +6,13 @@ from pytest_discover import __version__
 from ._utils import CommonTestSetup
 
 
-class TestMarker(CommonTestSetup):
-    def make_test_with_marker(self) -> None:
+@pytest.mark.markers
+class TestSimpleMarker(CommonTestSetup):
+    """Test suite for verifying markers detection."""
+
+    def make_simple_test_with_marker(self) -> None:
+        """A helper function to make a test file with a single test case with a marker."""
+
         self.make_testfile(
             "test_basic.py",
             """
@@ -20,7 +25,9 @@ class TestMarker(CommonTestSetup):
         )
 
     def test_json(self):
-        self.make_test_with_marker()
+        """Test JSON report for a test file with a single test case with a marker."""
+
+        self.make_simple_test_with_marker()
         result = self.test_dir.runpytest(
             "--collect-only", "--collect-report", self.json_file.as_posix()
         )
@@ -48,7 +55,9 @@ class TestMarker(CommonTestSetup):
         }
 
     def test_jsonl(self):
-        self.make_test_with_marker()
+        """Test JSON Lines report for a test file with a single test case with a marker."""
+
+        self.make_simple_test_with_marker()
         result = self.test_dir.runpytest(
             "--collect-only", "--collect-log", self.json_lines_file.as_posix()
         )

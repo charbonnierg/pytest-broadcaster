@@ -17,3 +17,23 @@ span[data-success="true"] {
 span[data-success="false"] {
   color: var(--sl-color-danger-500);
 }
+
+.command-lines li {
+  background-color: var(--sl-color-neutral-50);
+  width: 100%;
+  max-width: fit-content;
+  border-radius: var(--sl-border-radius-large);
+  margin-bottom: 1rem;
+}
+.command-lines code {
+  padding: 0.5rem 1rem;
+}
+.copy-icon {
+  cursor: pointer;
+  margin: auto auto;
+  padding-right: 1rem;
+}
+
+.proposal-button {
+  margin-bottom: 1rem;
+}

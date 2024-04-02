@@ -6,8 +6,13 @@ from pytest_discover import __version__
 from ._utils import CommonTestSetup
 
 
+@pytest.mark.parametrization
 class TestParametrize(CommonTestSetup):
+    """Test suite for verifying parametrize detection."""
+
     def make_test_with_paramtrize(self) -> None:
+        """A helper function to make a test file with a single test case with parametrize."""
+
         self.make_testfile(
             "test_basic.py",
             """
@@ -20,6 +25,8 @@ class TestParametrize(CommonTestSetup):
         )
 
     def test_json(self):
+        """Test JSON report for a test file with a single test case with parametrize."""
+
         self.make_test_with_paramtrize()
         result = self.test_dir.runpytest(
             "--collect-only", "--collect-report", self.json_file.as_posix()
@@ -70,6 +77,8 @@ class TestParametrize(CommonTestSetup):
         }
 
     def test_jsonl(self):
+        """Test JSON Lines report for a test file with a single test case with parametrize."""
+
         self.make_test_with_paramtrize()
         result = self.test_dir.runpytest(
             "--collect-only", "--collect-log", self.json_lines_file.as_posix()

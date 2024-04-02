@@ -1,14 +1,20 @@
 import SlBadge from "@shoelace-style/shoelace/dist/react/badge/index.js"
 import SlButton from "@shoelace-style/shoelace/dist/react/button/index.js"
+import SlCopyButton from "@shoelace-style/shoelace/dist/react/copy-button/index.js"
 import SlIcon from "@shoelace-style/shoelace/dist/react/icon/index.js"
 import SlTag from "@shoelace-style/shoelace/dist/react/tag/index.js"
 import SlTreeItem from "@shoelace-style/shoelace/dist/react/tree-item/index.js"
 import SlTree from "@shoelace-style/shoelace/dist/react/tree/index.js"
 import { useRef } from "react"
 
+import example from "../../../../assets/report.json"
+import { copy } from "../../../../lib/clipboard"
 import type { Report } from "../../../../lib/repository"
 import { newJSONReader } from "../../../../lib/upload"
-import type { ErrorMessage } from "../../../../types/discovery_result"
+import type {
+  DiscoveryResult,
+  ErrorMessage,
+} from "../../../../types/discovery_result"
 import type { WarningMessage } from "../../../../types/warning_message"
 import "./ReportsDetails.css"
 
@@ -110,6 +116,8 @@ const NudgeUsage = ({
   const reader = newJSONReader((filename, r) => {
     setReport({ result: r, filename: filename })
   })
+  const installCmd = "pip install pytest-discover"
+  const runCmd = "pytest --co --collect-report=report.json"
   return (
     <div className="nudge">
       <form>
@@ -129,16 +137,27 @@ const NudgeUsage = ({
           <p>Run the following command to generate a test report:</p>
           <ul className="command-lines">
             <li>
-              <code>pip install pytest-discover</code>
+              <code>{installCmd}</code>
+              <SlIcon
+                className="copy-icon"
+                name={"copy"}
+                onClick={copy(runCmd)}
+              ></SlIcon>
             </li>
             <li>
-              <code>pytest --co --collect-report=report.json</code>
+              <code>{runCmd}</code>
+              <SlIcon
+                className="copy-icon"
+                name={"copy"}
+                onClick={copy(runCmd)}
+              ></SlIcon>
             </li>
           </ul>
         </div>
         <div className="proposal">
-          <p>Click the button below to upload a test report.</p>
+          <p>Upload a test report or use example report:</p>
           <SlButton
+            className="proposal-button"
             onClick={(e) => {
               const el = ref.current
               if (el == null) {
@@ -148,7 +167,19 @@ const NudgeUsage = ({
               e.preventDefault()
             }}
           >
-            Upload
+            Upload file
+          </SlButton>
+          <SlButton
+            className="proposal-button"
+            onClick={(e) => {
+              setReport({
+                filename: "example.json",
+                result: example as DiscoveryResult,
+              })
+              e.preventDefault()
+            }}
+          >
+            Use example
           </SlButton>
         </div>
       </div>

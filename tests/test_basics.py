@@ -6,18 +6,25 @@ from pytest_discover import __version__
 from ._utils import CommonTestSetup
 
 
+@pytest.mark.basic
 class TestBasics(CommonTestSetup):
+    """Basic test suite."""
+
     def make_basic_test(self) -> None:
+        """A helper function to make a basic test file."""
+
         self.make_testfile(
             "test_basic.py",
             """
             def test_ok():
                 '''This is a test docstring.'''
                 pass
-        """,
+            """,
         )
 
     def test_json(self):
+        """Test JSON report for basic test file."""
+
         self.make_basic_test()
         result = self.test_dir.runpytest(
             "--collect-only", "--collect-report", self.json_file.as_posix()
@@ -46,6 +53,8 @@ class TestBasics(CommonTestSetup):
         }
 
     def test_jsonl(self):
+        """Test JSON Lines report for basic test file."""
+
         self.make_basic_test()
         result = self.test_dir.runpytest(
             "--collect-only", "--collect-log", self.json_lines_file.as_posix()
