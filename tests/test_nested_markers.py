@@ -44,7 +44,7 @@ class TestNestedMarker(CommonTestSetup):
             "collect_reports": [
                 {
                     "event": "CollectReport",
-                    "node_id": None,
+                    "node_id": "",
                     "items": [
                         {
                             "node_id": ".",
@@ -65,7 +65,7 @@ class TestNestedMarker(CommonTestSetup):
                             "doc": "",
                             "markers": ["skip"],
                             "parameters": {},
-                            "path": "test_markers.py",
+                            "path": directory.joinpath("test_markers.py").as_posix(),
                             "module": "test_markers",
                             "suite": "TestMarked",
                             "function": "test_marked",
@@ -121,7 +121,7 @@ class TestNestedMarker(CommonTestSetup):
             },
             {
                 "event": "CollectReport",
-                "node_id": None,
+                "node_id": "",
                 "items": [
                     {
                         "node_id": ".",
@@ -142,7 +142,7 @@ class TestNestedMarker(CommonTestSetup):
                         "doc": "",
                         "markers": ["skip"],
                         "parameters": {},
-                        "path": "test_markers.py",
+                        "path": directory.joinpath("test_markers.py").as_posix(),
                         "module": "test_markers",
                         "suite": "TestMarked",
                         "function": "test_marked",

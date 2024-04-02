@@ -58,7 +58,7 @@ class TestErrorsThirdParty(CommonTestSetup):
             "collect_reports": [
                 {
                     "event": "CollectReport",
-                    "node_id": None,
+                    "node_id": "",
                     "items": [
                         {
                             "node_id": ".",
@@ -88,7 +88,7 @@ class TestErrorsThirdParty(CommonTestSetup):
             },
             {
                 "event": "CollectReport",
-                "node_id": None,
+                "node_id": "",
                 "items": [
                     {
                         "node_id": ".",

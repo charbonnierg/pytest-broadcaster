@@ -5,7 +5,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Optional
 
 from . import location, traceback
 
@@ -30,9 +29,9 @@ class ErrorMessage:
     """
     When the error message is emitted
     """
-    traceback: traceback.Traceback
+    location: location.Location
     """
-    The traceback of the error
+    The location of the error
     """
     exception_type: str
     """
@@ -42,11 +41,11 @@ class ErrorMessage:
     """
     The exception value
     """
+    traceback: traceback.Traceback
+    """
+    The traceback of the error
+    """
     event: str = "ErrorMessage"
     """
     The event type
-    """
-    location: Optional[location.Location] = None
-    """
-    The location of the error
     """

@@ -68,7 +68,7 @@ class TestWarningsThirdParty(CommonTestSetup):
             "collect_reports": [
                 {
                     "event": "CollectReport",
-                    "node_id": None,
+                    "node_id": "",
                     "items": [
                         {
                             "node_id": ".",
@@ -89,7 +89,7 @@ class TestWarningsThirdParty(CommonTestSetup):
                             "doc": "This is a test docstring.",
                             "markers": [],
                             "parameters": {},
-                            "path": "test_warnings.py",
+                            "path": directory.joinpath("test_warnings.py").as_posix(),
                             "module": "test_warnings",
                             "suite": None,
                             "function": "test_warn",
@@ -130,7 +130,7 @@ class TestWarningsThirdParty(CommonTestSetup):
             },
             {
                 "event": "CollectReport",
-                "node_id": None,
+                "node_id": "",
                 "items": [
                     {
                         "node_id": ".",
@@ -151,7 +151,7 @@ class TestWarningsThirdParty(CommonTestSetup):
                         "doc": "This is a test docstring.",
                         "markers": [],
                         "parameters": {},
-                        "path": "test_warnings.py",
+                        "path": directory.joinpath("test_warnings.py").as_posix(),
                         "module": "test_warnings",
                         "suite": None,
                         "function": "test_warn",

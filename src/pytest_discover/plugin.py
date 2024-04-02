@@ -125,6 +125,7 @@ class PytestDiscoverPlugin:
         self.json_lines_filepath = (
             Path(json_lines_filepath) if json_lines_filepath else None
         )
+        self._root: Path | None = None
         self._file: TextIO | None = None
         self._result = DiscoveryResult(
             pytest_version=pytest.__version__,
@@ -284,7 +285,7 @@ class PytestDiscoverPlugin:
                     module=node_id.module,
                     suite=node_id.suite(),
                     function=node_id.func,
-                    path=api.field_file(result),
+                    path=result.path.as_posix(),
                     doc=api.field_doc(result),
                     markers=api.field_markers(result),
                     parameters=api.field_parameters(result),
@@ -293,7 +294,7 @@ class PytestDiscoverPlugin:
         # Generate a collect report event.
         data = CollectReport(
             items=items,
-            node_id=report.nodeid or None,
+            node_id=report.nodeid or "",
         )
         # Append repot to the result object.
         self._result.collect_reports.append(data)

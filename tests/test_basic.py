@@ -42,7 +42,7 @@ class TestBasic(CommonTestSetup):
             "collect_reports": [
                 {
                     "event": "CollectReport",
-                    "node_id": None,
+                    "node_id": "",
                     "items": [
                         {
                             "node_id": ".",
@@ -63,7 +63,7 @@ class TestBasic(CommonTestSetup):
                             "doc": "This is a test docstring.",
                             "markers": [],
                             "parameters": {},
-                            "path": "test_basic.py",
+                            "path": directory.joinpath("test_basic.py").as_posix(),
                             "module": "test_basic",
                             "suite": None,
                             "function": "test_ok",
@@ -104,7 +104,7 @@ class TestBasic(CommonTestSetup):
             },
             {
                 "event": "CollectReport",
-                "node_id": None,
+                "node_id": "",
                 "items": [
                     {
                         "node_id": ".",
@@ -125,7 +125,7 @@ class TestBasic(CommonTestSetup):
                         "doc": "This is a test docstring.",
                         "markers": [],
                         "parameters": {},
-                        "path": "test_basic.py",
+                        "path": directory.joinpath("test_basic.py").as_posix(),
                         "module": "test_basic",
                         "suite": None,
                         "function": "test_ok",

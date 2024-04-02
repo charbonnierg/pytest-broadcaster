@@ -44,7 +44,7 @@ class TestMultiCases(CommonTestSetup):
             "collect_reports": [
                 {
                     "event": "CollectReport",
-                    "node_id": None,
+                    "node_id": "",
                     "items": [
                         {
                             "node_id": ".",
@@ -65,7 +65,9 @@ class TestMultiCases(CommonTestSetup):
                             "doc": "This is a test docstring.",
                             "markers": [],
                             "parameters": {},
-                            "path": "test_multi_cases.py",
+                            "path": directory.joinpath(
+                                "test_multi_cases.py"
+                            ).as_posix(),
                             "module": "test_multi_cases",
                             "suite": None,
                             "function": "test_1",
@@ -77,7 +79,9 @@ class TestMultiCases(CommonTestSetup):
                             "doc": "This is a test docstring.",
                             "markers": [],
                             "parameters": {},
-                            "path": "test_multi_cases.py",
+                            "path": directory.joinpath(
+                                "test_multi_cases.py"
+                            ).as_posix(),
                             "module": "test_multi_cases",
                             "suite": None,
                             "function": "test_2",
@@ -120,7 +124,7 @@ class TestMultiCases(CommonTestSetup):
             },
             {
                 "event": "CollectReport",
-                "node_id": None,
+                "node_id": "",
                 "items": [
                     {
                         "node_id": ".",
@@ -139,7 +143,7 @@ class TestMultiCases(CommonTestSetup):
                         "doc": "This is a test docstring.",
                         "markers": [],
                         "parameters": {},
-                        "path": "test_multi_cases.py",
+                        "path": directory.joinpath("test_multi_cases.py").as_posix(),
                         "module": "test_multi_cases",
                         "suite": None,
                         "function": "test_1",
@@ -151,7 +155,7 @@ class TestMultiCases(CommonTestSetup):
                         "doc": "This is a test docstring.",
                         "markers": [],
                         "parameters": {},
-                        "path": "test_multi_cases.py",
+                        "path": directory.joinpath("test_multi_cases.py").as_posix(),
                         "module": "test_multi_cases",
                         "suite": None,
                         "function": "test_2",

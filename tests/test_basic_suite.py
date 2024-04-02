@@ -47,7 +47,7 @@ class TestBasicSuite(CommonTestSetup):
             "collect_reports": [
                 {
                     "event": "CollectReport",
-                    "node_id": None,
+                    "node_id": "",
                     "items": [
                         {
                             "node_id": ".",
@@ -68,7 +68,9 @@ class TestBasicSuite(CommonTestSetup):
                             "doc": "This is a first docstring.",
                             "markers": [],
                             "parameters": {},
-                            "path": "test_basic_suite.py",
+                            "path": directory.joinpath(
+                                "test_basic_suite.py"
+                            ).as_posix(),
                             "module": "test_basic_suite",
                             "suite": "TestOk",
                             "function": "test_1",
@@ -80,7 +82,9 @@ class TestBasicSuite(CommonTestSetup):
                             "doc": "This is a second docstring.",
                             "markers": [],
                             "parameters": {},
-                            "path": "test_basic_suite.py",
+                            "path": directory.joinpath(
+                                "test_basic_suite.py"
+                            ).as_posix(),
                             "module": "test_basic_suite",
                             "suite": "TestOk",
                             "function": "test_2",
@@ -140,7 +144,7 @@ class TestBasicSuite(CommonTestSetup):
             },
             {
                 "event": "CollectReport",
-                "node_id": None,
+                "node_id": "",
                 "items": [
                     {
                         "node_id": ".",
@@ -161,7 +165,7 @@ class TestBasicSuite(CommonTestSetup):
                         "doc": "This is a first docstring.",
                         "markers": [],
                         "parameters": {},
-                        "path": "test_basic_suite.py",
+                        "path": directory.joinpath("test_basic_suite.py").as_posix(),
                         "module": "test_basic_suite",
                         "suite": "TestOk",
                         "function": "test_1",
@@ -173,7 +177,7 @@ class TestBasicSuite(CommonTestSetup):
                         "doc": "This is a second docstring.",
                         "markers": [],
                         "parameters": {},
-                        "path": "test_basic_suite.py",
+                        "path": directory.joinpath("test_basic_suite.py").as_posix(),
                         "module": "test_basic_suite",
                         "suite": "TestOk",
                         "function": "test_2",

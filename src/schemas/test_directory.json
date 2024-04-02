@@ -6,9 +6,9 @@
     "type": "object",
     "required": [
       "node_id",
+      "node_type",
       "name",
-      "path",
-      "node_type"
+      "path"
     ],
     "properties": {
       "node_id": {

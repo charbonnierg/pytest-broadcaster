@@ -31,13 +31,13 @@
     "location": {
       "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/location.json#"
     },
-    "category": {
-      "type": "string",
-      "description": "The category of the warning message"
-    },
     "message": {
       "type": "string",
       "description": "The warning message"
+    },
+    "category": {
+      "type": "string",
+      "description": "The category of the warning message"
     }
   }
 }

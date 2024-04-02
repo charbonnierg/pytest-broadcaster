@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List, Optional, Union
+from typing import List, Union
 
 from . import test_case, test_directory, test_module, test_suite
 
@@ -15,6 +15,10 @@ class CollectReport:
     Pytest Collect Report
     """
 
+    node_id: str
+    """
+    The node id of the collector (if any)
+    """
     items: List[
         Union[
             test_directory.TestDirectory,
@@ -29,8 +33,4 @@ class CollectReport:
     event: str = "CollectReport"
     """
     The event type
-    """
-    node_id: Optional[str] = None
-    """
-    The node id of the collector (if any)
     """

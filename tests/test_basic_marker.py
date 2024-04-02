@@ -43,7 +43,7 @@ class TestBasicMarker(CommonTestSetup):
             "collect_reports": [
                 {
                     "event": "CollectReport",
-                    "node_id": None,
+                    "node_id": "",
                     "items": [
                         {
                             "node_id": ".",
@@ -64,7 +64,9 @@ class TestBasicMarker(CommonTestSetup):
                             "doc": "",
                             "markers": ["skip"],
                             "parameters": {},
-                            "path": "test_basic_marker.py",
+                            "path": directory.joinpath(
+                                "test_basic_marker.py"
+                            ).as_posix(),
                             "module": "test_basic_marker",
                             "suite": None,
                             "function": "test_ok",
@@ -107,7 +109,7 @@ class TestBasicMarker(CommonTestSetup):
             },
             {
                 "event": "CollectReport",
-                "node_id": None,
+                "node_id": "",
                 "items": [
                     {
                         "node_id": ".",
@@ -128,7 +130,7 @@ class TestBasicMarker(CommonTestSetup):
                         "doc": "",
                         "markers": ["skip"],
                         "parameters": {},
-                        "path": "test_basic_marker.py",
+                        "path": directory.joinpath("test_basic_marker.py").as_posix(),
                         "module": "test_basic_marker",
                         "suite": None,
                         "function": "test_ok",

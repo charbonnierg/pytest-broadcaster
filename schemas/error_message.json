@@ -7,9 +7,10 @@
   "required": [
     "event",
     "when",
-    "traceback",
+    "location",
     "exception_type",
-    "exception_value"
+    "exception_value",
+    "traceback"
   ],
   "properties": {
     "event": {
@@ -28,10 +29,6 @@
       "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/location.json",
       "description": "The location of the error"
     },
-    "traceback": {
-      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/traceback.json",
-      "description": "The traceback of the error"
-    },
     "exception_type": {
       "type": "string",
       "description": "The exception type"
@@ -39,6 +36,10 @@
     "exception_value": {
       "type": "string",
       "description": "The exception value"
+    },
+    "traceback": {
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/traceback.json",
+      "description": "The traceback of the error"
     }
   }
 }

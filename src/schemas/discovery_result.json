@@ -5,9 +5,9 @@
   "description": "Pytest Discover Result",
   "type": "object",
   "required": [
-    "exit_status",
     "pytest_version",
     "plugin_version",
+    "exit_status",
     "warnings",
     "errors",
     "collect_reports"

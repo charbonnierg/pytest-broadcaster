@@ -31,13 +31,13 @@
     "location": {
       "$ref": "location.json#"
     },
-    "category": {
-      "type": "string",
-      "description": "The category of the warning message"
-    },
     "message": {
       "type": "string",
       "description": "The warning message"
+    },
+    "category": {
+      "type": "string",
+      "description": "The category of the warning message"
     }
   }
 }

@@ -52,10 +52,6 @@ def make_node_id(
     )
 
 
-def field_file(item: pytest.Item) -> str | None:
-    return item.location[0]
-
-
 def field_doc(item: pytest.Item | pytest.Module | pytest.Class) -> str:
     return get_test_doc(item).strip()
 

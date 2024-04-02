@@ -17,6 +17,10 @@ class TestCase:
     """
     Node ID
     """
+    path: str
+    """
+    File path
+    """
     name: str
     """
     Test Name
@@ -36,10 +40,6 @@ class TestCase:
     node_type: str = "case"
     """
     Node Type
-    """
-    path: Optional[str] = None
-    """
-    File path
     """
     module: Optional[str] = None
     """

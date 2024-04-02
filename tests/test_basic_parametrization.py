@@ -43,7 +43,7 @@ class TestBasicParametrization(CommonTestSetup):
             "collect_reports": [
                 {
                     "event": "CollectReport",
-                    "node_id": None,
+                    "node_id": "",
                     "items": [
                         {
                             "node_id": ".",
@@ -64,7 +64,9 @@ class TestBasicParametrization(CommonTestSetup):
                             "doc": "",
                             "markers": ["parametrize"],
                             "parameters": {"arg": "int"},
-                            "path": "test_basic_parametrization.py",
+                            "path": directory.joinpath(
+                                "test_basic_parametrization.py"
+                            ).as_posix(),
                             "module": "test_basic_parametrization",
                             "suite": None,
                             "function": "test_ok",
@@ -76,7 +78,9 @@ class TestBasicParametrization(CommonTestSetup):
                             "doc": "",
                             "markers": ["parametrize"],
                             "parameters": {"arg": "int"},
-                            "path": "test_basic_parametrization.py",
+                            "path": directory.joinpath(
+                                "test_basic_parametrization.py"
+                            ).as_posix(),
                             "module": "test_basic_parametrization",
                             "suite": None,
                             "function": "test_ok",
@@ -88,7 +92,9 @@ class TestBasicParametrization(CommonTestSetup):
                             "doc": "",
                             "markers": ["parametrize"],
                             "parameters": {"arg": "int"},
-                            "path": "test_basic_parametrization.py",
+                            "path": directory.joinpath(
+                                "test_basic_parametrization.py"
+                            ).as_posix(),
                             "module": "test_basic_parametrization",
                             "suite": None,
                             "function": "test_ok",
@@ -131,7 +137,7 @@ class TestBasicParametrization(CommonTestSetup):
             },
             {
                 "event": "CollectReport",
-                "node_id": None,
+                "node_id": "",
                 "items": [
                     {
                         "node_id": ".",
@@ -150,7 +156,9 @@ class TestBasicParametrization(CommonTestSetup):
                         "doc": "",
                         "markers": ["parametrize"],
                         "parameters": {"arg": "int"},
-                        "path": "test_basic_parametrization.py",
+                        "path": directory.joinpath(
+                            "test_basic_parametrization.py"
+                        ).as_posix(),
                         "module": "test_basic_parametrization",
                         "suite": None,
                         "function": "test_ok",
@@ -162,7 +170,9 @@ class TestBasicParametrization(CommonTestSetup):
                         "doc": "",
                         "markers": ["parametrize"],
                         "parameters": {"arg": "int"},
-                        "path": "test_basic_parametrization.py",
+                        "path": directory.joinpath(
+                            "test_basic_parametrization.py"
+                        ).as_posix(),
                         "module": "test_basic_parametrization",
                         "suite": None,
                         "function": "test_ok",
@@ -174,7 +184,9 @@ class TestBasicParametrization(CommonTestSetup):
                         "doc": "",
                         "markers": ["parametrize"],
                         "parameters": {"arg": "int"},
-                        "path": "test_basic_parametrization.py",
+                        "path": directory.joinpath(
+                            "test_basic_parametrization.py"
+                        ).as_posix(),
                         "module": "test_basic_parametrization",
                         "suite": None,
                         "function": "test_ok",
