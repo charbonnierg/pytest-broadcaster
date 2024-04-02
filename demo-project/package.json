@@ -12,8 +12,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "astro": "astro",
-    "check": "npm run format:check && astro check",
-    "schemas": "json2ts -i ../schemas/ -o src/types/"
+    "pre": "npm run format:check && astro check",
+    "generate": "json2ts -i ../schemas/ -o src/types/"
   },
   "dependencies": {
     "@astrojs/check": "^0.5.10",
