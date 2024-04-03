@@ -315,6 +315,11 @@ class PytestDiscoverPlugin:
         # Write the event to the output file.
         self._write_event(data)
 
+    # Process the TestReport produced for each of the setup, call and teardown runtest phases of an item.
+    # Ref: https://docs.pytest.org/en/7.1.x/reference/reference.html#pytest.hookspec.pytest_runtest_logreport
+    def pytest_runtest_logreport(self, report: pytest.TestReport) -> None:
+        pass
+
     # Add a section to terminal summary reporting.
     # Ref: https://docs.pytest.org/en/latest/reference/reference.html#pytest.hookspec.pytest_terminal_summary
     def pytest_terminal_summary(self, terminalreporter: TerminalReporter):
