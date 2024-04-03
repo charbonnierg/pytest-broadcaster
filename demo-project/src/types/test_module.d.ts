@@ -6,46 +6,32 @@
  */
 
 /**
- * Pytest Test Item
+ * Pytest Test Module
  */
-export interface TestItem {
+export interface TestModule {
   /**
    * Node ID
    */
   node_id: string
   /**
-   * File path
+   * Node Type
    */
-  file?: string
+  node_type: "module"
   /**
    * Module name
    */
-  module?: string
-  /**
-   * Class name
-   */
-  parent?: string
-  /**
-   * Function name
-   */
-  function?: string
-  /**
-   * Test Name
-   */
   name: string
   /**
-   * Test docstring
+   * File path
+   */
+  path: string
+  /**
+   * Module docstring
    */
   doc: string
   /**
    * Test markers
    */
   markers: string[]
-  /**
-   * Test parameters names and types
-   */
-  parameters: {
-    [k: string]: string
-  }
   [k: string]: unknown
 }

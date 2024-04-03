@@ -1,4 +1,4 @@
-import type { TestItem } from "../types/test_item"
+import type { TestCase } from "../types/test_case"
 
 /* Format a test item name */
 export const sanitizeName = (name: string): string => {
@@ -45,7 +45,7 @@ export interface Case extends NodeBase<NodeType.Case> {
   // A case must have a parent
   parent: string
   // The properties of the test case
-  properties: TestItem
+  properties: TestCase
 }
 
 export interface DirectoryView {
@@ -85,7 +85,7 @@ export interface CaseView {
   type: NodeType.Case
   path: string
   name: string
-  properties: TestItem
+  properties: TestCase
 }
 
 const makeDirectory = ({
@@ -148,7 +148,7 @@ const makeCase = ({
   parent,
 }: {
   name: string
-  content: TestItem
+  content: TestCase
   parent: string
 }): Case => ({
   type: NodeType.Case,
@@ -333,7 +333,7 @@ export const makeView = (nodes: Node[]): View[] => {
   return views
 }
 
-export const makeNodes = (...items: TestItem[]): Node[] => {
+export const makeNodes = (...items: TestCase[]): Node[] => {
   // Initialze nodes to add
   const next = {} as Record<string, Node>
   // Add the new nodes to the list of nodes to add
@@ -342,25 +342,29 @@ export const makeNodes = (...items: TestItem[]): Node[] => {
   return Object.values(next)
 }
 
-const addOne = (snapshot: Record<string, Node>, item: TestItem) => {
+const addOne = (snapshot: Record<string, Node>, item: TestCase) => {
   // Ignore items without filenames for the moment
-  if (!item.file) {
+  if (!item.path) {
+    throw new Error("No path")
+  }
+  if (item.path === "") {
     return
   }
   // Start by replacing the backslashes with forward slashes
-  const filepath = item.file.replaceAll("\\", "/").replaceAll("//", "/")
+  const filepath = item.path.replaceAll("\\", "/").replaceAll("//", "/")
   // At this point we've got a sanitized filepath, we can extract the directory and filename
   const parts = filepath.split("/")
   // Extract the filename
   const filename = parts.pop()
   if (!filename) {
-    return
+    throw new Error("No filename")
   }
   // Initialize the directory name
   let parent = undefined as string | undefined
   // Extract all the directories
   while (parts.length > 0) {
     const name = parts.shift() as string
+    if (name === "") continue
     // Create new directory
     const directory = makeDirectory({
       name,
@@ -413,7 +417,7 @@ const addOne = (snapshot: Record<string, Node>, item: TestItem) => {
   // Append the entry to the list of children to create
   snapshot[entry.path] = entry
 }
-const add = (snapshot: Record<string, Node>, ...items: TestItem[]) => {
+const add = (snapshot: Record<string, Node>, ...items: TestCase[]) => {
   // Add the new nodes to the list of nodes to add
   items.forEach((item) => {
     addOne(snapshot, item)

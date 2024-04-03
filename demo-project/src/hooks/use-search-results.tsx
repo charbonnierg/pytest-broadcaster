@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react"
 
 import type { ReportRepository } from "../lib/repository"
 import { newSearchEngine, sanitize, search } from "../lib/search"
-import type { TestItem } from "../types/test_item"
+import type { TestCase } from "../types/test_case"
 import { useMarkersFilters } from "./use-markers-filters"
 import { useReport } from "./use-report"
 import { useStats } from "./use-stats"
@@ -18,15 +18,16 @@ export const useSearchResults = (
   const [engine] = useState(newSearchEngine())
   const [terms, setTerms] = useState<string>("")
   const [limit] = useState<number>(defaultLimit)
-  const [allItems, setAllItems] = useState<TestItem[]>([])
-  const [results, setResults] = useState<TestItem[]>([])
+  const [allItems, setAllItems] = useState<TestCase[]>([])
+  const [results, setResults] = useState<TestCase[]>([])
   const statistics = useStats(report)
   const filterFunc = useCallback(
-    (item: TestItem): boolean => {
+    (item: TestCase): boolean => {
       if (filter == null || filter == "") {
         return markers.filter(item)
       }
       if (!item.node_id.startsWith(filter)) {
+        console.warn("does not match: ", item.node_id, filter)
         return false
       }
       return markers.filter(item)
@@ -42,7 +43,11 @@ export const useSearchResults = (
       return
     }
     // Gather all items
-    const newItems = report.result.items.map(sanitize)
+    const newItems = report.result.collect_reports
+      .flatMap((report) =>
+        report.items.filter((item) => item.node_type == "case"),
+      )
+      .map((t) => sanitize(t as TestCase))
     const newfilteredItems = newItems.filter(filterFunc)
     // Update state
     setAllItems(newItems)

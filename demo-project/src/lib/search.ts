@@ -5,7 +5,7 @@ import MiniSearch, {
   type SearchOptions as _SearchOptions,
 } from "minisearch"
 
-import type { TestItem } from "../types/test_item"
+import type { TestCase } from "../types/test_case"
 
 // The fields to index for full-text search.
 const SEARCH_FIELDS = [
@@ -32,7 +32,7 @@ const STORE_FIELDS = [
   "node_id",
 ]
 
-export interface SearchDocument extends TestItem {
+export interface SearchDocument extends TestCase {
   id: string
 }
 
@@ -45,25 +45,25 @@ export interface SearchResult extends SearchDocument {
 
 export interface SearchOpts {
   limit: number
-  boost: { [key: keyof TestItem]: number }
+  boost: { [key: keyof TestCase]: number }
   filter: (result: SearchResult) => boolean
 }
 
 /* Create a new search engine instance.*/
-export const newSearchEngine = (): MiniSearch<TestItem> => {
+export const newSearchEngine = (): MiniSearch<TestCase> => {
   // Define search engine options.
   const options = {
     // fields to index for full-text search.
     fields: SEARCH_FIELDS,
     // fields to return with search results.
     storeFields: STORE_FIELDS,
-  } as Options<TestItem>
+  } as Options<TestCase>
   // Return a new MiniSearch instance.
-  return new MiniSearch<TestItem>(options)
+  return new MiniSearch<TestCase>(options)
 }
 
 export const search = (
-  engine: MiniSearch<TestItem>,
+  engine: MiniSearch<TestCase>,
   terms: string,
   options: SearchOpts,
 ): SearchResult[] => {
@@ -73,7 +73,7 @@ export const search = (
   ) as SearchResult[]
 }
 
-export const sanitize = (item: TestItem): SearchDocument => {
+export const sanitize = (item: TestCase): SearchDocument => {
   const { node_id, ...rest } = item
   return {
     id: node_id,

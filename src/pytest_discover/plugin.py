@@ -125,7 +125,7 @@ class PytestDiscoverPlugin:
         self.json_lines_filepath = (
             Path(json_lines_filepath) if json_lines_filepath else None
         )
-        self._root: Path | None = None
+        self._roots: dict[str, str] = {}
         self._file: TextIO | None = None
         self._result = DiscoveryResult(
             pytest_version=pytest.__version__,
@@ -135,6 +135,20 @@ class PytestDiscoverPlugin:
             errors=[],
             collect_reports=[],
         )
+
+    def _get_path(self, path: str, is_error_or_warning: bool = False) -> str:
+        for root in self._roots:
+            if path.startswith(root):
+                return self._roots[root] + "/" + path[len(root) + 1 :]
+        pathobj = Path(path)
+        if pathobj.is_dir():
+            self._roots[path] = pathobj.name
+            return pathobj.name
+        if pathobj.is_file():
+            if not is_error_or_warning:
+                self._roots[path] = pathobj.parent.name
+                return f"{pathobj.parent.name}/{pathobj.name}"
+        return path
 
     def open(self) -> None:
         """Open the JSON Lines output file for writing."""
@@ -197,7 +211,7 @@ class PytestDiscoverPlugin:
             if warning_message.category
             else None,
             location=Location(
-                filename=warning_message.filename,
+                filename=self._get_path(warning_message.filename, True),
                 lineno=warning_message.lineno,
             ),
             message=api.make_warning_message(warning_message),
@@ -225,7 +239,7 @@ class PytestDiscoverPlugin:
         msg = ErrorMessage(
             when=call.when,  # type: ignore[arg-type]
             location=Location(
-                filename=exc_repr.reprcrash.path,
+                filename=self._get_path(exc_repr.reprcrash.path, True),
                 lineno=exc_repr.reprcrash.lineno,
             ),
             traceback=Traceback(str(exc_repr.reprcrash).splitlines()),
@@ -248,7 +262,7 @@ class PytestDiscoverPlugin:
                     TestDirectory(
                         node_id=result.nodeid,
                         name=result.path.name,
-                        path=result.path.as_posix(),
+                        path=self._get_path(result.path.as_posix()),
                     )
                 )
                 continue
@@ -257,7 +271,7 @@ class PytestDiscoverPlugin:
                     TestModule(
                         node_id=result.nodeid,
                         name=result.name,
-                        path=result.path.as_posix(),
+                        path=self._get_path(result.path.as_posix()),
                         markers=api.field_markers(result),
                         doc=api.field_doc(result),
                     )
@@ -271,7 +285,7 @@ class PytestDiscoverPlugin:
                         node_id=result.nodeid,
                         name=result.name,
                         module=node_id.module,
-                        path=result.path.as_posix(),
+                        path=self._get_path(result.path.as_posix()),
                         doc=api.field_doc(result),
                         markers=api.field_markers(result),
                     )
@@ -285,7 +299,7 @@ class PytestDiscoverPlugin:
                     module=node_id.module,
                     suite=node_id.suite(),
                     function=node_id.func,
-                    path=result.path.as_posix(),
+                    path=self._get_path(result.path.as_posix()),
                     doc=api.field_doc(result),
                     markers=api.field_markers(result),
                     parameters=api.field_parameters(result),

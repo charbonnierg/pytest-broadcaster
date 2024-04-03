@@ -63,7 +63,7 @@ class TestMultiFiles(CommonTestSetup):
                             "node_id": ".",
                             "node_type": "directory",
                             "name": directory.name,
-                            "path": directory.as_posix(),
+                            "path": directory.name,
                         }
                     ],
                 },
@@ -78,7 +78,9 @@ class TestMultiFiles(CommonTestSetup):
                             "doc": "This is a test docstring.",
                             "markers": [],
                             "parameters": {},
-                            "path": directory.joinpath("test_module_1.py").as_posix(),
+                            "path": directory.joinpath("test_module_1.py")
+                            .relative_to(directory.parent)
+                            .as_posix(),
                             "module": "test_module_1",
                             "suite": None,
                             "function": "test_1",
@@ -90,7 +92,9 @@ class TestMultiFiles(CommonTestSetup):
                             "doc": "This is a test docstring.",
                             "markers": [],
                             "parameters": {},
-                            "path": directory.joinpath("test_module_1.py").as_posix(),
+                            "path": directory.joinpath("test_module_1.py")
+                            .relative_to(directory.parent)
+                            .as_posix(),
                             "module": "test_module_1",
                             "suite": None,
                             "function": "test_2",
@@ -108,7 +112,9 @@ class TestMultiFiles(CommonTestSetup):
                             "doc": "This is a test docstring.",
                             "markers": [],
                             "parameters": {},
-                            "path": directory.joinpath("test_module_2.py").as_posix(),
+                            "path": directory.joinpath("test_module_2.py")
+                            .relative_to(directory.parent)
+                            .as_posix(),
                             "module": "test_module_2",
                             "suite": None,
                             "function": "test_3",
@@ -120,7 +126,9 @@ class TestMultiFiles(CommonTestSetup):
                             "doc": "This is a test docstring.",
                             "markers": [],
                             "parameters": {},
-                            "path": directory.joinpath("test_module_2.py").as_posix(),
+                            "path": directory.joinpath("test_module_2.py")
+                            .relative_to(directory.parent)
+                            .as_posix(),
                             "module": "test_module_2",
                             "suite": None,
                             "function": "test_4",
@@ -135,7 +143,9 @@ class TestMultiFiles(CommonTestSetup):
                             "node_id": "test_module_1.py",
                             "node_type": "module",
                             "name": "test_module_1.py",
-                            "path": directory.joinpath("test_module_1.py").as_posix(),
+                            "path": directory.joinpath("test_module_1.py")
+                            .relative_to(directory.parent)
+                            .as_posix(),
                             "doc": "",
                             "markers": [],
                         },
@@ -143,7 +153,9 @@ class TestMultiFiles(CommonTestSetup):
                             "node_id": "test_module_2.py",
                             "node_type": "module",
                             "name": "test_module_2.py",
-                            "path": directory.joinpath("test_module_2.py").as_posix(),
+                            "path": directory.joinpath("test_module_2.py")
+                            .relative_to(directory.parent)
+                            .as_posix(),
                             "doc": "",
                             "markers": [],
                         },
@@ -175,7 +187,7 @@ class TestMultiFiles(CommonTestSetup):
                         "node_id": ".",
                         "node_type": "directory",
                         "name": directory.name,
-                        "path": directory.as_posix(),
+                        "path": directory.name,
                     }
                 ],
             },
@@ -190,7 +202,9 @@ class TestMultiFiles(CommonTestSetup):
                         "doc": "This is a test docstring.",
                         "markers": [],
                         "parameters": {},
-                        "path": directory.joinpath("test_module_1.py").as_posix(),
+                        "path": directory.joinpath("test_module_1.py")
+                        .relative_to(directory.parent)
+                        .as_posix(),
                         "module": "test_module_1",
                         "suite": None,
                         "function": "test_1",
@@ -202,7 +216,9 @@ class TestMultiFiles(CommonTestSetup):
                         "doc": "This is a test docstring.",
                         "markers": [],
                         "parameters": {},
-                        "path": directory.joinpath("test_module_1.py").as_posix(),
+                        "path": directory.joinpath("test_module_1.py")
+                        .relative_to(directory.parent)
+                        .as_posix(),
                         "module": "test_module_1",
                         "suite": None,
                         "function": "test_2",
@@ -220,7 +236,9 @@ class TestMultiFiles(CommonTestSetup):
                         "doc": "This is a test docstring.",
                         "markers": [],
                         "parameters": {},
-                        "path": directory.joinpath("test_module_2.py").as_posix(),
+                        "path": directory.joinpath("test_module_2.py")
+                        .relative_to(directory.parent)
+                        .as_posix(),
                         "module": "test_module_2",
                         "suite": None,
                         "function": "test_3",
@@ -232,7 +250,9 @@ class TestMultiFiles(CommonTestSetup):
                         "doc": "This is a test docstring.",
                         "markers": [],
                         "parameters": {},
-                        "path": directory.joinpath("test_module_2.py").as_posix(),
+                        "path": directory.joinpath("test_module_2.py")
+                        .relative_to(directory.parent)
+                        .as_posix(),
                         "module": "test_module_2",
                         "suite": None,
                         "function": "test_4",
@@ -247,7 +267,9 @@ class TestMultiFiles(CommonTestSetup):
                         "node_id": "test_module_1.py",
                         "node_type": "module",
                         "name": "test_module_1.py",
-                        "path": directory.joinpath("test_module_1.py").as_posix(),
+                        "path": directory.joinpath("test_module_1.py")
+                        .relative_to(directory.parent)
+                        .as_posix(),
                         "doc": "",
                         "markers": [],
                     },
@@ -255,7 +277,9 @@ class TestMultiFiles(CommonTestSetup):
                         "node_id": "test_module_2.py",
                         "node_type": "module",
                         "name": "test_module_2.py",
-                        "path": directory.joinpath("test_module_2.py").as_posix(),
+                        "path": directory.joinpath("test_module_2.py")
+                        .relative_to(directory.parent)
+                        .as_posix(),
                         "doc": "",
                         "markers": [],
                     },

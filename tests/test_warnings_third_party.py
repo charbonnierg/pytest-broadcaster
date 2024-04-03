@@ -74,7 +74,7 @@ class TestWarningsThirdParty(CommonTestSetup):
                             "node_id": ".",
                             "node_type": "directory",
                             "name": directory.name,
-                            "path": directory.as_posix(),
+                            "path": directory.name,
                         }
                     ],
                 },
@@ -89,7 +89,9 @@ class TestWarningsThirdParty(CommonTestSetup):
                             "doc": "This is a test docstring.",
                             "markers": [],
                             "parameters": {},
-                            "path": directory.joinpath("test_warnings.py").as_posix(),
+                            "path": directory.joinpath("test_warnings.py")
+                            .relative_to(directory.parent)
+                            .as_posix(),
                             "module": "test_warnings",
                             "suite": None,
                             "function": "test_warn",
@@ -104,7 +106,9 @@ class TestWarningsThirdParty(CommonTestSetup):
                             "node_id": "test_warnings.py",
                             "node_type": "module",
                             "name": "test_warnings.py",
-                            "path": directory.joinpath("test_warnings.py").as_posix(),
+                            "path": directory.joinpath("test_warnings.py")
+                            .relative_to(directory.parent)
+                            .as_posix(),
                             "doc": "",
                             "markers": [],
                         }
@@ -136,7 +140,7 @@ class TestWarningsThirdParty(CommonTestSetup):
                         "node_id": ".",
                         "node_type": "directory",
                         "name": directory.name,
-                        "path": directory.as_posix(),
+                        "path": directory.name,
                     }
                 ],
             },
@@ -151,7 +155,9 @@ class TestWarningsThirdParty(CommonTestSetup):
                         "doc": "This is a test docstring.",
                         "markers": [],
                         "parameters": {},
-                        "path": directory.joinpath("test_warnings.py").as_posix(),
+                        "path": directory.joinpath("test_warnings.py")
+                        .relative_to(directory.parent)
+                        .as_posix(),
                         "module": "test_warnings",
                         "suite": None,
                         "function": "test_warn",
@@ -166,7 +172,9 @@ class TestWarningsThirdParty(CommonTestSetup):
                         "node_id": "test_warnings.py",
                         "node_type": "module",
                         "name": "test_warnings.py",
-                        "path": directory.joinpath("test_warnings.py").as_posix(),
+                        "path": directory.joinpath("test_warnings.py")
+                        .relative_to(directory.parent)
+                        .as_posix(),
                         "doc": "",
                         "markers": [],
                     }

@@ -36,7 +36,7 @@ const errorsItems = (errors: ErrorMessage[]) => {
           <SlTreeItem key={idx}>
             <SlTag>
               <SlIcon name="filetype-py"></SlIcon>
-              {error.filename}
+              {error.location.filename}
             </SlTag>
             <SlTreeItem>
               <p>{error.exception_value}</p>
@@ -66,7 +66,7 @@ const warningItems = (warnings: WarningMessage[]) => {
           <SlTreeItem key={idx}>
             <SlTag>
               <SlIcon name="filetype-py"></SlIcon>
-              {warning.filename}
+              {warning.location.filename}
             </SlTag>
             <SlTreeItem>
               <p>{warning.message}</p>

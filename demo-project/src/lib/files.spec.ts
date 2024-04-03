@@ -1,18 +1,19 @@
 import { describe, expect, it } from "vitest"
 
-import type { TestItem } from "../types/test_item"
+import type { TestCase } from "../types/test_case"
 import { NodeType, makeNodes, makeView } from "./files"
 
-const makeExample = (): TestItem => ({
-  file: "parent/test.py",
+const makeExample = (): TestCase => ({
+  path: "parent/test.py",
   node_id: "parent/test.py::test_something",
+  node_type: "case",
   name: "test_something",
   doc: "A test item",
   markers: ["marker1", "marker2"],
   parameters: {},
 })
 
-const evolve = (example: TestItem, updates: Partial<TestItem>): TestItem => {
+const evolve = (example: TestCase, updates: Partial<TestCase>): TestCase => {
   const updated = {
     ...example,
     ...updates,
@@ -86,13 +87,14 @@ describe.concurrent("Tree", () => {
   describe.concurrent("tree with multiple nested directories", () => {
     it("should return the list of nodes", () => {
       const item = {
-        file: "parent/test.py",
+        path: "parent/test.py",
         node_id: "parent/test.py::test_something",
+        node_type: "case",
         name: "test_something",
         doc: "A test item",
         markers: ["marker1", "marker2"],
         parameters: {},
-      } as TestItem
+      } as TestCase
       const item2 = evolve(item, { file: "another_parent/another.py" })
       const item3 = evolve(item, { file: "yet_another_parent/yet_another.py" })
       expect(makeNodes(item, item2, item3)).toStrictEqual([

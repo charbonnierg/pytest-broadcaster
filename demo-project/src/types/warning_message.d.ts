@@ -18,20 +18,31 @@ export interface WarningMessage {
    */
   when: "config" | "collect" | "runtest"
   /**
-   * The filename of the file where the warning message is emitted
+   * The node ID of the node where the warning message is emitted
    */
-  filename: string
-  /**
-   * The line number of the file where the warning message is emitted
-   */
-  lineno: number
-  /**
-   * The category of the warning message
-   */
-  category?: string
+  node_id: string
+  location: Location
   /**
    * The warning message
    */
   message: string
+  /**
+   * The category of the warning message
+   */
+  category?: string
+  [k: string]: unknown
+}
+/**
+ * Location in code source
+ */
+export interface Location {
+  /**
+   * File name
+   */
+  filename: string
+  /**
+   * Line number
+   */
+  lineno: number
   [k: string]: unknown
 }

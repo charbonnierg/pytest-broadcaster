@@ -17,14 +17,7 @@ export interface ErrorMessage {
    * When the error message is emitted
    */
   when: "config" | "collect" | "runtest"
-  /**
-   * The filename of the file where the error message is emitted
-   */
-  filename: string
-  /**
-   * The line number of the file where the error message is emitted
-   */
-  lineno: number
+  location: Location
   /**
    * The exception type
    */
@@ -33,5 +26,30 @@ export interface ErrorMessage {
    * The exception value
    */
   exception_value: string
+  traceback: Traceback
+  [k: string]: unknown
+}
+/**
+ * The location of the error
+ */
+export interface Location {
+  /**
+   * File name
+   */
+  filename: string
+  /**
+   * Line number
+   */
+  lineno: number
+  [k: string]: unknown
+}
+/**
+ * The traceback of the error
+ */
+export interface Traceback {
+  /**
+   * Traceback entries
+   */
+  lines: string[]
   [k: string]: unknown
 }

@@ -49,7 +49,7 @@ class TestBasicMarker(CommonTestSetup):
                             "node_id": ".",
                             "node_type": "directory",
                             "name": directory.name,
-                            "path": directory.as_posix(),
+                            "path": directory.name,
                         }
                     ],
                 },
@@ -64,9 +64,9 @@ class TestBasicMarker(CommonTestSetup):
                             "doc": "",
                             "markers": ["skip"],
                             "parameters": {},
-                            "path": directory.joinpath(
-                                "test_basic_marker.py"
-                            ).as_posix(),
+                            "path": directory.joinpath("test_basic_marker.py")
+                            .relative_to(directory.parent)
+                            .as_posix(),
                             "module": "test_basic_marker",
                             "suite": None,
                             "function": "test_ok",
@@ -80,9 +80,9 @@ class TestBasicMarker(CommonTestSetup):
                         {
                             "node_id": "test_basic_marker.py",
                             "name": "test_basic_marker.py",
-                            "path": directory.joinpath(
-                                "test_basic_marker.py"
-                            ).as_posix(),
+                            "path": directory.joinpath("test_basic_marker.py")
+                            .relative_to(directory.parent)
+                            .as_posix(),
                             "markers": [],
                             "doc": "",
                             "node_type": "module",
@@ -115,7 +115,7 @@ class TestBasicMarker(CommonTestSetup):
                         "node_id": ".",
                         "node_type": "directory",
                         "name": directory.name,
-                        "path": directory.as_posix(),
+                        "path": directory.name,
                     }
                 ],
             },
@@ -130,7 +130,9 @@ class TestBasicMarker(CommonTestSetup):
                         "doc": "",
                         "markers": ["skip"],
                         "parameters": {},
-                        "path": directory.joinpath("test_basic_marker.py").as_posix(),
+                        "path": directory.joinpath("test_basic_marker.py")
+                        .relative_to(directory.parent)
+                        .as_posix(),
                         "module": "test_basic_marker",
                         "suite": None,
                         "function": "test_ok",
@@ -145,7 +147,9 @@ class TestBasicMarker(CommonTestSetup):
                         "node_id": "test_basic_marker.py",
                         "node_type": "module",
                         "name": "test_basic_marker.py",
-                        "path": directory.joinpath("test_basic_marker.py").as_posix(),
+                        "path": directory.joinpath("test_basic_marker.py")
+                        .relative_to(directory.parent)
+                        .as_posix(),
                         "doc": "",
                         "markers": [],
                     }

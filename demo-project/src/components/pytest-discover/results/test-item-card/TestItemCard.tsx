@@ -1,14 +1,14 @@
 import SlCard from "@shoelace-style/shoelace/dist/react/card/index.js"
 
 import { getFilename, sanitizeName } from "../../../../lib/files.ts"
-import type { TestItem } from "../../../../types/test_item"
+import type { TestCase } from "../../../../types/test_case"
 import { CopyBadge } from "../../../widgets/copy-badge/CopyBadge.tsx"
 import { MarkersList } from "../markers-list/MarkersList.tsx"
 import "./TestItemCard.css"
 
 interface TestItemCardProps {
-  onClick: (props: TestItem) => void
-  properties: TestItem
+  onClick: (props: TestCase) => void
+  properties: TestCase
 }
 
 /* A test item collected by pytest */
@@ -25,8 +25,8 @@ export const TestItemCard = (item: TestItemCardProps) => {
       <MarkersList item={item.properties} />
       <p>
         <CopyBadge
-          label={getFilename(item.properties.file)}
-          value={item.properties.file}
+          label={getFilename(item.properties.path)}
+          value={item.properties.path}
           icon="filetype-py"
         />
       </p>

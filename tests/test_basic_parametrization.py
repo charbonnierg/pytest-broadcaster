@@ -49,7 +49,7 @@ class TestBasicParametrization(CommonTestSetup):
                             "node_id": ".",
                             "node_type": "directory",
                             "name": directory.name,
-                            "path": directory.as_posix(),
+                            "path": directory.name,
                         }
                     ],
                 },
@@ -64,9 +64,9 @@ class TestBasicParametrization(CommonTestSetup):
                             "doc": "",
                             "markers": ["parametrize"],
                             "parameters": {"arg": "int"},
-                            "path": directory.joinpath(
-                                "test_basic_parametrization.py"
-                            ).as_posix(),
+                            "path": directory.joinpath("test_basic_parametrization.py")
+                            .relative_to(directory.parent)
+                            .as_posix(),
                             "module": "test_basic_parametrization",
                             "suite": None,
                             "function": "test_ok",
@@ -78,9 +78,9 @@ class TestBasicParametrization(CommonTestSetup):
                             "doc": "",
                             "markers": ["parametrize"],
                             "parameters": {"arg": "int"},
-                            "path": directory.joinpath(
-                                "test_basic_parametrization.py"
-                            ).as_posix(),
+                            "path": directory.joinpath("test_basic_parametrization.py")
+                            .relative_to(directory.parent)
+                            .as_posix(),
                             "module": "test_basic_parametrization",
                             "suite": None,
                             "function": "test_ok",
@@ -92,9 +92,9 @@ class TestBasicParametrization(CommonTestSetup):
                             "doc": "",
                             "markers": ["parametrize"],
                             "parameters": {"arg": "int"},
-                            "path": directory.joinpath(
-                                "test_basic_parametrization.py"
-                            ).as_posix(),
+                            "path": directory.joinpath("test_basic_parametrization.py")
+                            .relative_to(directory.parent)
+                            .as_posix(),
                             "module": "test_basic_parametrization",
                             "suite": None,
                             "function": "test_ok",
@@ -108,9 +108,9 @@ class TestBasicParametrization(CommonTestSetup):
                         {
                             "node_id": "test_basic_parametrization.py",
                             "name": "test_basic_parametrization.py",
-                            "path": directory.joinpath(
-                                "test_basic_parametrization.py"
-                            ).as_posix(),
+                            "path": directory.joinpath("test_basic_parametrization.py")
+                            .relative_to(directory.parent)
+                            .as_posix(),
                             "doc": "",
                             "markers": [],
                             "node_type": "module",
@@ -143,7 +143,7 @@ class TestBasicParametrization(CommonTestSetup):
                         "node_id": ".",
                         "node_type": "directory",
                         "name": directory.name,
-                        "path": directory.as_posix(),
+                        "path": directory.name,
                     }
                 ],
             },
@@ -156,9 +156,9 @@ class TestBasicParametrization(CommonTestSetup):
                         "doc": "",
                         "markers": ["parametrize"],
                         "parameters": {"arg": "int"},
-                        "path": directory.joinpath(
-                            "test_basic_parametrization.py"
-                        ).as_posix(),
+                        "path": directory.joinpath("test_basic_parametrization.py")
+                        .relative_to(directory.parent)
+                        .as_posix(),
                         "module": "test_basic_parametrization",
                         "suite": None,
                         "function": "test_ok",
@@ -170,9 +170,9 @@ class TestBasicParametrization(CommonTestSetup):
                         "doc": "",
                         "markers": ["parametrize"],
                         "parameters": {"arg": "int"},
-                        "path": directory.joinpath(
-                            "test_basic_parametrization.py"
-                        ).as_posix(),
+                        "path": directory.joinpath("test_basic_parametrization.py")
+                        .relative_to(directory.parent)
+                        .as_posix(),
                         "module": "test_basic_parametrization",
                         "suite": None,
                         "function": "test_ok",
@@ -184,9 +184,9 @@ class TestBasicParametrization(CommonTestSetup):
                         "doc": "",
                         "markers": ["parametrize"],
                         "parameters": {"arg": "int"},
-                        "path": directory.joinpath(
-                            "test_basic_parametrization.py"
-                        ).as_posix(),
+                        "path": directory.joinpath("test_basic_parametrization.py")
+                        .relative_to(directory.parent)
+                        .as_posix(),
                         "module": "test_basic_parametrization",
                         "suite": None,
                         "function": "test_ok",
@@ -202,9 +202,9 @@ class TestBasicParametrization(CommonTestSetup):
                     {
                         "node_id": "test_basic_parametrization.py",
                         "name": "test_basic_parametrization.py",
-                        "path": directory.joinpath(
-                            "test_basic_parametrization.py"
-                        ).as_posix(),
+                        "path": directory.joinpath("test_basic_parametrization.py")
+                        .relative_to(directory.parent)
+                        .as_posix(),
                         "doc": "",
                         "markers": [],
                         "node_type": "module",

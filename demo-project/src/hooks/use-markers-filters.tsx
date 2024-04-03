@@ -4,7 +4,7 @@ import {
   type IncludedExcludeStatus,
   newIncludeExcludeFilter,
 } from "../lib/filter"
-import type { TestItem } from "../types/test_item"
+import type { TestCase } from "../types/test_case"
 
 /* Weird hook: To review */
 export const useMarkersFilters = () => {
@@ -16,7 +16,7 @@ export const useMarkersFilters = () => {
     setExclude: setExcludedMarkers,
   })
   const filter = useCallback(
-    (item: TestItem): boolean =>
+    (item: TestCase): boolean =>
       markerFilter.filter(includedMarkers, excludedMarkers, ...item.markers),
     [includedMarkers, excludedMarkers],
   )

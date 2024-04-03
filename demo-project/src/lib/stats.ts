@@ -1,5 +1,7 @@
 /* stats.ts exposes utilities to compute statistics from discovery results.*/
-import type { DiscoveryResult } from "../types/discovery_result"
+import type { DiscoveryResult, TestModule } from "../types/discovery_result"
+import type { TestCase } from "../types/test_case"
+import type { TestSuite } from "../types/test_suite"
 
 // I'm sure something like that already exists in the TS standard library
 // but I can't find it 😭
@@ -8,37 +10,55 @@ type HasField<K extends string, T = any> = Partial<{
 }>
 
 export interface Statistics {
-  totalCount: number
-  totalMarkersCount: number
-  totalFiles: number
   totalErrors: number
   totalWarnings: number
+  totalCases: number
+  totalMarkersCount: number
+  totalDirectories: number
   totalModules: number
   totalSuites: number
 }
 
+const sum = (a: number, b: number) => a + b
+
 export const computeStats = (result: DiscoveryResult): Statistics => {
+  const items = result.collect_reports.flatMap((report) =>
+    report.items.filter((item) => item.node_type != "directory"),
+  ) as (TestModule | TestCase | TestSuite)[]
   const stats = {
-    // Total count
-    totalCount: result.items.length,
     // Total errors
     totalErrors: result.errors.length,
     // Total warnings
     totalWarnings: result.warnings.length,
+    // Total count
+    totalCases: result.collect_reports
+      .map((report) => report.items.length)
+      .reduce(sum, 0),
     // Markers count
-    totalMarkersCount: uniqueMultiCount(result.items, "markers"),
-    // Files count
-    totalFiles: uniqueCount(result.items, "file"),
-    // Modules count
-    totalModules: uniqueCount(result.items, "module"),
-    // Suites count
-    totalSuites: Array.from(
-      new Set(
-        result.items.map(
-          (item) => item.parent || item.module || item.file || item.name,
-        ),
-      ),
+    totalMarkersCount: Array.from(
+      new Set(items.flatMap((item) => item.markers)),
     ).length,
+    // Files count
+    totalDirectories: result.collect_reports
+      .map(
+        (report) =>
+          report.items.filter((item) => item.node_type == "directory").length,
+      )
+      .reduce(sum, 0),
+    // Modules count
+    totalModules: result.collect_reports
+      .map(
+        (report) =>
+          report.items.filter((item) => item.node_type == "module").length,
+      )
+      .reduce(sum, 0),
+    // Suites count
+    totalSuites: result.collect_reports
+      .map(
+        (report) =>
+          report.items.filter((item) => item.node_type == "suite").length,
+      )
+      .reduce(sum, 0),
   }
   return stats
 }

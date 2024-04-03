@@ -16,33 +16,123 @@ export interface CollectReport {
   /**
    * The node id of the collector (if any)
    */
-  node_id?: string
+  node_id: string
   /**
    * The collected items
    */
-  items: TestItem[]
+  items: (TestDirectory | TestModule | TestSuite | TestCase)[]
   [k: string]: unknown
 }
 /**
- * Pytest Test Item
+ * Pytest Test Directory
  */
-export interface TestItem {
+export interface TestDirectory {
   /**
    * Node ID
    */
   node_id: string
   /**
+   * Node Type
+   */
+  node_type: "directory"
+  /**
+   * Test Name
+   */
+  name: string
+  /**
+   * Directory path
+   */
+  path: string
+  [k: string]: unknown
+}
+/**
+ * Pytest Test Module
+ */
+export interface TestModule {
+  /**
+   * Node ID
+   */
+  node_id: string
+  /**
+   * Node Type
+   */
+  node_type: "module"
+  /**
+   * Module name
+   */
+  name: string
+  /**
    * File path
    */
-  file?: string
+  path: string
+  /**
+   * Module docstring
+   */
+  doc: string
+  /**
+   * Test markers
+   */
+  markers: string[]
+  [k: string]: unknown
+}
+/**
+ * Pytest Test Suite
+ */
+export interface TestSuite {
+  /**
+   * Node ID
+   */
+  node_id: string
+  /**
+   * Node Type
+   */
+  node_type: "suite"
+  /**
+   * Suite name
+   */
+  name: string
+  /**
+   * Module name
+   */
+  module: string
+  /**
+   * File path
+   */
+  path: string
+  /**
+   * Suite documentation
+   */
+  doc: string
+  /**
+   * Test markers
+   */
+  markers: string[]
+  [k: string]: unknown
+}
+/**
+ * Pytest Test Case
+ */
+export interface TestCase {
+  /**
+   * Node ID
+   */
+  node_id: string
+  /**
+   * Node Type
+   */
+  node_type: "case"
+  /**
+   * File path
+   */
+  path: string
   /**
    * Module name
    */
   module?: string
   /**
-   * Class name
+   * Parent suite
    */
-  parent?: string
+  suite?: string
   /**
    * Function name
    */

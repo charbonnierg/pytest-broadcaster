@@ -2,14 +2,14 @@ import { SlIcon } from "@shoelace-style/shoelace/dist/react"
 import SlTag from "@shoelace-style/shoelace/dist/react/tag/index.js"
 
 import { copy } from "../../../../lib/clipboard"
-import type { TestItem } from "../../../../types/test_item"
+import type { TestCase } from "../../../../types/test_case"
 import "./MarkersList.css"
 
 /* Format a test item markers */
 export const MarkersList = ({
   item,
 }: {
-  item: TestItem
+  item: TestCase
 }): JSX.Element | null => {
   if (item.markers.length === 0) {
     return null

@@ -11,6 +11,7 @@ import {
   sanitizeName,
 } from "../../../lib/files"
 import { type Report } from "../../../lib/repository"
+import type { TestCase } from "../../../types/discovery_result"
 import "./FileTree.css"
 
 interface FileNavigationProps {
@@ -113,12 +114,20 @@ export const FileNavigation = ({
 }: FileNavigationProps) => {
   const [views, setViews] = useState<View[]>([])
   useEffect(() => {
+    console.warn("FileNavigation: report changed")
     if (report == null) {
+      console.warn("FileNavigation: report is null")
       setViews([])
       return
     }
-    const nodes = makeNodes(...report.result.items)
+    const cases = report.result.collect_reports.flatMap((r) =>
+      r.items.filter((i) => i.node_type == "case"),
+    ) as TestCase[]
+    console.warn("Cases: ", cases)
+    const nodes = makeNodes(...cases)
+    console.warn("Nodes: ", nodes)
     const views = makeView(nodes)
+    console.log("Views: ", views)
     setViews(views)
   }, [report])
 

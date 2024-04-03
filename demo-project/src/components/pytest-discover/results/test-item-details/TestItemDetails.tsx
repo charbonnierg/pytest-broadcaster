@@ -3,13 +3,13 @@ import SlTag from "@shoelace-style/shoelace/dist/react/tag/index.js"
 
 import { copy } from "../../../../lib/clipboard"
 import { sanitizeName } from "../../../../lib/files"
-import type { TestItem } from "../../../../types/test_item"
+import type { TestCase } from "../../../../types/test_case"
 import { CopyBadge } from "../../../widgets/copy-badge/CopyBadge"
 import { MarkersList } from "../markers-list/MarkersList"
 import "./TestItemDetails.css"
 
 interface TestItemDetailsProps {
-  item: TestItem | null
+  item: TestCase | null
 }
 
 export const TestItemDetails = ({ item }: TestItemDetailsProps) => {
@@ -33,7 +33,7 @@ export const TestItemDetails = ({ item }: TestItemDetailsProps) => {
             </tr>
             <tr>
               <td>
-                <CopyBadge value={item.file} icon="filetype-py" />
+                <CopyBadge value={item.path} icon="filetype-py" />
               </td>
             </tr>
             <tr>
@@ -56,12 +56,12 @@ export const TestItemDetails = ({ item }: TestItemDetailsProps) => {
 }
 
 /* Format a test item node id */
-const formatNodeId = (item: TestItem): JSX.Element => {
+const formatNodeId = (item: TestCase): JSX.Element => {
   return <CopyBadge value={item.node_id} icon="tag" />
 }
 
 /* Format a test item module name */
-const formatModule = (item: TestItem): JSX.Element | null => {
+const formatModule = (item: TestCase): JSX.Element | null => {
   if (item.module == null || item.module == "") {
     return null
   }
@@ -69,22 +69,22 @@ const formatModule = (item: TestItem): JSX.Element | null => {
 }
 
 /* Format a test item parent name */
-const formatParent = (item: TestItem): JSX.Element | null => {
-  if (item.parent == null || item.parent == "") {
+const formatParent = (item: TestCase): JSX.Element | null => {
+  if (item.suite == null || item.suite == "") {
     return null
   }
   return (
     <>
-      <SlTag onClick={copy(item.parent)}>
+      <SlTag onClick={copy(item.suite)}>
         <SlIcon name="diagram-2"></SlIcon>
-        {item.parent}
+        {item.suite}
       </SlTag>
     </>
   )
 }
 
 /* Format a test item parameters */
-const formatParameters = (item: TestItem): JSX.Element | null => {
+const formatParameters = (item: TestCase): JSX.Element | null => {
   if (Object.keys(item.parameters).length === 0) {
     return null
   }

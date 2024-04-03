@@ -53,7 +53,7 @@ class TestBasicSuite(CommonTestSetup):
                             "node_id": ".",
                             "node_type": "directory",
                             "name": directory.name,
-                            "path": directory.as_posix(),
+                            "path": directory.name,
                         }
                     ],
                 },
@@ -68,9 +68,9 @@ class TestBasicSuite(CommonTestSetup):
                             "doc": "This is a first docstring.",
                             "markers": [],
                             "parameters": {},
-                            "path": directory.joinpath(
-                                "test_basic_suite.py"
-                            ).as_posix(),
+                            "path": directory.joinpath("test_basic_suite.py")
+                            .relative_to(directory.parent)
+                            .as_posix(),
                             "module": "test_basic_suite",
                             "suite": "TestOk",
                             "function": "test_1",
@@ -82,9 +82,9 @@ class TestBasicSuite(CommonTestSetup):
                             "doc": "This is a second docstring.",
                             "markers": [],
                             "parameters": {},
-                            "path": directory.joinpath(
-                                "test_basic_suite.py"
-                            ).as_posix(),
+                            "path": directory.joinpath("test_basic_suite.py")
+                            .relative_to(directory.parent)
+                            .as_posix(),
                             "module": "test_basic_suite",
                             "suite": "TestOk",
                             "function": "test_2",
@@ -99,9 +99,9 @@ class TestBasicSuite(CommonTestSetup):
                             "node_id": "test_basic_suite.py::TestOk",
                             "node_type": "suite",
                             "name": "TestOk",
-                            "path": directory.joinpath(
-                                "test_basic_suite.py"
-                            ).as_posix(),
+                            "path": directory.joinpath("test_basic_suite.py")
+                            .relative_to(directory.parent)
+                            .as_posix(),
                             "module": "test_basic_suite",
                             "doc": "This is a suite docstring.",
                             "markers": [],
@@ -116,9 +116,9 @@ class TestBasicSuite(CommonTestSetup):
                             "node_id": "test_basic_suite.py",
                             "node_type": "module",
                             "name": "test_basic_suite.py",
-                            "path": directory.joinpath(
-                                "test_basic_suite.py"
-                            ).as_posix(),
+                            "path": directory.joinpath("test_basic_suite.py")
+                            .relative_to(directory.parent)
+                            .as_posix(),
                             "doc": "This is a module docstring.",
                             "markers": [],
                         }
@@ -150,7 +150,7 @@ class TestBasicSuite(CommonTestSetup):
                         "node_id": ".",
                         "node_type": "directory",
                         "name": directory.name,
-                        "path": directory.as_posix(),
+                        "path": directory.name,
                     }
                 ],
             },
@@ -165,7 +165,9 @@ class TestBasicSuite(CommonTestSetup):
                         "doc": "This is a first docstring.",
                         "markers": [],
                         "parameters": {},
-                        "path": directory.joinpath("test_basic_suite.py").as_posix(),
+                        "path": directory.joinpath("test_basic_suite.py")
+                        .relative_to(directory.parent)
+                        .as_posix(),
                         "module": "test_basic_suite",
                         "suite": "TestOk",
                         "function": "test_1",
@@ -177,7 +179,9 @@ class TestBasicSuite(CommonTestSetup):
                         "doc": "This is a second docstring.",
                         "markers": [],
                         "parameters": {},
-                        "path": directory.joinpath("test_basic_suite.py").as_posix(),
+                        "path": directory.joinpath("test_basic_suite.py")
+                        .relative_to(directory.parent)
+                        .as_posix(),
                         "module": "test_basic_suite",
                         "suite": "TestOk",
                         "function": "test_2",
@@ -192,7 +196,9 @@ class TestBasicSuite(CommonTestSetup):
                         "node_id": "test_basic_suite.py::TestOk",
                         "node_type": "suite",
                         "name": "TestOk",
-                        "path": directory.joinpath("test_basic_suite.py").as_posix(),
+                        "path": directory.joinpath("test_basic_suite.py")
+                        .relative_to(directory.parent)
+                        .as_posix(),
                         "doc": "This is a suite docstring.",
                         "module": "test_basic_suite",
                         "markers": [],
@@ -207,7 +213,9 @@ class TestBasicSuite(CommonTestSetup):
                         "node_id": "test_basic_suite.py",
                         "node_type": "module",
                         "name": "test_basic_suite.py",
-                        "path": directory.joinpath("test_basic_suite.py").as_posix(),
+                        "path": directory.joinpath("test_basic_suite.py")
+                        .relative_to(directory.parent)
+                        .as_posix(),
                         "doc": "This is a module docstring.",
                         "markers": [],
                     }

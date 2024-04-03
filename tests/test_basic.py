@@ -48,7 +48,7 @@ class TestBasic(CommonTestSetup):
                             "node_id": ".",
                             "node_type": "directory",
                             "name": directory.name,
-                            "path": directory.as_posix(),
+                            "path": directory.name,
                         }
                     ],
                 },
@@ -63,7 +63,9 @@ class TestBasic(CommonTestSetup):
                             "doc": "This is a test docstring.",
                             "markers": [],
                             "parameters": {},
-                            "path": directory.joinpath("test_basic.py").as_posix(),
+                            "path": directory.joinpath("test_basic.py")
+                            .relative_to(directory.parent)
+                            .as_posix(),
                             "module": "test_basic",
                             "suite": None,
                             "function": "test_ok",
@@ -77,7 +79,9 @@ class TestBasic(CommonTestSetup):
                         {
                             "node_id": "test_basic.py",
                             "name": "test_basic.py",
-                            "path": directory.joinpath("test_basic.py").as_posix(),
+                            "path": directory.joinpath("test_basic.py")
+                            .relative_to(directory.parent)
+                            .as_posix(),
                             "doc": "This is a module docstring.",
                             "markers": [],
                             "node_type": "module",
@@ -110,7 +114,7 @@ class TestBasic(CommonTestSetup):
                         "node_id": ".",
                         "node_type": "directory",
                         "name": directory.name,
-                        "path": directory.as_posix(),
+                        "path": directory.name,
                     }
                 ],
             },
@@ -125,7 +129,9 @@ class TestBasic(CommonTestSetup):
                         "doc": "This is a test docstring.",
                         "markers": [],
                         "parameters": {},
-                        "path": directory.joinpath("test_basic.py").as_posix(),
+                        "path": directory.joinpath("test_basic.py")
+                        .relative_to(directory.parent)
+                        .as_posix(),
                         "module": "test_basic",
                         "suite": None,
                         "function": "test_ok",
@@ -139,7 +145,9 @@ class TestBasic(CommonTestSetup):
                     {
                         "node_id": "test_basic.py",
                         "name": "test_basic.py",
-                        "path": directory.joinpath("test_basic.py").as_posix(),
+                        "path": directory.joinpath("test_basic.py")
+                        .relative_to(directory.parent)
+                        .as_posix(),
                         "doc": "This is a module docstring.",
                         "markers": [],
                         "node_type": "module",

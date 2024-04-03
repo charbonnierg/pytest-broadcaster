@@ -116,11 +116,11 @@ const ReportFilename = ({
 }
 
 const ReportTotalCount = ({ stats }: { stats: Statistics }) => {
-  return <ReportIndicator icon="box" value={stats.totalCount} />
+  return <ReportIndicator icon="box" value={stats.totalCases} />
 }
 
 const ReportFileCount = ({ stats }: { stats: Statistics }) => {
-  return <ReportIndicator icon="filetype-py" value={stats.totalFiles} />
+  return <ReportIndicator icon="folder" value={stats.totalDirectories} />
 }
 
 const ReportSuitesCount = ({ stats }: { stats: Statistics }) => {

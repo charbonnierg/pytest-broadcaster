@@ -50,7 +50,7 @@ class TestMultiCases(CommonTestSetup):
                             "node_id": ".",
                             "node_type": "directory",
                             "name": directory.name,
-                            "path": directory.as_posix(),
+                            "path": directory.name,
                         }
                     ],
                 },
@@ -65,9 +65,9 @@ class TestMultiCases(CommonTestSetup):
                             "doc": "This is a test docstring.",
                             "markers": [],
                             "parameters": {},
-                            "path": directory.joinpath(
-                                "test_multi_cases.py"
-                            ).as_posix(),
+                            "path": directory.joinpath("test_multi_cases.py")
+                            .relative_to(directory.parent)
+                            .as_posix(),
                             "module": "test_multi_cases",
                             "suite": None,
                             "function": "test_1",
@@ -79,9 +79,9 @@ class TestMultiCases(CommonTestSetup):
                             "doc": "This is a test docstring.",
                             "markers": [],
                             "parameters": {},
-                            "path": directory.joinpath(
-                                "test_multi_cases.py"
-                            ).as_posix(),
+                            "path": directory.joinpath("test_multi_cases.py")
+                            .relative_to(directory.parent)
+                            .as_posix(),
                             "module": "test_multi_cases",
                             "suite": None,
                             "function": "test_2",
@@ -96,9 +96,9 @@ class TestMultiCases(CommonTestSetup):
                             "node_id": "test_multi_cases.py",
                             "node_type": "module",
                             "name": "test_multi_cases.py",
-                            "path": directory.joinpath(
-                                "test_multi_cases.py"
-                            ).as_posix(),
+                            "path": directory.joinpath("test_multi_cases.py")
+                            .relative_to(directory.parent)
+                            .as_posix(),
                             "doc": "",
                             "markers": [],
                         }
@@ -130,7 +130,7 @@ class TestMultiCases(CommonTestSetup):
                         "node_id": ".",
                         "node_type": "directory",
                         "name": directory.name,
-                        "path": directory.as_posix(),
+                        "path": directory.name,
                     }
                 ],
             },
@@ -143,7 +143,9 @@ class TestMultiCases(CommonTestSetup):
                         "doc": "This is a test docstring.",
                         "markers": [],
                         "parameters": {},
-                        "path": directory.joinpath("test_multi_cases.py").as_posix(),
+                        "path": directory.joinpath("test_multi_cases.py")
+                        .relative_to(directory.parent)
+                        .as_posix(),
                         "module": "test_multi_cases",
                         "suite": None,
                         "function": "test_1",
@@ -155,7 +157,9 @@ class TestMultiCases(CommonTestSetup):
                         "doc": "This is a test docstring.",
                         "markers": [],
                         "parameters": {},
-                        "path": directory.joinpath("test_multi_cases.py").as_posix(),
+                        "path": directory.joinpath("test_multi_cases.py")
+                        .relative_to(directory.parent)
+                        .as_posix(),
                         "module": "test_multi_cases",
                         "suite": None,
                         "function": "test_2",
@@ -172,7 +176,9 @@ class TestMultiCases(CommonTestSetup):
                         "node_id": "test_multi_cases.py",
                         "node_type": "module",
                         "name": "test_multi_cases.py",
-                        "path": directory.joinpath("test_multi_cases.py").as_posix(),
+                        "path": directory.joinpath("test_multi_cases.py")
+                        .relative_to(directory.parent)
+                        .as_posix(),
                         "doc": "",
                         "markers": [],
                     }

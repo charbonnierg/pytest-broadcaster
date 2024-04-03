@@ -14,7 +14,7 @@ import FileTree from "../components/widgets/file-tree/FileTree.tsx"
 import { useSearchResults } from "../hooks/use-search-results.tsx"
 import { getFilename } from "../lib/files.ts"
 import { newLocalStorageReportRepository } from "../lib/repository.ts"
-import type { TestItem } from "../types/test_item"
+import type { TestCase } from "../types/test_case"
 import "./SearchApp.css"
 
 /* A search component for test items. */
@@ -23,7 +23,7 @@ export const SearchApp = (props: PropsWithChildren) => {
   const [navigationOpened, setNavigationOpened] = useState<boolean>(false)
   const [footerOpened, setFooterOpened] = useState<boolean>(false)
   const [focusOpened, setFocusOpened] = useState<boolean>(false)
-  const [focusedItem, setFocusedItem] = useState<TestItem | null>(null)
+  const [focusedItem, setFocusedItem] = useState<TestCase | null>(null)
   // Initialize file tree state
   const [position, setPosition] = useState<string | null>(null)
   // Initialize search state
@@ -69,7 +69,7 @@ export const SearchApp = (props: PropsWithChildren) => {
         <TestItemGrid
           items={results}
           pageSize={20}
-          onItemClicked={(item: TestItem) => {
+          onItemClicked={(item: TestCase) => {
             if (focusOpened) {
               return
             }

@@ -45,7 +45,9 @@ class TestErrors(CommonTestSetup):
                     "event": "ErrorMessage",
                     "when": "collect",
                     "location": {
-                        "filename": directory.joinpath("test_errors.py").as_posix(),
+                        "filename": directory.joinpath("test_errors.py")
+                        .relative_to(directory.parent)
+                        .as_posix(),
                         "lineno": 4,
                     },
                     "traceback": {
@@ -67,7 +69,7 @@ class TestErrors(CommonTestSetup):
                             "node_id": ".",
                             "node_type": "directory",
                             "name": directory.name,
-                            "path": directory.as_posix(),
+                            "path": directory.name,
                         }
                     ],
                 },
@@ -97,7 +99,7 @@ class TestErrors(CommonTestSetup):
                         "node_id": ".",
                         "node_type": "directory",
                         "name": directory.name,
-                        "path": directory.as_posix(),
+                        "path": directory.name,
                     }
                 ],
             },
@@ -105,7 +107,9 @@ class TestErrors(CommonTestSetup):
                 "event": "ErrorMessage",
                 "when": "collect",
                 "location": {
-                    "filename": directory.joinpath("test_errors.py").as_posix(),
+                    "filename": directory.joinpath("test_errors.py")
+                    .relative_to(directory.parent)
+                    .as_posix(),
                     "lineno": 4,
                 },
                 "traceback": {

@@ -3,7 +3,7 @@ import SlButton from "@shoelace-style/shoelace/dist/react/button/index.js"
 import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner/index.js"
 import { useEffect, useState } from "react"
 
-import type { TestItem } from "../../../../types/discovery_result"
+import type { TestCase } from "../../../../types/test_case"
 import TestItemCard from "../test-item-card/TestItemCard"
 import "./TestItemGrid.css"
 
@@ -21,9 +21,9 @@ const isAtBottom = (el: Element | null): boolean => {
   return Math.abs(scrollHeight - scrollTop - clientHeight) < 1
 }
 interface TestItemGridProps {
-  items: TestItem[]
+  items: TestCase[]
   pageSize: number
-  onItemClicked: (item: TestItem) => void
+  onItemClicked: (item: TestCase) => void
 }
 
 const LoadingIndicator = ({ loading }: { loading: boolean }) => {
@@ -41,7 +41,7 @@ export const TestItemGrid = ({
 }: TestItemGridProps) => {
   const delay = 1000
   // Create a state to hold displayed items
-  const [displayed, setDisplayed] = useState<TestItem[]>(
+  const [displayed, setDisplayed] = useState<TestCase[]>(
     items.slice(0, pageSize),
   )
   // Create a state to hold offset and loading state
