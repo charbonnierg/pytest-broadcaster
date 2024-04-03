@@ -49,7 +49,7 @@ pre = { chain = ["generate", "__format", "__lint", "__test", "__typecheck"] }
 # Automate CI
 ci = { chain = ["bootstrap", "diff", "__formatcheck", "__lint", "__test", "__typecheck"] }
 # Automate project install
-bootstrap = { chain = ["__install-project", "__install-fake-lib"] }
+bootstrap = { chain = ["__install-project"] }
 # Run code generation
 generate = { chain = ["__generate-models", "__format-models", "__generate-schemas"] }
 # Verify generated code is up-to-date
@@ -68,8 +68,7 @@ __generate-models-check = "datamodel-codegen --input src/schemas/ --output check
 __generate-models-diff = "diff --exclude __pycache__ -r src/pytest_discover/models check"
 __format-models = "rye fmt src/pytest_discover/models"
 __format-models-check = "rye fmt check"
-__install-project = "rye sync --no-lock"
-__install-fake-lib = "rye add --no-sync --path ./tests/fake-lib fake-lib"
+__install-project = "rye sync --no-lock --force"
 
 [tool.pytest.ini_options]
 markers=["basic", "filetree", "suites", "markers", "parametrization", "buildmeta"]
