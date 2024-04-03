@@ -29,7 +29,8 @@
       "description": "The node ID of the node where the warning message is emitted"
     },
     "location": {
-      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/location.json#"
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/location.json#",
+      "description": "The location of the warning message"
     },
     "message": {
       "type": "string",

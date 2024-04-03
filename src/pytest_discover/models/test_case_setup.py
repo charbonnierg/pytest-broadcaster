@@ -20,20 +20,26 @@ class TestCaseSetup:
     Node ID
     """
     outcome: outcome.Outcome
+    """
+    Outcome of the setup step
+    """
     duration: float
     """
-    Duration in seconds
+    Duration of the setup step in seconds
     """
     start: str
     """
-    Start Time
+    Start time of the setup step in ISO 8601 format
     """
     stop: str
     """
-    Stop Time
+    Stop time of the setup step in ISO 8601 format
     """
     event_type: str = "case_setup"
     """
     Event Type
     """
     error: Optional[test_case_error.TestCaseError] = None
+    """
+    Error details if the setup step failed
+    """

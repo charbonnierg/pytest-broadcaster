@@ -35,6 +35,9 @@ class WarningMessage:
     The node ID of the node where the warning message is emitted
     """
     location: location.Location
+    """
+    The location of the warning message
+    """
     message: str
     """
     The warning message

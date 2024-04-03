@@ -18,23 +18,28 @@
       "description": "Node ID"
     },
     "outcome": {
-      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/outcome.json"
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/outcome.json",
+      "description": "Outcome of the test case"
     },
     "duration": {
       "type": "number",
-      "description": "Duration in seconds"
+      "description": "Duration of the test case in seconds"
     },
     "setup": {
-      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case_setup.json"
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case_setup.json",
+      "description": "Setup of the test case"
     },
     "call": {
-      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case_call.json"
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case_call.json",
+      "description": "Call of the test case"
     },
     "teardown": {
-      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case_teardown.json"
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case_teardown.json",
+      "description": "Teardown of the test case"
     },
     "finished": {
-      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case_finished.json"
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case_finished.json",
+      "description": "View of the test case after it has finished"
     }
   }
 }

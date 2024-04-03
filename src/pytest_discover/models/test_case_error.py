@@ -20,3 +20,6 @@ class TestCaseError:
     Error message
     """
     traceback: Optional[traceback.Traceback] = None
+    """
+    Error traceback
+    """

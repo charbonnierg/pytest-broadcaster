@@ -13,7 +13,8 @@
       "description": "Error message"
     },
     "traceback": {
-      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/traceback.json"
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/traceback.json",
+      "description": "Error traceback"
     }
   }
 }

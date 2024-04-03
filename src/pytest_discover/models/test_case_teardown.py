@@ -20,20 +20,26 @@ class TestCaseTeardown:
     Node ID
     """
     outcome: outcome.Outcome
+    """
+    Outcome of the teardown step
+    """
     duration: float
     """
-    Duration in seconds
+    Duration of the teardown step in seconds
     """
     start: str
     """
-    Start Time
+    Start time of the teardown step in ISO 8601 format
     """
     stop: str
     """
-    Stop Time
+    Stop time of the teardown step in ISO 8601 format
     """
     event_type: str = "case_teardown"
     """
     Event Type
     """
     error: Optional[test_case_error.TestCaseError] = None
+    """
+    Error details if the teardown step failed
+    """

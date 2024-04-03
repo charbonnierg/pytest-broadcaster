@@ -24,16 +24,20 @@
       "items": {
         "oneOf": [
           {
-            "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_directory.json"
+            "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_directory.json",
+            "description": "A test directory"
           },
           {
-            "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_module.json"
+            "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_module.json",
+            "description": "A test module"
           },
           {
-            "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_suite.json"
+            "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_suite.json",
+            "description": "A test suite"
           },
           {
-            "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case.json"
+            "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case.json",
+            "description": "A test case"
           }
         ]
       }

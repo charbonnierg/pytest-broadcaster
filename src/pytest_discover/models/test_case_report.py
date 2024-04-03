@@ -26,11 +26,26 @@ class TestCaseReport:
     Node ID
     """
     outcome: outcome.Outcome
+    """
+    Outcome of the test case
+    """
     duration: float
     """
-    Duration in seconds
+    Duration of the test case in seconds
     """
     setup: test_case_setup.TestCaseSetup
+    """
+    Setup of the test case
+    """
     teardown: test_case_teardown.TestCaseTeardown
+    """
+    Teardown of the test case
+    """
     finished: test_case_finished.TestCaseFinished
+    """
+    View of the test case after it has finished
+    """
     call: Optional[test_case_call.TestCaseCall] = None
+    """
+    Call of the test case
+    """

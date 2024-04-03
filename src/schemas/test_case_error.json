@@ -13,7 +13,8 @@
       "description": "Error message"
     },
     "traceback": {
-      "$ref": "traceback.json/#"
+      "$ref": "traceback.json/#",
+      "description": "Error traceback"
     }
   }
 }

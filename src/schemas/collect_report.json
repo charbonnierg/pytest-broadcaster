@@ -23,10 +23,10 @@
       "description": "The collected items",
       "items": {
         "oneOf": [
-          {"$ref": "test_directory.json/#"},
-          {"$ref": "test_module.json/#"},
-          {"$ref": "test_suite.json/#"},
-          {"$ref": "test_case.json/#"}
+          {"$ref": "test_directory.json/#", "description": "A test directory"},
+          {"$ref": "test_module.json/#", "description": "A test module"},
+          {"$ref": "test_suite.json/#", "description": "A test suite"},
+          {"$ref": "test_case.json/#", "description": "A test case"}
         ]
       }
     }

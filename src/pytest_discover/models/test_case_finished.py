@@ -19,17 +19,20 @@ class TestCaseFinished:
     Node ID
     """
     outcome: outcome.Outcome
+    """
+    Outcome of the test case
+    """
     duration: float
     """
-    Duration in seconds
+    Duration of the test case in seconds (including setup and teardown)
     """
     start: str
     """
-    Start time
+    Start time of the test case (including setup)
     """
     stop: str
     """
-    Stop time
+    Stop time of the test case (including teardown)
     """
     event_type: str = "case_finished"
     """

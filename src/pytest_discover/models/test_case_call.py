@@ -20,20 +20,26 @@ class TestCaseCall:
     Node ID
     """
     outcome: outcome.Outcome
+    """
+    Outcome of the call step
+    """
     duration: float
     """
-    Duration in seconds
+    Duration of the call step in seconds
     """
     start: str
     """
-    Start Time
+    Start time of the call step in ISO 8601 format
     """
     stop: str
     """
-    Stop Time
+    Stop time of the call step in ISO 8601 format
     """
     event_type: str = "case_call"
     """
     Event Type
     """
     error: Optional[test_case_error.TestCaseError] = None
+    """
+    Error details if the call step failed
+    """
