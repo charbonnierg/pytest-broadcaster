@@ -320,6 +320,13 @@ class PytestDiscoverPlugin:
     def pytest_runtest_logreport(self, report: pytest.TestReport) -> None:
         pass
 
+    # Called at the end of running the runtest protocol for a single item.
+    # Ref: https://docs.pytest.org/en/7.1.x/reference/reference.html#pytest.hookspec.pytest_runtest_logfinish
+    def pytest_runtest_logfinish(
+        self, nodeid: str, location: tuple[str, int | None, str]
+    ) -> None:
+        pass
+
     # Add a section to terminal summary reporting.
     # Ref: https://docs.pytest.org/en/latest/reference/reference.html#pytest.hookspec.pytest_terminal_summary
     def pytest_terminal_summary(self, terminalreporter: TerminalReporter):

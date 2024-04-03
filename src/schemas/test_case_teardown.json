@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "test_case_teardown.json",
+  "title": "Test Case Teardown",
+  "description": "Pytest Test Case Teardown",
+  "type": "object",
+  "required": [
+    "node_id",
+    "event_type"
+  ],
+  "properties": {
+    "node_id": {
+      "type": "string",
+      "description": "Node ID"
+    },
+    "event_type": {
+      "const": "teardown",
+      "description": "Event Type"
+    }
+  }
+}

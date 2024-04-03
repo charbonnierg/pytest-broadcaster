@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "test_case_call.json",
+  "title": "Test Case Call",
+  "description": "Pytest Test Case Call",
+  "type": "object",
+  "required": [
+    "node_id",
+    "event_type"
+  ],
+  "properties": {
+    "node_id": {
+      "type": "string",
+      "description": "Node ID"
+    },
+    "event_type": {
+      "const": "call",
+      "description": "Event Type"
+    }
+  }
+}

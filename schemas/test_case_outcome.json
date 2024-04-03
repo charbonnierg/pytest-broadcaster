@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case_outcome.json",
+  "title": "Test Case Outcome",
+  "description": "Pytest Test Case Outcome",
+  "type": "object",
+  "required": [
+    "node_id",
+    "event_type"
+  ],
+  "properties": {
+    "node_id": {
+      "type": "string",
+      "description": "Node ID"
+    },
+    "event_type": {
+      "const": "outcome",
+      "description": "Event Type"
+    }
+  }
+}
