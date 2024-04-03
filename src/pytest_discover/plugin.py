@@ -14,6 +14,7 @@ from pytest_discover.models.location import Location
 from pytest_discover.models.outcome import Outcome
 from pytest_discover.models.test_case import TestCase
 from pytest_discover.models.test_case_call import TestCaseCall
+from pytest_discover.models.test_case_error import TestCaseError
 from pytest_discover.models.test_case_finished import TestCaseFinished
 from pytest_discover.models.test_case_report import TestCaseReport
 from pytest_discover.models.test_case_setup import TestCaseSetup
@@ -335,23 +336,30 @@ class PytestDiscoverPlugin:
     # Ref: https://docs.pytest.org/en/7.1.x/reference/reference.html#pytest.hookspec.pytest_runtest_logreport
     def pytest_runtest_logreport(self, report: pytest.TestReport) -> None:
         event: TestCaseSetup | TestCaseCall | TestCaseTeardown
+        error: TestCaseError | None = None
         outcome = Outcome(report.outcome)
         if report.when == "setup":
             event = TestCaseSetup(
-                node_id=report.nodeid, outcome=outcome, duration=report.duration
+                node_id=report.nodeid,
+                outcome=outcome,
+                duration=report.duration,
+                error=error,
             )
             self._pending_report = TestCaseReport(
                 node_id=report.nodeid,
                 outcome=outcome,
                 duration=event.duration,
                 setup=event,
-                finished=...,  # type: ignore
+                finished=...,  # type: ignore (will be set later)
             )
         elif report.when == "call":
             if outcome == Outcome.skipped and hasattr(report, "wasxfail"):
                 outcome = Outcome.xfailed
             event = TestCaseCall(
-                node_id=report.nodeid, outcome=outcome, duration=report.duration
+                node_id=report.nodeid,
+                outcome=outcome,
+                duration=report.duration,
+                error=error,
             )
             assert (
                 self._pending_report
@@ -360,7 +368,10 @@ class PytestDiscoverPlugin:
 
         elif report.when == "teardown":
             event = TestCaseTeardown(
-                node_id=report.nodeid, outcome=outcome, duration=report.duration
+                node_id=report.nodeid,
+                outcome=outcome,
+                duration=report.duration,
+                error=error,
             )
             assert (
                 self._pending_report

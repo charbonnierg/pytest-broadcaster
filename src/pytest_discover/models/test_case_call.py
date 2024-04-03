@@ -4,8 +4,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Optional
 
-from . import outcome
+from . import outcome, test_case_error
 
 
 @dataclass
@@ -27,3 +28,4 @@ class TestCaseCall:
     """
     Event Type
     """
+    error: Optional[test_case_error.TestCaseError] = None

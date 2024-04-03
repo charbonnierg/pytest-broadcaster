@@ -25,6 +25,9 @@
     "duration": {
       "type": "number",
       "description": "Duration in seconds"
+    },
+    "error": {
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case_error.json"
     }
   }
 }

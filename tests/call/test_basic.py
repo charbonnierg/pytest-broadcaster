@@ -69,18 +69,21 @@ class TestBasic(CommonTestSetup):
                         "node_id": "test_basic.py::test_ok",
                         "outcome": "passed",
                         "duration": "omitted",
+                        "error": None,
                     },
                     "call": {
                         "event_type": "case_call",
                         "node_id": "test_basic.py::test_ok",
                         "outcome": "passed",
                         "duration": "omitted",
+                        "error": None,
                     },
                     "teardown": {
                         "event_type": "case_teardown",
                         "node_id": "test_basic.py::test_ok",
                         "outcome": "passed",
                         "duration": "omitted",
+                        "error": None,
                     },
                     "finished": {
                         "event_type": "case_finished",
@@ -216,18 +219,21 @@ class TestBasic(CommonTestSetup):
                 "node_id": "test_basic.py::test_ok",
                 "outcome": "passed",
                 "duration": "omitted",
+                "error": None,
             },
             {
                 "event_type": "case_call",
                 "node_id": "test_basic.py::test_ok",
                 "outcome": "passed",
                 "duration": "omitted",
+                "error": None,
             },
             {
                 "event_type": "case_teardown",
                 "node_id": "test_basic.py::test_ok",
                 "outcome": "passed",
                 "duration": "omitted",
+                "error": None,
             },
             {
                 "event_type": "case_finished",

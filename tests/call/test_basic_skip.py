@@ -49,6 +49,7 @@ class TestBasicSkip(CommonTestSetup):
                         "node_id": "test_basic_skipped.py::test_skipped",
                         "outcome": "skipped",
                         "duration": "omitted",
+                        "error": None,
                     },
                     "call": None,
                     "teardown": {
@@ -56,6 +57,7 @@ class TestBasicSkip(CommonTestSetup):
                         "node_id": "test_basic_skipped.py::test_skipped",
                         "outcome": "passed",
                         "duration": "omitted",
+                        "error": None,
                     },
                     "finished": {
                         "event_type": "case_finished",
@@ -185,12 +187,14 @@ class TestBasicSkip(CommonTestSetup):
                 "node_id": "test_basic_skipped.py::test_skipped",
                 "outcome": "skipped",
                 "duration": "omitted",
+                "error": None,
             },
             {
                 "event_type": "case_teardown",
                 "node_id": "test_basic_skipped.py::test_skipped",
                 "outcome": "passed",
                 "duration": "omitted",
+                "error": None,
             },
             {
                 "event_type": "case_finished",

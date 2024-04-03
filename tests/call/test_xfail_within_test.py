@@ -49,18 +49,21 @@ class TestxFailWithinTest(CommonTestSetup):
                         "node_id": "test_xfail_within_test.py::test_xfail",
                         "outcome": "passed",
                         "duration": "omitted",
+                        "error": None,
                     },
                     "call": {
                         "event_type": "case_call",
                         "node_id": "test_xfail_within_test.py::test_xfail",
                         "outcome": "xfailed",
                         "duration": "omitted",
+                        "error": None,
                     },
                     "teardown": {
                         "event_type": "case_teardown",
                         "node_id": "test_xfail_within_test.py::test_xfail",
                         "outcome": "passed",
                         "duration": "omitted",
+                        "error": None,
                     },
                     "finished": {
                         "event_type": "case_finished",
@@ -190,18 +193,21 @@ class TestxFailWithinTest(CommonTestSetup):
                 "node_id": "test_xfail_within_test.py::test_xfail",
                 "outcome": "passed",
                 "duration": "omitted",
+                "error": None,
             },
             {
                 "event_type": "case_call",
                 "node_id": "test_xfail_within_test.py::test_xfail",
                 "outcome": "xfailed",
                 "duration": "omitted",
+                "error": None,
             },
             {
                 "event_type": "case_teardown",
                 "node_id": "test_xfail_within_test.py::test_xfail",
                 "outcome": "passed",
                 "duration": "omitted",
+                "error": None,
             },
             {
                 "event_type": "case_finished",

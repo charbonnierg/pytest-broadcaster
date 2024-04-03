@@ -11,4 +11,5 @@ wheels/
 .pytest_cache
 .venv
 .vscode
-check
+/check
+/debug

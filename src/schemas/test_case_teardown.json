@@ -25,6 +25,9 @@
     "duration": {
       "type": "number",
       "description": "Duration in seconds"
+    },
+    "error": {
+      "$ref": "test_case_error.json/#"
     }
   }
 }
