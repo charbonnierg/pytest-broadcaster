@@ -2,6 +2,12 @@
 
 A plugin to write pytest collect output to either a [JSON](https://www.json.org/json-en.html) file or a [JSON lines](https://jsonlines.org/) file.
 
+## Motivation
+
+If you ever wanter to build a tool that needs to parse the output of `pytest --collect-only`, you may have noticed that the output is not very easy to parse. This plugin aims to provide a more structured output that can be easily parsed by other tools.
+
+JSON schemas are provided for clients to help them parse the output of the plugin.
+
 ## Install
 
 ```bash
