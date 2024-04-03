@@ -8,25 +8,24 @@ from pytest_discover import __version__
 from ._utils import CommonTestSetup
 
 
+@pytest.mark.basic
 @pytest.mark.markers
-class TestNestedMarker(CommonTestSetup):
-    """Scenario: A test suite with a marker and a single test with same marker."""
+class TestBasicMarker(CommonTestSetup):
+    """Scenario: A single test case with a marker within a single test file."""
 
     def make_test_directory(self) -> Path:
         return self.make_testfile(
-            "test_markers.py",
+            "test_basic_marker.py",
             """
             import pytest
 
             @pytest.mark.skip
-            class TestMarked:
-                @pytest.mark.skip
-                def test_marked():
-                    pass
+            def test_ok():
+                pass
         """,
         ).parent
 
-    def test_json(self):
+    def test_json_basic_marker(self):
         """Test JSON report for a test file with a single test case with a marker."""
 
         directory = self.make_test_directory()
@@ -41,6 +40,7 @@ class TestNestedMarker(CommonTestSetup):
             "exit_status": 0,
             "errors": [],
             "warnings": [],
+            "test_reports": [],
             "collect_reports": [
                 {
                     "event": "CollectReport",
@@ -56,39 +56,22 @@ class TestNestedMarker(CommonTestSetup):
                 },
                 {
                     "event": "CollectReport",
-                    "node_id": "test_markers.py::TestMarked",
+                    "node_id": "test_basic_marker.py",
                     "items": [
                         {
-                            "node_id": "test_markers.py::TestMarked::test_marked",
+                            "node_id": "test_basic_marker.py::test_ok",
                             "node_type": "case",
-                            "name": "test_marked",
+                            "name": "test_ok",
                             "doc": "",
                             "markers": ["skip"],
                             "parameters": {},
-                            "path": directory.joinpath("test_markers.py")
+                            "path": directory.joinpath("test_basic_marker.py")
                             .relative_to(directory.parent)
                             .as_posix(),
-                            "module": "test_markers",
-                            "suite": "TestMarked",
-                            "function": "test_marked",
+                            "module": "test_basic_marker",
+                            "suite": None,
+                            "function": "test_ok",
                         },
-                    ],
-                },
-                {
-                    "event": "CollectReport",
-                    "node_id": "test_markers.py",
-                    "items": [
-                        {
-                            "node_id": "test_markers.py::TestMarked",
-                            "node_type": "suite",
-                            "name": "TestMarked",
-                            "path": directory.joinpath("test_markers.py")
-                            .relative_to(directory.parent)
-                            .as_posix(),
-                            "module": "test_markers",
-                            "doc": "",
-                            "markers": ["skip"],
-                        }
                     ],
                 },
                 {
@@ -96,21 +79,21 @@ class TestNestedMarker(CommonTestSetup):
                     "node_id": ".",
                     "items": [
                         {
-                            "node_id": "test_markers.py",
-                            "node_type": "module",
-                            "name": "test_markers.py",
-                            "path": directory.joinpath("test_markers.py")
+                            "node_id": "test_basic_marker.py",
+                            "name": "test_basic_marker.py",
+                            "path": directory.joinpath("test_basic_marker.py")
                             .relative_to(directory.parent)
                             .as_posix(),
-                            "doc": "",
                             "markers": [],
+                            "doc": "",
+                            "node_type": "module",
                         }
                     ],
                 },
             ],
         }
 
-    def test_jsonl(self):
+    def test_jsonl_basic_marker(self):
         """Test JSON Lines report for a test file with a single test case with a marker."""
 
         directory = self.make_test_directory()
@@ -139,39 +122,22 @@ class TestNestedMarker(CommonTestSetup):
             },
             {
                 "event": "CollectReport",
-                "node_id": "test_markers.py::TestMarked",
+                "node_id": "test_basic_marker.py",
                 "items": [
                     {
-                        "node_id": "test_markers.py::TestMarked::test_marked",
+                        "node_id": "test_basic_marker.py::test_ok",
                         "node_type": "case",
-                        "name": "test_marked",
+                        "name": "test_ok",
                         "doc": "",
                         "markers": ["skip"],
                         "parameters": {},
-                        "path": directory.joinpath("test_markers.py")
+                        "path": directory.joinpath("test_basic_marker.py")
                         .relative_to(directory.parent)
                         .as_posix(),
-                        "module": "test_markers",
-                        "suite": "TestMarked",
-                        "function": "test_marked",
+                        "module": "test_basic_marker",
+                        "suite": None,
+                        "function": "test_ok",
                     },
-                ],
-            },
-            {
-                "event": "CollectReport",
-                "node_id": "test_markers.py",
-                "items": [
-                    {
-                        "node_id": "test_markers.py::TestMarked",
-                        "node_type": "suite",
-                        "name": "TestMarked",
-                        "path": directory.joinpath("test_markers.py")
-                        .relative_to(directory.parent)
-                        .as_posix(),
-                        "module": "test_markers",
-                        "doc": "",
-                        "markers": ["skip"],
-                    }
                 ],
             },
             {
@@ -179,10 +145,10 @@ class TestNestedMarker(CommonTestSetup):
                 "node_id": ".",
                 "items": [
                     {
-                        "node_id": "test_markers.py",
+                        "node_id": "test_basic_marker.py",
                         "node_type": "module",
-                        "name": "test_markers.py",
-                        "path": directory.joinpath("test_markers.py")
+                        "name": "test_basic_marker.py",
+                        "path": directory.joinpath("test_basic_marker.py")
                         .relative_to(directory.parent)
                         .as_posix(),
                         "doc": "",

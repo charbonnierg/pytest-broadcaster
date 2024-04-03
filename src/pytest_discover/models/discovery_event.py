@@ -10,11 +10,19 @@ from . import (
     error_message,
     session_finish,
     session_start,
+    test_case_call,
+    test_case_finished,
+    test_case_setup,
+    test_case_teardown,
     warning_message,
 )
 
 DiscoveryEvent = Union[
     collect_report.CollectReport,
+    test_case_finished.TestCaseFinished,
+    test_case_setup.TestCaseSetup,
+    test_case_teardown.TestCaseTeardown,
+    test_case_call.TestCaseCall,
     error_message.ErrorMessage,
     warning_message.WarningMessage,
     session_start.SessionStart,

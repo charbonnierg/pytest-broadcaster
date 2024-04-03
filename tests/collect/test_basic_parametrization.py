@@ -40,6 +40,7 @@ class TestBasicParametrization(CommonTestSetup):
             "exit_status": 0,
             "errors": [],
             "warnings": [],
+            "test_reports": [],
             "collect_reports": [
                 {
                     "event": "CollectReport",

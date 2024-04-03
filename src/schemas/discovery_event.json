@@ -9,6 +9,18 @@
       "$ref": "collect_report.json/#"
     },
     {
+      "$ref": "test_case_finished.json/#"
+    },
+    {
+      "$ref": "test_case_setup.json/#"
+    },
+    {
+      "$ref": "test_case_teardown.json/#"
+    },
+    {
+      "$ref": "test_case_call.json/#"
+    },
+    {
       "$ref": "error_message.json/#"
     },
     {

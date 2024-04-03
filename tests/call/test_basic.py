@@ -9,29 +9,26 @@ from ._utils import CommonTestSetup
 
 
 @pytest.mark.basic
-@pytest.mark.markers
-class TestBasicMarker(CommonTestSetup):
-    """Scenario: A single test case with a marker within a single test file."""
+class TestBasic(CommonTestSetup):
+    """Scenario: A single test case within a single test file."""
 
     def make_test_directory(self) -> Path:
         return self.make_testfile(
-            "test_basic_marker.py",
+            "test_basic.py",
             """
-            import pytest
+            '''This is a module docstring.'''
 
-            @pytest.mark.skip
             def test_ok():
+                '''This is a test docstring.'''
                 pass
-        """,
+            """,
         ).parent
 
-    def test_json_basic_marker(self):
-        """Test JSON report for a test file with a single test case with a marker."""
+    def test_json(self):
+        """Test JSON report for single test case within single test file."""
 
         directory = self.make_test_directory()
-        result = self.test_dir.runpytest(
-            "--collect-only", "--collect-report", self.json_file.as_posix()
-        )
+        result = self.test_dir.runpytest("--collect-report", self.json_file.as_posix())
         assert result.ret == 0
         assert self.json_file.exists()
         assert self.read_json_file() == {
@@ -40,6 +37,32 @@ class TestBasicMarker(CommonTestSetup):
             "exit_status": 0,
             "errors": [],
             "warnings": [],
+            "test_reports": [
+                {
+                    "node_id": "test_basic.py::test_ok",
+                    "outcome": "passed",
+                    "setup": {
+                        "event_type": "case_setup",
+                        "node_id": "test_basic.py::test_ok",
+                        "outcome": "passed",
+                    },
+                    "call": {
+                        "event_type": "case_call",
+                        "node_id": "test_basic.py::test_ok",
+                        "outcome": "passed",
+                    },
+                    "teardown": {
+                        "event_type": "case_teardown",
+                        "node_id": "test_basic.py::test_ok",
+                        "outcome": "passed",
+                    },
+                    "finished": {
+                        "event_type": "case_finished",
+                        "node_id": "test_basic.py::test_ok",
+                        "outcome": "passed",
+                    },
+                }
+            ],
             "collect_reports": [
                 {
                     "event": "CollectReport",
@@ -55,22 +78,22 @@ class TestBasicMarker(CommonTestSetup):
                 },
                 {
                     "event": "CollectReport",
-                    "node_id": "test_basic_marker.py",
+                    "node_id": "test_basic.py",
                     "items": [
                         {
-                            "node_id": "test_basic_marker.py::test_ok",
+                            "node_id": "test_basic.py::test_ok",
                             "node_type": "case",
                             "name": "test_ok",
-                            "doc": "",
-                            "markers": ["skip"],
+                            "doc": "This is a test docstring.",
+                            "markers": [],
                             "parameters": {},
-                            "path": directory.joinpath("test_basic_marker.py")
+                            "path": directory.joinpath("test_basic.py")
                             .relative_to(directory.parent)
                             .as_posix(),
-                            "module": "test_basic_marker",
+                            "module": "test_basic",
                             "suite": None,
                             "function": "test_ok",
-                        },
+                        }
                     ],
                 },
                 {
@@ -78,13 +101,13 @@ class TestBasicMarker(CommonTestSetup):
                     "node_id": ".",
                     "items": [
                         {
-                            "node_id": "test_basic_marker.py",
-                            "name": "test_basic_marker.py",
-                            "path": directory.joinpath("test_basic_marker.py")
+                            "node_id": "test_basic.py",
+                            "name": "test_basic.py",
+                            "path": directory.joinpath("test_basic.py")
                             .relative_to(directory.parent)
                             .as_posix(),
+                            "doc": "This is a module docstring.",
                             "markers": [],
-                            "doc": "",
                             "node_type": "module",
                         }
                     ],
@@ -92,12 +115,12 @@ class TestBasicMarker(CommonTestSetup):
             ],
         }
 
-    def test_jsonl_basic_marker(self):
-        """Test JSON Lines report for a test file with a single test case with a marker."""
+    def test_jsonl_basic(self):
+        """Test JSON Lines report for single test case within single test file."""
 
         directory = self.make_test_directory()
         result = self.test_dir.runpytest(
-            "--collect-only", "--collect-log", self.json_lines_file.as_posix()
+            "--collect-log", self.json_lines_file.as_posix()
         )
         assert result.ret == 0
         assert self.json_lines_file.exists()
@@ -121,19 +144,19 @@ class TestBasicMarker(CommonTestSetup):
             },
             {
                 "event": "CollectReport",
-                "node_id": "test_basic_marker.py",
+                "node_id": "test_basic.py",
                 "items": [
                     {
-                        "node_id": "test_basic_marker.py::test_ok",
+                        "node_id": "test_basic.py::test_ok",
                         "node_type": "case",
                         "name": "test_ok",
-                        "doc": "",
-                        "markers": ["skip"],
+                        "doc": "This is a test docstring.",
+                        "markers": [],
                         "parameters": {},
-                        "path": directory.joinpath("test_basic_marker.py")
+                        "path": directory.joinpath("test_basic.py")
                         .relative_to(directory.parent)
                         .as_posix(),
-                        "module": "test_basic_marker",
+                        "module": "test_basic",
                         "suite": None,
                         "function": "test_ok",
                     },
@@ -144,16 +167,36 @@ class TestBasicMarker(CommonTestSetup):
                 "node_id": ".",
                 "items": [
                     {
-                        "node_id": "test_basic_marker.py",
-                        "node_type": "module",
-                        "name": "test_basic_marker.py",
-                        "path": directory.joinpath("test_basic_marker.py")
+                        "node_id": "test_basic.py",
+                        "name": "test_basic.py",
+                        "path": directory.joinpath("test_basic.py")
                         .relative_to(directory.parent)
                         .as_posix(),
-                        "doc": "",
+                        "doc": "This is a module docstring.",
                         "markers": [],
+                        "node_type": "module",
                     }
                 ],
+            },
+            {
+                "event_type": "case_setup",
+                "node_id": "test_basic.py::test_ok",
+                "outcome": "passed",
+            },
+            {
+                "event_type": "case_call",
+                "node_id": "test_basic.py::test_ok",
+                "outcome": "passed",
+            },
+            {
+                "event_type": "case_teardown",
+                "node_id": "test_basic.py::test_ok",
+                "outcome": "passed",
+            },
+            {
+                "event_type": "case_finished",
+                "node_id": "test_basic.py::test_ok",
+                "outcome": "passed",
             },
             {"exit_status": 0, "event": "SessionFinish"},
         ]

@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import warnings
 from dataclasses import asdict
+from enum import Enum
 from typing import TYPE_CHECKING, Any, Literal, TextIO
 
 import pytest
@@ -10,7 +11,13 @@ from _pytest.pathlib import Path  # pyright: ignore[reportPrivateImportUsage]
 from _pytest.terminal import TerminalReporter
 
 from pytest_discover.models.location import Location
+from pytest_discover.models.outcome import Outcome
 from pytest_discover.models.test_case import TestCase
+from pytest_discover.models.test_case_call import TestCaseCall
+from pytest_discover.models.test_case_finished import TestCaseFinished
+from pytest_discover.models.test_case_report import TestCaseReport
+from pytest_discover.models.test_case_setup import TestCaseSetup
+from pytest_discover.models.test_case_teardown import TestCaseTeardown
 from pytest_discover.models.test_directory import TestDirectory
 from pytest_discover.models.test_module import TestModule
 from pytest_discover.models.test_suite import TestSuite
@@ -134,7 +141,9 @@ class PytestDiscoverPlugin:
             warnings=[],
             errors=[],
             collect_reports=[],
+            test_reports=[],
         )
+        self._pending_report: TestCaseReport | None = None
 
     def _get_path(self, path: str, is_error_or_warning: bool = False) -> str:
         for root in self._roots:
@@ -167,7 +176,11 @@ class PytestDiscoverPlugin:
             self._file.close()
             self._file = None
         if self.json_filepath is not None:
-            json_data = json.dumps(asdict(self._result), indent=2)
+            json_data = json.dumps(
+                asdict(self._result),
+                default=_default_serializer,
+                indent=2,
+            )
             self.json_filepath.write_text(json_data)
 
     def _write_event(
@@ -178,7 +191,10 @@ class PytestDiscoverPlugin:
             return
         if self._file is None:
             raise RuntimeError("pytest-discover output file is not open yet")
-        json_data = json.dumps(asdict(data))
+        json_data = json.dumps(
+            asdict(data),
+            default=_default_serializer,
+        )
         self._file.write(json_data + "\n")
         self._file.flush()
 
@@ -318,14 +334,82 @@ class PytestDiscoverPlugin:
     # Process the TestReport produced for each of the setup, call and teardown runtest phases of an item.
     # Ref: https://docs.pytest.org/en/7.1.x/reference/reference.html#pytest.hookspec.pytest_runtest_logreport
     def pytest_runtest_logreport(self, report: pytest.TestReport) -> None:
-        pass
+        event: TestCaseSetup | TestCaseCall | TestCaseTeardown
+        outcome = Outcome(report.outcome)
+        if report.when == "setup":
+            event = TestCaseSetup(node_id=report.nodeid, outcome=outcome)
+            self._pending_report = TestCaseReport(
+                node_id=report.nodeid,
+                outcome=outcome,
+                setup=event,
+                finished=...,  # type: ignore
+            )
+        elif report.when == "call":
+            if outcome == Outcome.skipped and hasattr(report, "wasxfail"):
+                outcome = Outcome.xfailed
+            event = TestCaseCall(node_id=report.nodeid, outcome=outcome)
+            assert (
+                self._pending_report
+            ), "pending report is missing, this is a bug in pytest-discover plugin"
+            self._pending_report.call = event
+
+        elif report.when == "teardown":
+            event = TestCaseTeardown(node_id=report.nodeid, outcome=outcome)
+            assert (
+                self._pending_report
+            ), "pending report is missing, this is a bug in pytest-discover plugin"
+            self._pending_report.teardown = event
+        else:
+            return
+        self._write_event(event)
 
     # Called at the end of running the runtest protocol for a single item.
     # Ref: https://docs.pytest.org/en/7.1.x/reference/reference.html#pytest.hookspec.pytest_runtest_logfinish
     def pytest_runtest_logfinish(
         self, nodeid: str, location: tuple[str, int | None, str]
     ) -> None:
-        pass
+        # Let's pop the pending report (we always have one)
+        pending_report = self._pending_report
+        assert (
+            pending_report
+        ), "pending report is missing, this is a bug in pytest-discover plugin"
+        # Get all reports
+        reports = [
+            report
+            for report in (
+                pending_report.setup,
+                pending_report.call,
+                pending_report.teardown,
+            )
+            if report is not None
+        ]
+        # Detect if test was failed
+        if any(report.outcome == Outcome.failed for report in reports):
+            outcome = Outcome.failed
+        elif any(report.outcome == Outcome.xfailed for report in reports):
+            outcome = Outcome.xfailed
+        # Detect if test was skipped
+        elif any(report.outcome == Outcome.skipped for report in reports):
+            outcome = Outcome.skipped
+        # Else consider test passed
+        else:
+            outcome = Outcome.passed
+        # Create the finished event and the report
+        finished = TestCaseFinished(
+            node_id=nodeid,
+            outcome=outcome,
+        )
+        report = TestCaseReport(
+            node_id=nodeid,
+            outcome=outcome,
+            finished=finished,
+            setup=pending_report.setup,
+            call=pending_report.call,
+            teardown=pending_report.teardown,
+        )
+        self._write_event(finished)
+        self._result.test_reports.append(report)
+        self._pending_report = None
 
     # Add a section to terminal summary reporting.
     # Ref: https://docs.pytest.org/en/latest/reference/reference.html#pytest.hookspec.pytest_terminal_summary
@@ -338,3 +422,9 @@ class PytestDiscoverPlugin:
             terminalreporter.write_sep(
                 "-", f"generated report file: {self.json_filepath.as_posix()}"
             )
+
+
+def _default_serializer(obj: object) -> object:
+    if isinstance(obj, Enum):
+        return obj.value
+    return obj

@@ -60,6 +60,7 @@ class TestErrors(CommonTestSetup):
                     "exception_value": "BOOM",
                 }
             ],
+            "test_reports": [],
             "collect_reports": [
                 {
                     "event": "CollectReport",

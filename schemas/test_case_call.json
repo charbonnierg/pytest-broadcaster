@@ -6,7 +6,8 @@
   "type": "object",
   "required": [
     "node_id",
-    "event_type"
+    "event_type",
+    "outcome"
   ],
   "properties": {
     "node_id": {
@@ -14,8 +15,11 @@
       "description": "Node ID"
     },
     "event_type": {
-      "const": "call",
+      "const": "case_call",
       "description": "Event Type"
+    },
+    "outcome": {
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/outcome.json"
     }
   }
 }

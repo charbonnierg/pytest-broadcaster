@@ -5,6 +5,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from . import outcome
+
 
 @dataclass
 class TestCaseSetup:
@@ -16,7 +18,8 @@ class TestCaseSetup:
     """
     Node ID
     """
-    event_type: str = "setup"
+    outcome: outcome.Outcome
+    event_type: str = "case_setup"
     """
     Event Type
     """

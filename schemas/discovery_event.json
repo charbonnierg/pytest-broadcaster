@@ -9,6 +9,18 @@
       "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/collect_report.json"
     },
     {
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case_finished.json"
+    },
+    {
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case_setup.json"
+    },
+    {
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case_teardown.json"
+    },
+    {
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case_call.json"
+    },
+    {
       "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/error_message.json"
     },
     {

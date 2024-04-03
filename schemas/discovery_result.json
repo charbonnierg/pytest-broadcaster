@@ -10,7 +10,8 @@
     "exit_status",
     "warnings",
     "errors",
-    "collect_reports"
+    "collect_reports",
+    "test_reports"
   ],
   "properties": {
     "pytest_version": {
@@ -44,6 +45,13 @@
       "description": "Collect reports generated during the discovery process",
       "items": {
         "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/collect_report.json"
+      }
+    },
+    "test_reports": {
+      "type": "array",
+      "description": "Test reports generated during the discovery process",
+      "items": {
+        "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case_report.json"
       }
     }
   }

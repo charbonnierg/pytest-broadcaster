@@ -4,6 +4,7 @@ import re
 from typing import Any
 
 import pytest
+from _pytest.outcomes import Skipped
 
 __NODE_ID__ = re.compile(
     r"(?P<module>.+)\.py(?:::(?P<class>[^:]+)(?:::.+)?)?::(?P<function>[^\[]+)(?:\[(?P<params>.*)\])?"
@@ -25,7 +26,7 @@ def parse_node_id(node_id: str) -> tuple[str, str, str, str]:
 def get_test_doc(item: pytest.Item | pytest.Module | pytest.Class) -> str:
     try:
         return item.obj.__doc__ or ""  # type: ignore
-    except AttributeError:
+    except (AttributeError, Skipped):
         return ""
 
 

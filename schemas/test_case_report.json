@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case_report.json",
+  "title": "Test Case Report",
+  "description": "Pytest Test Case Report",
+  "type": "object",
+  "required": [
+    "node_id",
+    "outcome",
+    "setup",
+    "finished"
+  ],
+  "properties": {
+    "node_id": {
+      "type": "string",
+      "description": "Node ID"
+    },
+    "outcome": {
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/outcome.json"
+    },
+    "setup": {
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case_setup.json"
+    },
+    "call": {
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case_call.json"
+    },
+    "teardown": {
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case_teardown.json"
+    },
+    "finished": {
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case_finished.json"
+    }
+  }
+}

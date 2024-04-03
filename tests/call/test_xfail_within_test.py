@@ -9,18 +9,20 @@ from ._utils import CommonTestSetup
 
 
 @pytest.mark.basic
-class TestBasic(CommonTestSetup):
-    """Scenario: A single test case within a single test file."""
+class TestxFailWithinTest(CommonTestSetup):
+    """Scenario: A single test case within a single test file which calls xfail() during execution."""
 
     def make_test_directory(self) -> Path:
         return self.make_testfile(
-            "test_basic.py",
+            "test_xfail_within_test.py",
             """
             '''This is a module docstring.'''
+            import pytest
 
-            def test_ok():
+            def test_xfail():
                 '''This is a test docstring.'''
-                pass
+                pytest.xfail("failing configuration (but should work)")
+                raise ValueError("BOOM")
             """,
         ).parent
 
@@ -28,9 +30,7 @@ class TestBasic(CommonTestSetup):
         """Test JSON report for single test case within single test file."""
 
         directory = self.make_test_directory()
-        result = self.test_dir.runpytest(
-            "--collect-only", "--collect-report", self.json_file.as_posix()
-        )
+        result = self.test_dir.runpytest("--collect-report", self.json_file.as_posix())
         assert result.ret == 0
         assert self.json_file.exists()
         assert self.read_json_file() == {
@@ -39,6 +39,32 @@ class TestBasic(CommonTestSetup):
             "exit_status": 0,
             "errors": [],
             "warnings": [],
+            "test_reports": [
+                {
+                    "node_id": "test_xfail_within_test.py::test_xfail",
+                    "outcome": "xfailed",
+                    "setup": {
+                        "event_type": "case_setup",
+                        "node_id": "test_xfail_within_test.py::test_xfail",
+                        "outcome": "passed",
+                    },
+                    "call": {
+                        "event_type": "case_call",
+                        "node_id": "test_xfail_within_test.py::test_xfail",
+                        "outcome": "xfailed",
+                    },
+                    "teardown": {
+                        "event_type": "case_teardown",
+                        "node_id": "test_xfail_within_test.py::test_xfail",
+                        "outcome": "passed",
+                    },
+                    "finished": {
+                        "event_type": "case_finished",
+                        "node_id": "test_xfail_within_test.py::test_xfail",
+                        "outcome": "xfailed",
+                    },
+                }
+            ],
             "collect_reports": [
                 {
                     "event": "CollectReport",
@@ -54,21 +80,21 @@ class TestBasic(CommonTestSetup):
                 },
                 {
                     "event": "CollectReport",
-                    "node_id": "test_basic.py",
+                    "node_id": "test_xfail_within_test.py",
                     "items": [
                         {
-                            "node_id": "test_basic.py::test_ok",
+                            "node_id": "test_xfail_within_test.py::test_xfail",
                             "node_type": "case",
-                            "name": "test_ok",
+                            "name": "test_xfail",
                             "doc": "This is a test docstring.",
                             "markers": [],
                             "parameters": {},
-                            "path": directory.joinpath("test_basic.py")
+                            "path": directory.joinpath("test_xfail_within_test.py")
                             .relative_to(directory.parent)
                             .as_posix(),
-                            "module": "test_basic",
+                            "module": "test_xfail_within_test",
                             "suite": None,
-                            "function": "test_ok",
+                            "function": "test_xfail",
                         }
                     ],
                 },
@@ -77,9 +103,9 @@ class TestBasic(CommonTestSetup):
                     "node_id": ".",
                     "items": [
                         {
-                            "node_id": "test_basic.py",
-                            "name": "test_basic.py",
-                            "path": directory.joinpath("test_basic.py")
+                            "node_id": "test_xfail_within_test.py",
+                            "name": "test_xfail_within_test.py",
+                            "path": directory.joinpath("test_xfail_within_test.py")
                             .relative_to(directory.parent)
                             .as_posix(),
                             "doc": "This is a module docstring.",
@@ -91,12 +117,12 @@ class TestBasic(CommonTestSetup):
             ],
         }
 
-    def test_jsonl_basic(self):
+    def test_jsonl(self):
         """Test JSON Lines report for single test case within single test file."""
 
         directory = self.make_test_directory()
         result = self.test_dir.runpytest(
-            "--collect-only", "--collect-log", self.json_lines_file.as_posix()
+            "--collect-log", self.json_lines_file.as_posix()
         )
         assert result.ret == 0
         assert self.json_lines_file.exists()
@@ -120,21 +146,21 @@ class TestBasic(CommonTestSetup):
             },
             {
                 "event": "CollectReport",
-                "node_id": "test_basic.py",
+                "node_id": "test_xfail_within_test.py",
                 "items": [
                     {
-                        "node_id": "test_basic.py::test_ok",
+                        "node_id": "test_xfail_within_test.py::test_xfail",
                         "node_type": "case",
-                        "name": "test_ok",
+                        "name": "test_xfail",
                         "doc": "This is a test docstring.",
                         "markers": [],
                         "parameters": {},
-                        "path": directory.joinpath("test_basic.py")
+                        "path": directory.joinpath("test_xfail_within_test.py")
                         .relative_to(directory.parent)
                         .as_posix(),
-                        "module": "test_basic",
+                        "module": "test_xfail_within_test",
                         "suite": None,
-                        "function": "test_ok",
+                        "function": "test_xfail",
                     },
                 ],
             },
@@ -143,9 +169,9 @@ class TestBasic(CommonTestSetup):
                 "node_id": ".",
                 "items": [
                     {
-                        "node_id": "test_basic.py",
-                        "name": "test_basic.py",
-                        "path": directory.joinpath("test_basic.py")
+                        "node_id": "test_xfail_within_test.py",
+                        "name": "test_xfail_within_test.py",
+                        "path": directory.joinpath("test_xfail_within_test.py")
                         .relative_to(directory.parent)
                         .as_posix(),
                         "doc": "This is a module docstring.",
@@ -153,6 +179,26 @@ class TestBasic(CommonTestSetup):
                         "node_type": "module",
                     }
                 ],
+            },
+            {
+                "event_type": "case_setup",
+                "node_id": "test_xfail_within_test.py::test_xfail",
+                "outcome": "passed",
+            },
+            {
+                "event_type": "case_call",
+                "node_id": "test_xfail_within_test.py::test_xfail",
+                "outcome": "xfailed",
+            },
+            {
+                "event_type": "case_teardown",
+                "node_id": "test_xfail_within_test.py::test_xfail",
+                "outcome": "passed",
+            },
+            {
+                "event_type": "case_finished",
+                "node_id": "test_xfail_within_test.py::test_xfail",
+                "outcome": "xfailed",
             },
             {"exit_status": 0, "event": "SessionFinish"},
         ]

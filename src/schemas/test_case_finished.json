@@ -1,12 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
   "$id": "test_case_outcome.json",
-  "title": "Test Case Outcome",
-  "description": "Pytest Test Case Outcome",
+  "title": "Test Case Finished",
+  "description": "Pytest Test Case Finished",
   "type": "object",
   "required": [
     "node_id",
-    "event_type"
+    "event_type",
+    "outcome"
   ],
   "properties": {
     "node_id": {
@@ -14,8 +15,11 @@
       "description": "Node ID"
     },
     "event_type": {
-      "const": "outcome",
+      "const": "case_finished",
       "description": "Event Type"
+    },
+    "outcome": {
+      "$ref": "outcome.json/#"
     }
   }
 }
