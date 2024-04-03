@@ -9,6 +9,7 @@
     "outcome",
     "duration",
     "setup",
+    "teardown",
     "finished"
   ],
   "properties": {

@@ -367,12 +367,15 @@ class PytestDiscoverPlugin:
                 outcome=outcome,
                 duration=report.duration,
                 error=error,
+                start=api.make_timestamp(report.start),
+                stop=api.make_timestamp(report.stop),
             )
             self._pending_report = TestCaseReport(
                 node_id=report.nodeid,
                 outcome=outcome,
                 duration=phase.duration,
                 setup=phase,
+                teardown=...,  # type: ignore (will be set later)
                 finished=...,  # type: ignore (will be set later)
             )
         elif report.when == "call":
@@ -383,6 +386,8 @@ class PytestDiscoverPlugin:
                 outcome=outcome,
                 duration=report.duration,
                 error=error,
+                start=api.make_timestamp(report.start),
+                stop=api.make_timestamp(report.stop),
             )
             assert (
                 self._pending_report
@@ -395,6 +400,8 @@ class PytestDiscoverPlugin:
                 outcome=outcome,
                 duration=report.duration,
                 error=error,
+                start=api.make_timestamp(report.start),
+                stop=api.make_timestamp(report.stop),
             )
             assert (
                 self._pending_report
@@ -441,6 +448,8 @@ class PytestDiscoverPlugin:
             node_id=nodeid,
             outcome=outcome,
             duration=duration,
+            start=pending_report.setup.start,
+            stop=pending_report.teardown.stop,
         )
         report = TestCaseReport(
             node_id=nodeid,

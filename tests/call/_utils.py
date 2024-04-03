@@ -37,25 +37,29 @@ class CommonTestSetup:
         kwargs = {filename: content}
         return self.test_dir.makepyfile(**kwargs)
 
-    def omit_durations(
+    def omit_durations_and_times(
         self, data: dict[str, Any] | list[Any]
     ) -> dict[str, Any] | list[Any]:
-        return self._omit_durations(deepcopy(data))
+        return self._omit_durations_and_times(deepcopy(data))
 
-    def _omit_durations(
+    def _omit_durations_and_times(
         self,
         data: Any,
     ) -> Any:
         if isinstance(data, dict):
             for key, value in data.items():
                 if isinstance(value, dict):
-                    data[key] = self._omit_durations(value)
+                    data[key] = self._omit_durations_and_times(value)
                 elif isinstance(value, list):
-                    data[key] = self._omit_durations(value)
+                    data[key] = self._omit_durations_and_times(value)
                 elif key == "duration":
                     data[key] = "omitted"
+                elif key == "start":
+                    data[key] = "omitted"
+                elif key == "stop":
+                    data[key] = "omitted"
         elif isinstance(data, list):
-            data = [self._omit_durations(item) for item in data]
+            data = [self._omit_durations_and_times(item) for item in data]
         else:
             return data
         return data

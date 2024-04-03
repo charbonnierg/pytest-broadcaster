@@ -23,6 +23,14 @@ class TestCaseFinished:
     """
     Duration in seconds
     """
+    start: str
+    """
+    Start time
+    """
+    stop: str
+    """
+    Stop time
+    """
     event_type: str = "case_finished"
     """
     Event Type

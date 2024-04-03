@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import datetime
 from warnings import WarningMessage
 
 import pytest
@@ -62,6 +63,10 @@ def make_warning_message(warning: WarningMessage) -> str:
     if isinstance(warning.message, str):
         return warning.message
     return str(warning.message)
+
+
+def make_timestamp(epoch: float) -> str:
+    return datetime.datetime.fromtimestamp(epoch).isoformat()
 
 
 def make_traceback(report: pytest.TestReport) -> list[TracebackLine]:

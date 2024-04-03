@@ -33,7 +33,7 @@ class TestBasicSkip(CommonTestSetup):
         result = self.test_dir.runpytest("--collect-report", self.json_file.as_posix())
         assert result.ret == 0
         assert self.json_file.exists()
-        assert self.omit_durations(self.read_json_file()) == {
+        assert self.omit_durations_and_times(self.read_json_file()) == {
             "pytest_version": pytest.__version__,
             "plugin_version": __version__,
             "exit_status": 0,
@@ -49,6 +49,8 @@ class TestBasicSkip(CommonTestSetup):
                         "node_id": "test_basic_skipped.py::test_skipped",
                         "outcome": "skipped",
                         "duration": "omitted",
+                        "start": "omitted",
+                        "stop": "omitted",
                         "error": None,
                     },
                     "call": None,
@@ -57,6 +59,8 @@ class TestBasicSkip(CommonTestSetup):
                         "node_id": "test_basic_skipped.py::test_skipped",
                         "outcome": "passed",
                         "duration": "omitted",
+                        "start": "omitted",
+                        "stop": "omitted",
                         "error": None,
                     },
                     "finished": {
@@ -64,6 +68,8 @@ class TestBasicSkip(CommonTestSetup):
                         "node_id": "test_basic_skipped.py::test_skipped",
                         "outcome": "skipped",
                         "duration": "omitted",
+                        "start": "omitted",
+                        "stop": "omitted",
                     },
                 }
             ],
@@ -128,7 +134,7 @@ class TestBasicSkip(CommonTestSetup):
         )
         assert result.ret == 0
         assert self.json_lines_file.exists()
-        assert self.omit_durations(self.read_json_lines_file()) == [
+        assert self.omit_durations_and_times(self.read_json_lines_file()) == [
             {
                 "pytest_version": pytest.__version__,
                 "plugin_version": __version__,
@@ -187,6 +193,8 @@ class TestBasicSkip(CommonTestSetup):
                 "node_id": "test_basic_skipped.py::test_skipped",
                 "outcome": "skipped",
                 "duration": "omitted",
+                "start": "omitted",
+                "stop": "omitted",
                 "error": None,
             },
             {
@@ -194,6 +202,8 @@ class TestBasicSkip(CommonTestSetup):
                 "node_id": "test_basic_skipped.py::test_skipped",
                 "outcome": "passed",
                 "duration": "omitted",
+                "start": "omitted",
+                "stop": "omitted",
                 "error": None,
             },
             {
@@ -201,6 +211,8 @@ class TestBasicSkip(CommonTestSetup):
                 "node_id": "test_basic_skipped.py::test_skipped",
                 "outcome": "skipped",
                 "duration": "omitted",
+                "start": "omitted",
+                "stop": "omitted",
             },
             {"exit_status": 0, "event": "SessionFinish"},
         ]

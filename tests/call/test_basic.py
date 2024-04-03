@@ -14,22 +14,22 @@ class TestBasic(CommonTestSetup):
 
     def test_omit_duration(self) -> None:
         data = {}
-        assert self.omit_durations(data) == {}
+        assert self.omit_durations_and_times(data) == {}
         data = {"duration": 0.123}
-        assert self.omit_durations(data) == {"duration": "omitted"}
+        assert self.omit_durations_and_times(data) == {"duration": "omitted"}
         data = {"test": {"duration": 0.123}}
-        assert self.omit_durations(data) == {"test": {"duration": "omitted"}}
+        assert self.omit_durations_and_times(data) == {"test": {"duration": "omitted"}}
         data = {"test": {"duration": 0.123, "nested": {"duration": 0.456}}}
-        assert self.omit_durations(data) == {
+        assert self.omit_durations_and_times(data) == {
             "test": {"duration": "omitted", "nested": {"duration": "omitted"}}
         }
         data = [{"duration": 0.123}, {"duration": 0.456}]
-        assert self.omit_durations(data) == [
+        assert self.omit_durations_and_times(data) == [
             {"duration": "omitted"},
             {"duration": "omitted"},
         ]
         data = [{"test": {"nested": [{"duration": 0.123}]}}]
-        assert self.omit_durations(data) == [
+        assert self.omit_durations_and_times(data) == [
             {"test": {"nested": [{"duration": "omitted"}]}}
         ]
 
@@ -53,7 +53,7 @@ class TestBasic(CommonTestSetup):
         assert result.ret == 0
         assert self.json_file.exists()
         report = self.read_json_file()
-        assert self.omit_durations(report) == {
+        assert self.omit_durations_and_times(report) == {
             "pytest_version": pytest.__version__,
             "plugin_version": __version__,
             "exit_status": 0,
@@ -69,6 +69,8 @@ class TestBasic(CommonTestSetup):
                         "node_id": "test_basic.py::test_ok",
                         "outcome": "passed",
                         "duration": "omitted",
+                        "start": "omitted",
+                        "stop": "omitted",
                         "error": None,
                     },
                     "call": {
@@ -76,6 +78,8 @@ class TestBasic(CommonTestSetup):
                         "node_id": "test_basic.py::test_ok",
                         "outcome": "passed",
                         "duration": "omitted",
+                        "start": "omitted",
+                        "stop": "omitted",
                         "error": None,
                     },
                     "teardown": {
@@ -83,6 +87,8 @@ class TestBasic(CommonTestSetup):
                         "node_id": "test_basic.py::test_ok",
                         "outcome": "passed",
                         "duration": "omitted",
+                        "start": "omitted",
+                        "stop": "omitted",
                         "error": None,
                     },
                     "finished": {
@@ -90,6 +96,8 @@ class TestBasic(CommonTestSetup):
                         "node_id": "test_basic.py::test_ok",
                         "outcome": "passed",
                         "duration": "omitted",
+                        "start": "omitted",
+                        "stop": "omitted",
                     },
                 }
             ],
@@ -160,7 +168,7 @@ class TestBasic(CommonTestSetup):
         assert result.ret == 0
         assert self.json_lines_file.exists()
         lines = self.read_json_lines_file()
-        assert self.omit_durations(lines) == [
+        assert self.omit_durations_and_times(lines) == [
             {
                 "pytest_version": pytest.__version__,
                 "plugin_version": __version__,
@@ -219,6 +227,8 @@ class TestBasic(CommonTestSetup):
                 "node_id": "test_basic.py::test_ok",
                 "outcome": "passed",
                 "duration": "omitted",
+                "start": "omitted",
+                "stop": "omitted",
                 "error": None,
             },
             {
@@ -226,6 +236,8 @@ class TestBasic(CommonTestSetup):
                 "node_id": "test_basic.py::test_ok",
                 "outcome": "passed",
                 "duration": "omitted",
+                "start": "omitted",
+                "stop": "omitted",
                 "error": None,
             },
             {
@@ -233,6 +245,8 @@ class TestBasic(CommonTestSetup):
                 "node_id": "test_basic.py::test_ok",
                 "outcome": "passed",
                 "duration": "omitted",
+                "start": "omitted",
+                "stop": "omitted",
                 "error": None,
             },
             {
@@ -240,6 +254,8 @@ class TestBasic(CommonTestSetup):
                 "node_id": "test_basic.py::test_ok",
                 "outcome": "passed",
                 "duration": "omitted",
+                "start": "omitted",
+                "stop": "omitted",
             },
             {"exit_status": 0, "event": "SessionFinish"},
         ]

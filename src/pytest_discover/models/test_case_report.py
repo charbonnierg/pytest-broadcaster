@@ -31,6 +31,6 @@ class TestCaseReport:
     Duration in seconds
     """
     setup: test_case_setup.TestCaseSetup
+    teardown: test_case_teardown.TestCaseTeardown
     finished: test_case_finished.TestCaseFinished
     call: Optional[test_case_call.TestCaseCall] = None
-    teardown: Optional[test_case_teardown.TestCaseTeardown] = None

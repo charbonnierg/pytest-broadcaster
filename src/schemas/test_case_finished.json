@@ -9,7 +9,9 @@
     "event_type",
     "outcome",
     "finished",
-    "duration"
+    "duration",
+    "start",
+    "stop"
   ],
   "properties": {
     "node_id": {
@@ -26,6 +28,16 @@
     "duration": {
       "type": "number",
       "description": "Duration in seconds"
+    },
+    "start": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Start time"
+    },
+    "stop": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Stop time"
     }
   }
 }

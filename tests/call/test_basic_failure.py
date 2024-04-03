@@ -31,7 +31,7 @@ class TestBasicFailure(CommonTestSetup):
         result = self.test_dir.runpytest("--collect-report", self.json_file.as_posix())
         assert result.ret == 1
         assert self.json_file.exists()
-        assert self.omit_durations(self.read_json_file()) == {
+        assert self.omit_durations_and_times(self.read_json_file()) == {
             "pytest_version": pytest.__version__,
             "plugin_version": __version__,
             "exit_status": 1,
@@ -47,6 +47,8 @@ class TestBasicFailure(CommonTestSetup):
                         "node_id": "test_basic_failure.py::test_failure",
                         "outcome": "passed",
                         "duration": "omitted",
+                        "start": "omitted",
+                        "stop": "omitted",
                         "error": None,
                     },
                     "call": {
@@ -54,6 +56,8 @@ class TestBasicFailure(CommonTestSetup):
                         "node_id": "test_basic_failure.py::test_failure",
                         "outcome": "failed",
                         "duration": "omitted",
+                        "start": "omitted",
+                        "stop": "omitted",
                         "error": {
                             "message": "def test_failure():\n        '''This is a test docstring.'''\n>       raise ValueError(\"BOOM\")\nE       ValueError: BOOM\n\ntest_basic_failure.py:5: ValueError",
                             "traceback": {
@@ -72,6 +76,8 @@ class TestBasicFailure(CommonTestSetup):
                         "node_id": "test_basic_failure.py::test_failure",
                         "outcome": "passed",
                         "duration": "omitted",
+                        "start": "omitted",
+                        "stop": "omitted",
                         "error": None,
                     },
                     "finished": {
@@ -79,6 +85,8 @@ class TestBasicFailure(CommonTestSetup):
                         "node_id": "test_basic_failure.py::test_failure",
                         "outcome": "failed",
                         "duration": "omitted",
+                        "start": "omitted",
+                        "stop": "omitted",
                     },
                 }
             ],
@@ -143,7 +151,7 @@ class TestBasicFailure(CommonTestSetup):
         )
         assert result.ret == 1
         assert self.json_lines_file.exists()
-        assert self.omit_durations(self.read_json_lines_file()) == [
+        assert self.omit_durations_and_times(self.read_json_lines_file()) == [
             {
                 "pytest_version": pytest.__version__,
                 "plugin_version": __version__,
@@ -202,6 +210,8 @@ class TestBasicFailure(CommonTestSetup):
                 "node_id": "test_basic_failure.py::test_failure",
                 "outcome": "passed",
                 "duration": "omitted",
+                "start": "omitted",
+                "stop": "omitted",
                 "error": None,
             },
             {
@@ -209,6 +219,8 @@ class TestBasicFailure(CommonTestSetup):
                 "node_id": "test_basic_failure.py::test_failure",
                 "outcome": "failed",
                 "duration": "omitted",
+                "start": "omitted",
+                "stop": "omitted",
                 "error": {
                     "message": "def test_failure():\n        '''This is a test docstring.'''\n>       raise ValueError(\"BOOM\")\nE       ValueError: BOOM\n\ntest_basic_failure.py:5: ValueError",
                     "traceback": {
@@ -227,6 +239,8 @@ class TestBasicFailure(CommonTestSetup):
                 "node_id": "test_basic_failure.py::test_failure",
                 "outcome": "passed",
                 "duration": "omitted",
+                "start": "omitted",
+                "stop": "omitted",
                 "error": None,
             },
             {
@@ -234,6 +248,8 @@ class TestBasicFailure(CommonTestSetup):
                 "node_id": "test_basic_failure.py::test_failure",
                 "outcome": "failed",
                 "duration": "omitted",
+                "start": "omitted",
+                "stop": "omitted",
             },
             {"exit_status": 1, "event": "SessionFinish"},
         ]

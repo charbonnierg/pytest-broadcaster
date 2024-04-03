@@ -24,6 +24,14 @@ class TestCaseTeardown:
     """
     Duration in seconds
     """
+    start: str
+    """
+    Start Time
+    """
+    stop: str
+    """
+    Stop Time
+    """
     event_type: str = "case_teardown"
     """
     Event Type
