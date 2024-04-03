@@ -7,6 +7,7 @@
   "required": [
     "node_id",
     "outcome",
+    "duration",
     "setup",
     "finished"
   ],
@@ -17,6 +18,10 @@
     },
     "outcome": {
       "$ref": "outcome.json/#"
+    },
+    "duration": {
+      "type": "number",
+      "description": "Duration in seconds"
     },
     "setup": {
       "$ref": "test_case_setup.json/#"

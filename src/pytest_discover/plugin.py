@@ -337,24 +337,31 @@ class PytestDiscoverPlugin:
         event: TestCaseSetup | TestCaseCall | TestCaseTeardown
         outcome = Outcome(report.outcome)
         if report.when == "setup":
-            event = TestCaseSetup(node_id=report.nodeid, outcome=outcome)
+            event = TestCaseSetup(
+                node_id=report.nodeid, outcome=outcome, duration=report.duration
+            )
             self._pending_report = TestCaseReport(
                 node_id=report.nodeid,
                 outcome=outcome,
+                duration=event.duration,
                 setup=event,
                 finished=...,  # type: ignore
             )
         elif report.when == "call":
             if outcome == Outcome.skipped and hasattr(report, "wasxfail"):
                 outcome = Outcome.xfailed
-            event = TestCaseCall(node_id=report.nodeid, outcome=outcome)
+            event = TestCaseCall(
+                node_id=report.nodeid, outcome=outcome, duration=report.duration
+            )
             assert (
                 self._pending_report
             ), "pending report is missing, this is a bug in pytest-discover plugin"
             self._pending_report.call = event
 
         elif report.when == "teardown":
-            event = TestCaseTeardown(node_id=report.nodeid, outcome=outcome)
+            event = TestCaseTeardown(
+                node_id=report.nodeid, outcome=outcome, duration=report.duration
+            )
             assert (
                 self._pending_report
             ), "pending report is missing, this is a bug in pytest-discover plugin"
@@ -394,10 +401,12 @@ class PytestDiscoverPlugin:
         # Else consider test passed
         else:
             outcome = Outcome.passed
+        duration = sum(report.duration for report in reports)
         # Create the finished event and the report
         finished = TestCaseFinished(
             node_id=nodeid,
             outcome=outcome,
+            duration=duration,
         )
         report = TestCaseReport(
             node_id=nodeid,
@@ -406,6 +415,7 @@ class PytestDiscoverPlugin:
             setup=pending_report.setup,
             call=pending_report.call,
             teardown=pending_report.teardown,
+            duration=duration,
         )
         self._write_event(finished)
         self._result.test_reports.append(report)

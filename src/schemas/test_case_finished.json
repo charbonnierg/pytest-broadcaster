@@ -7,7 +7,9 @@
   "required": [
     "node_id",
     "event_type",
-    "outcome"
+    "outcome",
+    "finished",
+    "duration"
   ],
   "properties": {
     "node_id": {
@@ -20,6 +22,10 @@
     },
     "outcome": {
       "$ref": "outcome.json/#"
+    },
+    "duration": {
+      "type": "number",
+      "description": "Duration in seconds"
     }
   }
 }

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
@@ -35,3 +36,26 @@ class CommonTestSetup:
             raise ValueError("Filename must end with '.py'")
         kwargs = {filename: content}
         return self.test_dir.makepyfile(**kwargs)
+
+    def omit_durations(
+        self, data: dict[str, Any] | list[Any]
+    ) -> dict[str, Any] | list[Any]:
+        return self._omit_durations(deepcopy(data))
+
+    def _omit_durations(
+        self,
+        data: Any,
+    ) -> Any:
+        if isinstance(data, dict):
+            for key, value in data.items():
+                if isinstance(value, dict):
+                    data[key] = self.omit_durations(value)
+                elif isinstance(value, list):
+                    data[key] = self.omit_durations(value)
+                elif key == "duration":
+                    data[key] = "omitted"
+        elif isinstance(data, list):
+            data = [self.omit_durations(item) for item in data]
+        else:
+            return data
+        return data

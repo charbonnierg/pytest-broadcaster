@@ -7,7 +7,9 @@
   "required": [
     "node_id",
     "event_type",
-    "outcome"
+    "outcome",
+    "finished",
+    "duration"
   ],
   "properties": {
     "node_id": {
@@ -20,6 +22,10 @@
     },
     "outcome": {
       "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/outcome.json"
+    },
+    "duration": {
+      "type": "number",
+      "description": "Duration in seconds"
     }
   }
 }

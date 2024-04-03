@@ -19,6 +19,10 @@ class TestCaseFinished:
     Node ID
     """
     outcome: outcome.Outcome
+    duration: float
+    """
+    Duration in seconds
+    """
     event_type: str = "case_finished"
     """
     Event Type

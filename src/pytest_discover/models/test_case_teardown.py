@@ -19,6 +19,10 @@ class TestCaseTeardown:
     Node ID
     """
     outcome: outcome.Outcome
+    duration: float
+    """
+    Duration in seconds
+    """
     event_type: str = "case_teardown"
     """
     Event Type

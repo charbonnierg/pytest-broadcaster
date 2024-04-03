@@ -33,7 +33,7 @@ class TestxFailWithinTest(CommonTestSetup):
         result = self.test_dir.runpytest("--collect-report", self.json_file.as_posix())
         assert result.ret == 0
         assert self.json_file.exists()
-        assert self.read_json_file() == {
+        assert self.omit_durations(self.read_json_file()) == {
             "pytest_version": pytest.__version__,
             "plugin_version": __version__,
             "exit_status": 0,
@@ -43,25 +43,30 @@ class TestxFailWithinTest(CommonTestSetup):
                 {
                     "node_id": "test_xfail_within_test.py::test_xfail",
                     "outcome": "xfailed",
+                    "duration": "omitted",
                     "setup": {
                         "event_type": "case_setup",
                         "node_id": "test_xfail_within_test.py::test_xfail",
                         "outcome": "passed",
+                        "duration": "omitted",
                     },
                     "call": {
                         "event_type": "case_call",
                         "node_id": "test_xfail_within_test.py::test_xfail",
                         "outcome": "xfailed",
+                        "duration": "omitted",
                     },
                     "teardown": {
                         "event_type": "case_teardown",
                         "node_id": "test_xfail_within_test.py::test_xfail",
                         "outcome": "passed",
+                        "duration": "omitted",
                     },
                     "finished": {
                         "event_type": "case_finished",
                         "node_id": "test_xfail_within_test.py::test_xfail",
                         "outcome": "xfailed",
+                        "duration": "omitted",
                     },
                 }
             ],
@@ -126,7 +131,7 @@ class TestxFailWithinTest(CommonTestSetup):
         )
         assert result.ret == 0
         assert self.json_lines_file.exists()
-        assert self.read_json_lines_file() == [
+        assert self.omit_durations(self.read_json_lines_file()) == [
             {
                 "pytest_version": pytest.__version__,
                 "plugin_version": __version__,
@@ -184,21 +189,25 @@ class TestxFailWithinTest(CommonTestSetup):
                 "event_type": "case_setup",
                 "node_id": "test_xfail_within_test.py::test_xfail",
                 "outcome": "passed",
+                "duration": "omitted",
             },
             {
                 "event_type": "case_call",
                 "node_id": "test_xfail_within_test.py::test_xfail",
                 "outcome": "xfailed",
+                "duration": "omitted",
             },
             {
                 "event_type": "case_teardown",
                 "node_id": "test_xfail_within_test.py::test_xfail",
                 "outcome": "passed",
+                "duration": "omitted",
             },
             {
                 "event_type": "case_finished",
                 "node_id": "test_xfail_within_test.py::test_xfail",
                 "outcome": "xfailed",
+                "duration": "omitted",
             },
             {"exit_status": 0, "event": "SessionFinish"},
         ]

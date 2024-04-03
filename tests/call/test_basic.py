@@ -12,6 +12,27 @@ from ._utils import CommonTestSetup
 class TestBasic(CommonTestSetup):
     """Scenario: A single test case within a single test file."""
 
+    def test_omit_duration(self) -> None:
+        data = {}
+        assert self.omit_durations(data) == {}
+        data = {"duration": 0.123}
+        assert self.omit_durations(data) == {"duration": "omitted"}
+        data = {"test": {"duration": 0.123}}
+        assert self.omit_durations(data) == {"test": {"duration": "omitted"}}
+        data = {"test": {"duration": 0.123, "nested": {"duration": 0.456}}}
+        assert self.omit_durations(data) == {
+            "test": {"duration": "omitted", "nested": {"duration": "omitted"}}
+        }
+        data = [{"duration": 0.123}, {"duration": 0.456}]
+        assert self.omit_durations(data) == [
+            {"duration": "omitted"},
+            {"duration": "omitted"},
+        ]
+        data = [{"test": {"nested": [{"duration": 0.123}]}}]
+        assert self.omit_durations(data) == [
+            {"test": {"nested": [{"duration": "omitted"}]}}
+        ]
+
     def make_test_directory(self) -> Path:
         return self.make_testfile(
             "test_basic.py",
@@ -31,7 +52,8 @@ class TestBasic(CommonTestSetup):
         result = self.test_dir.runpytest("--collect-report", self.json_file.as_posix())
         assert result.ret == 0
         assert self.json_file.exists()
-        assert self.read_json_file() == {
+        report = self.read_json_file()
+        assert self.omit_durations(report) == {
             "pytest_version": pytest.__version__,
             "plugin_version": __version__,
             "exit_status": 0,
@@ -41,25 +63,30 @@ class TestBasic(CommonTestSetup):
                 {
                     "node_id": "test_basic.py::test_ok",
                     "outcome": "passed",
+                    "duration": "omitted",
                     "setup": {
                         "event_type": "case_setup",
                         "node_id": "test_basic.py::test_ok",
                         "outcome": "passed",
+                        "duration": "omitted",
                     },
                     "call": {
                         "event_type": "case_call",
                         "node_id": "test_basic.py::test_ok",
                         "outcome": "passed",
+                        "duration": "omitted",
                     },
                     "teardown": {
                         "event_type": "case_teardown",
                         "node_id": "test_basic.py::test_ok",
                         "outcome": "passed",
+                        "duration": "omitted",
                     },
                     "finished": {
                         "event_type": "case_finished",
                         "node_id": "test_basic.py::test_ok",
                         "outcome": "passed",
+                        "duration": "omitted",
                     },
                 }
             ],
@@ -114,6 +141,11 @@ class TestBasic(CommonTestSetup):
                 },
             ],
         }
+        assert report["test_reports"][0]["duration"] == (
+            report["test_reports"][0]["setup"]["duration"]
+            + report["test_reports"][0]["call"]["duration"]
+            + report["test_reports"][0]["teardown"]["duration"]
+        )
 
     def test_jsonl_basic(self):
         """Test JSON Lines report for single test case within single test file."""
@@ -124,7 +156,8 @@ class TestBasic(CommonTestSetup):
         )
         assert result.ret == 0
         assert self.json_lines_file.exists()
-        assert self.read_json_lines_file() == [
+        lines = self.read_json_lines_file()
+        assert self.omit_durations(lines) == [
             {
                 "pytest_version": pytest.__version__,
                 "plugin_version": __version__,
@@ -182,21 +215,25 @@ class TestBasic(CommonTestSetup):
                 "event_type": "case_setup",
                 "node_id": "test_basic.py::test_ok",
                 "outcome": "passed",
+                "duration": "omitted",
             },
             {
                 "event_type": "case_call",
                 "node_id": "test_basic.py::test_ok",
                 "outcome": "passed",
+                "duration": "omitted",
             },
             {
                 "event_type": "case_teardown",
                 "node_id": "test_basic.py::test_ok",
                 "outcome": "passed",
+                "duration": "omitted",
             },
             {
                 "event_type": "case_finished",
                 "node_id": "test_basic.py::test_ok",
                 "outcome": "passed",
+                "duration": "omitted",
             },
             {"exit_status": 0, "event": "SessionFinish"},
         ]

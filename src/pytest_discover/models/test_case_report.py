@@ -26,6 +26,10 @@ class TestCaseReport:
     Node ID
     """
     outcome: outcome.Outcome
+    duration: float
+    """
+    Duration in seconds
+    """
     setup: test_case_setup.TestCaseSetup
     finished: test_case_finished.TestCaseFinished
     call: Optional[test_case_call.TestCaseCall] = None

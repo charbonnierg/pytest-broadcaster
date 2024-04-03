@@ -7,6 +7,7 @@
   "required": [
     "node_id",
     "outcome",
+    "duration",
     "setup",
     "finished"
   ],
@@ -17,6 +18,10 @@
     },
     "outcome": {
       "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/outcome.json"
+    },
+    "duration": {
+      "type": "number",
+      "description": "Duration in seconds"
     },
     "setup": {
       "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case_setup.json"
