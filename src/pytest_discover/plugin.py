@@ -22,7 +22,7 @@ from pytest_discover.models.test_case_teardown import TestCaseTeardown
 from pytest_discover.models.test_directory import TestDirectory
 from pytest_discover.models.test_module import TestModule
 from pytest_discover.models.test_suite import TestSuite
-from pytest_discover.models.traceback import Traceback
+from pytest_discover.models.traceback import Entry, Traceback
 
 from .__about__ import __version__
 from .internal import _fields as api
@@ -253,13 +253,23 @@ class PytestDiscoverPlugin:
         assert exc_info, "exception info is missing"
         exc_repr = exc_info.getrepr()
         assert exc_repr.reprcrash, "exception crash repr is missing"
+        traceback_lines = api.make_traceback_from_reprtraceback(exc_repr.reprtraceback)
         msg = ErrorMessage(
             when=call.when,  # type: ignore[arg-type]
             location=Location(
                 filename=self._get_path(exc_repr.reprcrash.path, True),
                 lineno=exc_repr.reprcrash.lineno,
             ),
-            traceback=Traceback(str(exc_repr.reprcrash).splitlines()),
+            traceback=Traceback(
+                entries=[
+                    Entry(
+                        lineno=line.lineno,
+                        path=line.path,
+                        message=line.message,
+                    )
+                    for line in traceback_lines
+                ]
+            ),
             exception_type=exc_info.typename,
             exception_value=str(exc_info.value),
         )
@@ -335,11 +345,24 @@ class PytestDiscoverPlugin:
     # Process the TestReport produced for each of the setup, call and teardown runtest phases of an item.
     # Ref: https://docs.pytest.org/en/7.1.x/reference/reference.html#pytest.hookspec.pytest_runtest_logreport
     def pytest_runtest_logreport(self, report: pytest.TestReport) -> None:
-        event: TestCaseSetup | TestCaseCall | TestCaseTeardown
-        error: TestCaseError | None = None
+        # Always validate the outcome
         outcome = Outcome(report.outcome)
+        # Let's process the error if any
+        error: TestCaseError | None = None
+        if report.failed:
+            error = TestCaseError(
+                message=report.longreprtext,
+                traceback=Traceback(
+                    entries=[
+                        Entry(path=line.path, lineno=line.lineno, message=line.message)
+                        for line in api.make_traceback(report)
+                    ]
+                ),
+            )
+        # Let's process the report based on the phase
+        phase: TestCaseSetup | TestCaseCall | TestCaseTeardown
         if report.when == "setup":
-            event = TestCaseSetup(
+            phase = TestCaseSetup(
                 node_id=report.nodeid,
                 outcome=outcome,
                 duration=report.duration,
@@ -348,14 +371,14 @@ class PytestDiscoverPlugin:
             self._pending_report = TestCaseReport(
                 node_id=report.nodeid,
                 outcome=outcome,
-                duration=event.duration,
-                setup=event,
+                duration=phase.duration,
+                setup=phase,
                 finished=...,  # type: ignore (will be set later)
             )
         elif report.when == "call":
             if outcome == Outcome.skipped and hasattr(report, "wasxfail"):
                 outcome = Outcome.xfailed
-            event = TestCaseCall(
+            phase = TestCaseCall(
                 node_id=report.nodeid,
                 outcome=outcome,
                 duration=report.duration,
@@ -364,10 +387,10 @@ class PytestDiscoverPlugin:
             assert (
                 self._pending_report
             ), "pending report is missing, this is a bug in pytest-discover plugin"
-            self._pending_report.call = event
+            self._pending_report.call = phase
 
         elif report.when == "teardown":
-            event = TestCaseTeardown(
+            phase = TestCaseTeardown(
                 node_id=report.nodeid,
                 outcome=outcome,
                 duration=report.duration,
@@ -376,10 +399,10 @@ class PytestDiscoverPlugin:
             assert (
                 self._pending_report
             ), "pending report is missing, this is a bug in pytest-discover plugin"
-            self._pending_report.teardown = event
+            self._pending_report.teardown = phase
         else:
             return
-        self._write_event(event)
+        self._write_event(phase)
 
     # Called at the end of running the runtest protocol for a single item.
     # Ref: https://docs.pytest.org/en/7.1.x/reference/reference.html#pytest.hookspec.pytest_runtest_logfinish

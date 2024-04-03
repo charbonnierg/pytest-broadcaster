@@ -8,12 +8,28 @@ from typing import List
 
 
 @dataclass
+class Entry:
+    path: str
+    """
+    File path
+    """
+    lineno: int
+    """
+    Line number
+    """
+    message: str
+    """
+    Error message
+    """
+
+
+@dataclass
 class Traceback:
     """
     Error traceback
     """
 
-    lines: List[str]
+    entries: List[Entry]
     """
     Traceback entries
     """

@@ -54,7 +54,18 @@ class TestBasicFailure(CommonTestSetup):
                         "node_id": "test_basic_failure.py::test_failure",
                         "outcome": "failed",
                         "duration": "omitted",
-                        "error": None,
+                        "error": {
+                            "message": "def test_failure():\n        '''This is a test docstring.'''\n>       raise ValueError(\"BOOM\")\nE       ValueError: BOOM\n\ntest_basic_failure.py:5: ValueError",
+                            "traceback": {
+                                "entries": [
+                                    {
+                                        "path": "test_basic_failure.py",
+                                        "lineno": 5,
+                                        "message": "ValueError",
+                                    }
+                                ]
+                            },
+                        },
                     },
                     "teardown": {
                         "event_type": "case_teardown",
@@ -198,7 +209,18 @@ class TestBasicFailure(CommonTestSetup):
                 "node_id": "test_basic_failure.py::test_failure",
                 "outcome": "failed",
                 "duration": "omitted",
-                "error": None,
+                "error": {
+                    "message": "def test_failure():\n        '''This is a test docstring.'''\n>       raise ValueError(\"BOOM\")\nE       ValueError: BOOM\n\ntest_basic_failure.py:5: ValueError",
+                    "traceback": {
+                        "entries": [
+                            {
+                                "path": "test_basic_failure.py",
+                                "lineno": 5,
+                                "message": "ValueError",
+                            }
+                        ]
+                    },
+                },
             },
             {
                 "event_type": "case_teardown",

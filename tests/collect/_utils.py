@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
@@ -35,3 +36,33 @@ class CommonTestSetup:
             raise ValueError("Filename must end with '.py'")
         kwargs = {filename: content}
         return self.test_dir.makepyfile(**kwargs)
+
+    def filter_traceback(
+        self, data: dict[str, Any] | list[Any]
+    ) -> dict[str, Any] | list[Any]:
+        return self._filter_traceback(deepcopy(data))
+
+    def _filter_traceback(
+        self,
+        data: Any,
+    ) -> Any:
+        if isinstance(data, dict):
+            for key, value in data.items():
+                if key == "traceback":
+                    data[key] = {
+                        **data[key],
+                        "entries": [
+                            line
+                            for line in value["entries"]
+                            if "importlib" not in line["path"]
+                        ],
+                    }
+                elif isinstance(value, dict):
+                    data[key] = self._filter_traceback(value)
+                elif isinstance(value, list):
+                    data[key] = self._filter_traceback(value)
+        elif isinstance(data, list):
+            data = [self._filter_traceback(item) for item in data]
+        else:
+            return data
+        return data

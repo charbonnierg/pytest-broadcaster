@@ -33,7 +33,7 @@ class TestErrorsThirdParty(CommonTestSetup):
         )
         assert result.ret == 3
         assert self.json_file.exists()
-        assert self.read_json_file() == {
+        assert self.filter_traceback(self.read_json_file()) == {
             "pytest_version": pytest.__version__,
             "plugin_version": __version__,
             "exit_status": 3,
@@ -47,9 +47,14 @@ class TestErrorsThirdParty(CommonTestSetup):
                         "lineno": 1,
                     },
                     "traceback": {
-                        "lines": [
-                            f"{filename('with_errors.py')}:1: " "RuntimeError: BOOM",
-                        ],
+                        "entries": [
+                            {"path": "test_errors.py", "lineno": 2, "message": ""},
+                            {
+                                "path": filename("with_errors.py"),
+                                "lineno": 1,
+                                "message": "RuntimeError",
+                            },
+                        ]
                     },
                     "exception_type": "RuntimeError",
                     "exception_value": "BOOM",
@@ -81,7 +86,7 @@ class TestErrorsThirdParty(CommonTestSetup):
         )
         assert result.ret == 3
         assert self.json_lines_file.exists()
-        assert self.read_json_lines_file() == [
+        assert self.filter_traceback(self.read_json_lines_file()) == [
             {
                 "pytest_version": pytest.__version__,
                 "plugin_version": __version__,
@@ -107,9 +112,14 @@ class TestErrorsThirdParty(CommonTestSetup):
                     "lineno": 1,
                 },
                 "traceback": {
-                    "lines": [
-                        f"{filename('with_errors.py')}:1: " "RuntimeError: BOOM",
-                    ],
+                    "entries": [
+                        {"path": "test_errors.py", "lineno": 2, "message": ""},
+                        {
+                            "path": filename("with_errors.py"),
+                            "lineno": 1,
+                            "message": "RuntimeError",
+                        },
+                    ]
                 },
                 "exception_type": "RuntimeError",
                 "exception_value": "BOOM",

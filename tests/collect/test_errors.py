@@ -12,6 +12,16 @@ from ._utils import CommonTestSetup
 class TestErrors(CommonTestSetup):
     """Errors test suite."""
 
+    def test_filter_traceback(self) -> None:
+        data = {
+            "traceback": {
+                "entries": [{"path": "importlib"}, {"path": "something/else"}]
+            }
+        }
+        assert self.filter_traceback(data) == {
+            "traceback": {"entries": [{"path": "something/else"}]}
+        }
+
     def make_basic_test(self) -> Path:
         """A helper function to make a test file which emits errors on collection."""
 
@@ -35,7 +45,7 @@ class TestErrors(CommonTestSetup):
         )
         assert result.ret == 3
         assert self.json_file.exists()
-        assert self.read_json_file() == {
+        assert self.filter_traceback(self.read_json_file()) == {
             "pytest_version": pytest.__version__,
             "plugin_version": __version__,
             "exit_status": 3,
@@ -51,9 +61,17 @@ class TestErrors(CommonTestSetup):
                         "lineno": 4,
                     },
                     "traceback": {
-                        "lines": [
-                            f"{directory.joinpath('test_errors.py').as_posix()}:4: "
-                            "RuntimeError: BOOM",
+                        "entries": [
+                            {
+                                "lineno": 5,
+                                "message": "",
+                                "path": "test_errors.py",
+                            },
+                            {
+                                "path": "test_errors.py",
+                                "lineno": 4,
+                                "message": "RuntimeError",
+                            },
                         ],
                     },
                     "exception_type": "RuntimeError",
@@ -86,7 +104,7 @@ class TestErrors(CommonTestSetup):
         )
         assert result.ret == 3
         assert self.json_lines_file.exists()
-        assert self.read_json_lines_file() == [
+        assert self.filter_traceback(self.read_json_lines_file()) == [
             {
                 "pytest_version": pytest.__version__,
                 "plugin_version": __version__,
@@ -114,9 +132,17 @@ class TestErrors(CommonTestSetup):
                     "lineno": 4,
                 },
                 "traceback": {
-                    "lines": [
-                        f"{directory.joinpath('test_errors.py').as_posix()}:4: "
-                        "RuntimeError: BOOM",
+                    "entries": [
+                        {
+                            "lineno": 5,
+                            "message": "",
+                            "path": "test_errors.py",
+                        },
+                        {
+                            "path": "test_errors.py",
+                            "lineno": 4,
+                            "message": "RuntimeError",
+                        },
                     ],
                 },
                 "exception_type": "RuntimeError",

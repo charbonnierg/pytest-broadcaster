@@ -49,13 +49,13 @@ class CommonTestSetup:
         if isinstance(data, dict):
             for key, value in data.items():
                 if isinstance(value, dict):
-                    data[key] = self.omit_durations(value)
+                    data[key] = self._omit_durations(value)
                 elif isinstance(value, list):
-                    data[key] = self.omit_durations(value)
+                    data[key] = self._omit_durations(value)
                 elif key == "duration":
                     data[key] = "omitted"
         elif isinstance(data, list):
-            data = [self.omit_durations(item) for item in data]
+            data = [self._omit_durations(item) for item in data]
         else:
             return data
         return data

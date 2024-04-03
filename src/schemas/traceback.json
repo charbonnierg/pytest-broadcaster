@@ -5,14 +5,33 @@
   "description": "Error traceback",
   "type": "object",
   "required": [
-    "lines"
+    "entries"
   ],
   "properties": {
-    "lines": {
+    "entries": {
       "type": "array",
       "description": "Traceback entries",
       "items": {
-        "type": "string"
+        "type": "object",
+        "required": [
+          "path",
+          "lineno",
+          "message"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "File path"
+          },
+          "lineno": {
+            "type": "integer",
+            "description": "Line number"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message"
+          }
+        }
       }
     }
   }

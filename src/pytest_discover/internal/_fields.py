@@ -1,36 +1,21 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 from warnings import WarningMessage
 
 import pytest
+from _pytest._code.code import ReprTraceback
 
 from ._utils import (
+    NodeID,
+    TracebackLine,
+    filter_traceback,
     format_mark,
     get_test_args,
     get_test_doc,
     get_test_markers,
+    make_traceback_line,
     parse_node_id,
 )
-
-
-@dataclass
-class NodeID:
-    filename: str | None
-    module: str | None
-    classes: list[str] | None
-    func: str
-    params: str | None
-    name: str
-    value: str = field(repr=False)
-
-    def __str__(self) -> str:
-        return self.value
-
-    def suite(self) -> str | None:
-        if self.classes:
-            return "::".join(self.classes)
-        return None
 
 
 def make_node_id(
@@ -77,3 +62,17 @@ def make_warning_message(warning: WarningMessage) -> str:
     if isinstance(warning.message, str):
         return warning.message
     return str(warning.message)
+
+
+def make_traceback(report: pytest.TestReport) -> list[TracebackLine]:
+    return make_traceback_from_reprtraceback(report.longrepr.reprtraceback)  # type: ignore
+
+
+def make_traceback_from_reprtraceback(
+    reprtraceback: ReprTraceback,
+) -> list[TracebackLine]:
+    return [
+        make_traceback_line(line.reprfileloc)  # type: ignore
+        for line in reprtraceback.reprentries
+        if filter_traceback(line.reprfileloc.path)  # type: ignore
+    ]
