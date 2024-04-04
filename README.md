@@ -10,6 +10,18 @@ Available destinations:
 
 Additional destinations can be added in the future, and users can also implement their own destinations.
 
+## Project state
+
+This project is in early development. The plugin is functional, but the API is not stable yet. The plugin is tested with Python 3.8, 3.9, 3.10, 3.11, and 3.12.
+
+If you find a bug, please open an issue. Contributions are welcome.
+
+## Install
+
+```bash
+pip install pytest-broadcaster
+```
+
 ## Motivation
 
 If you ever wanter to build a tool that needs to parse the output of `pytest --collect-only`, you may have noticed that the output is not very easy to parse. This plugin aims to provide a more structured output that can be easily parsed by other tools.
@@ -17,12 +29,6 @@ If you ever wanter to build a tool that needs to parse the output of `pytest --c
 Historically, this project only parsed the output of `pytest --collect-only`, but it has been extended to parse the output of `pytest` in general.
 
 JSON schemas are provided for clients to help them parse the output of the plugin.
-
-## Install
-
-```bash
-pip install pytest-broadcaster
-```
 
 ## Usage
 
@@ -124,9 +130,15 @@ def pytest_broadcaster_set_reporter(set):
 
 ## Credits
 
+- [pytest](https://docs.pytest.org/en/8.0.x/): Well, this is a pytest plugin.
 - [pytest-report-log](https://github.com/pytest-dev/pytest-reportlog): This package was heavily inspired by the `report-log` plugin.
-- - [pytest-json-report](https://github.com/numirias/pytest-json-report): The `pytest-json-report` plugin was also a source of inspiration.
+- [pytest-json-report](https://github.com/numirias/pytest-json-report): The `pytest-json-report` plugin was also a source of inspiration.
 - [pytest-csv](https://github.com/nicoulaj/pytest-csv): The `pytest-csv` plugin was also a source of inspiration.
 - [`datamodel-code-generator`](https://github.com/koxudaxi/datamodel-code-generator): The dataclasses generation from JSON schemas is performed using `datamodel-code-generator`.
-- [rye](https://rye-up.com/): Project management is easy thanks to `rye`.
+- [rye](https://rye-up.com/): Project management is easy thanks to `rye`. It is also used to lint and format the code.
 - [hatch-vcs](https://github.com/ofek/hatch-vcs): Python project version control is easy thanks to `hatch-vcs`.
+- [pyright](https://github.com/microsoft/pyright): `pyright` is used to check the code and find bugs sooner.
+
+## License
+
+This project is licensed under the terms of the MIT license. See [LICENSE](./LICENSE) for more information.
