@@ -22,16 +22,6 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Topic :: Software Development :: Testing",
 ]
-[project.optional-dependencies]
-docs = [
-    "mkdocs-gen-files",
-    "mkdocs-literate-nav",
-    "mkdocs-material",
-    "mkdocs-section-index",
-    "mkdocstrings[python]",
-    "pymdown-extensions",
-    "termynal",
-]
 
 [project.entry-points.pytest11]
 pytest_broadcaster = "pytest_broadcaster.plugin"
@@ -65,9 +55,20 @@ dev-dependencies = [
     "tomli>=2.0.1 ; python_version < '3.12'",
     "coverage>=7.4.4",
     "flask>=3.0.2",
+    "mkdocs-gen-files",
+    "mkdocs-literate-nav",
+    "mkdocs-material",
+    "mkdocs-section-index",
+    "mkdocstrings[python]",
+    "pymdown-extensions",
+    "termynal",
 ]
 
 [tool.rye.scripts]
+# Serve documentation
+docs = "mkdocs serve"
+# Build documentation
+build-docs = "mkdocs build"
 # Run test with coverage
 test = { chain = ["__test", "__coverage-html"] }
 # View coverage report
@@ -75,6 +76,7 @@ htmlcov = "python -m http.server 8080 --directory coverage-report"
 # Automate pre-commit
 pre = { chain = ["generate", "__format", "__lint", "test", "__typecheck"] }
 # Automate CI
+ci-docs = { chain = ["bootstrap", "diff", "build-docs"] }
 ci = { chain = [
     "bootstrap",
     "diff",
@@ -100,9 +102,9 @@ diff = { chain = [
 ] }
 # Generate version file
 version = "hatch --quiet build --hooks-only"
+# Private tasks used for chaining
 __test = "coverage run --rcfile=pyproject.toml -m pytest"
 __coverage-html = "coverage html"
-# Private tasks used for chaining
 __typecheck = { cmd = "pyright", env = { PYRIGHT_PYTHON_FORCE_VERSION = "latest" } }
 __lint = "rye lint"
 __format = "rye fmt"

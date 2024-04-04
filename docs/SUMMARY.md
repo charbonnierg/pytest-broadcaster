@@ -1,3 +1,4 @@
 * [Home](index.md)
-* [Reference](./reference/nats_contrib/micro/index.md)
+* [Usage](./usage.md)
+* [Reference](./reference/)
 * [License](./LICENSE.md)

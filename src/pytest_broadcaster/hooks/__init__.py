@@ -11,16 +11,21 @@ def pytest_broadcaster_add_destination(add: Callable[[Destination], None]) -> No
 
     Use it to add your own destination.
 
-    For instance, in conftest.py:
-    >>> def pytest_broadcaster_add_destination(add_destination):
-    >>>
-    >>>    add(HTTPublisher(url="https://example.com"))
-    >>>    add(HTTPublisher(url="https://another-example.com"))
-    >>>
+    For instance, in `conftest.py`:
+
+    ```python
+    from pytest_broadcaster import HTTPWebhook
+
+    def pytest_broadcaster_add_destination(add):
+        add(HTTPWebhook(url="https://example.com"))
+        add(HTTPWebhook(url="https://another-example.com"))
+    ```
 
     Then run pytest without any option:
 
-        $ pytest
+    ```bash
+    pytest
+    ```
     """
 
 
@@ -30,13 +35,16 @@ def pytest_broadcaster_set_reporter(set: Callable[[Reporter], None]) -> None:
 
     Use it to set your own reporter.
 
-    For instance, in conftest.py:
-    >>> def pytest_broadcaster_set_reporter(set_reporter):
-    >>>
-    >>>     set(MyReporter())
-    >>>
+    For instance, in `conftest.py`:
+
+    ```python
+    def pytest_broadcaster_set_reporter(set_reporter):
+        set(MyReporter())
+    ```
 
     Then run pytest without any option:
 
-        $ pytest
+    ```bash
+    pytest
+    ```
     """

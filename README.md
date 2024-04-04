@@ -4,9 +4,9 @@ A plugin to write pytest collect output to various destinations.
 
 Available destinations:
 
-- [JSON](https://www.json.org/json-en.html) file
-- [JSON lines](https://jsonlines.org/) file.
-- [HTTP URL](https://en.wikipedia.org/wiki/Webhook) (only POST request)
+- JSON file
+- JSON lines file.
+- HTTP URL (only POST request)
 
 Additional destinations can be added in the future, and users can also implement their own destinations.
 
