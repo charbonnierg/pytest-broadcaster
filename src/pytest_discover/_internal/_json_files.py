@@ -4,7 +4,7 @@ import json
 from dataclasses import asdict
 from enum import Enum
 from pathlib import Path
-from typing import TYPE_CHECKING, TextIO
+from typing import TYPE_CHECKING, Any, TextIO
 
 from ..interfaces import Destination
 from ..models.discovery_event import DiscoveryEvent
@@ -15,6 +15,13 @@ def _default_serializer(obj: object) -> object:
     if isinstance(obj, Enum):
         return obj.value
     return obj
+
+
+def encode(obj: Any) -> str:
+    return json.dumps(
+        asdict(obj),
+        default=_default_serializer,
+    )
 
 
 class JSONFile(Destination):

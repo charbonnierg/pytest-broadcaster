@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from typing import Callable
 
-from pytest_discover._internal._json_files import JSONFile, JSONLinesFile
-from pytest_discover.interfaces import Destination
+from pytest_discover import Destination, JSONFile, JSONLinesFile
 
 pytest_plugins = "pytester"
 

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import logging
 import warnings
 from contextlib import ExitStack
 from typing import TYPE_CHECKING, Any, Literal
@@ -11,6 +10,7 @@ from _pytest.terminal import TerminalReporter
 from pytest_discover import hooks
 from pytest_discover._internal._json_files import JSONFile, JSONLinesFile
 from pytest_discover._internal._reporter import DefaultReporter
+from pytest_discover._internal._webhook import HTTPWebhook
 from pytest_discover.interfaces import Destination, Reporter
 from pytest_discover.models.discovery_event import DiscoveryEvent
 from pytest_discover.models.discovery_result import DiscoveryResult
@@ -20,9 +20,6 @@ if TYPE_CHECKING:
 
 
 __PLUGIN_ATTR__ = "_collect_log_plugin"
-
-
-logger = logging.getLogger("pytest-discover")
 
 
 # Register argparse-style options and ini-style config values, called once at the beginning of a test run.
@@ -52,6 +49,20 @@ def pytest_addoption(parser: pytest.Parser) -> None:
         default=None,
         help="Path to JSON Lines output file where events are logged to.",
     )
+    group.addoption(
+        "--collect-url",
+        action="store",
+        metavar="url",
+        default=None,
+        help="URL to send collected items to.",
+    )
+    group.addoption(
+        "--collect-log-url",
+        action="store",
+        metavar="url",
+        default=None,
+        help="URL to send events to.",
+    )
 
 
 # Perform initial plugin configuration, called once after command line options have been parsed.
@@ -80,6 +91,14 @@ def pytest_configure(config: pytest.Config) -> None:
 
     if json_lines_path := config.option.collect_log:
         destinations.append(JSONLinesFile(json_lines_path))
+
+    if json_url := config.option.collect_url:
+        destinations.append(HTTPWebhook(json_url, emit_events=False, emit_result=True))
+
+    if json_lines_url := config.option.collect_log_url:
+        destinations.append(
+            HTTPWebhook(json_lines_url, emit_events=True, emit_result=False)
+        )
 
     def add_destination(destination: Destination) -> None:
         destinations.append(destination)
@@ -163,8 +182,8 @@ class PytestDiscoverPlugin:
         for publisher in self.publishers:
             try:
                 self.stack.enter_context(publisher)
-            except Exception:
-                logger.error("Failed to open publisher: %s", publisher)
+            except Exception as e:
+                warnings.warn(f"Failed to open publisher: {publisher} - {repr(e)}")
 
     def close(self) -> None:
         """Close the plugin instance. It performs the following actions:
@@ -181,16 +200,20 @@ class PytestDiscoverPlugin:
         for publisher in self.publishers:
             try:
                 publisher.write_event(event)
-            except Exception:
-                logger.error("Failed to write event to destination: %s", publisher)
+            except Exception as e:
+                warnings.warn(
+                    f"Failed to write event to destination: {publisher} - {repr(e)}"
+                )
 
     def _write_result(self, result: DiscoveryResult) -> None:
         """Write the discovery result to the JSON output file."""
         for publisher in self.publishers:
             try:
                 publisher.write_results(result)
-            except Exception:
-                logger.error("Failed to write result to destination: %s", publisher)
+            except Exception as e:
+                warnings.warn(
+                    f"Failed to write result to destination: {publisher} - {repr(e)}",
+                )
 
     # Called after the Session object has been created and before performing collection and entering the run test loop.
     # Ref: https://docs.pytest.org/en/latest/reference/reference.html#pytest.hookspec.pytest_sessionstart

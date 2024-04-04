@@ -42,11 +42,14 @@ dev-dependencies = [
     "pyright>=1.1.355",
     "tomli>=2.0.1 ; python_version < '3.12'",
     "coverage>=7.4.4",
+    "flask>=3.0.2",
 ]
 
 [tool.rye.scripts]
 # Run test with coverage
 test = { chain = ["__test", "__coverage-html"] }
+# View coverage report
+htmlcov = "python -m http.server 8080 --directory coverage-report"
 # Automate pre-commit
 pre = { chain = ["generate", "__format", "__lint", "test", "__typecheck"] }
 # Automate CI

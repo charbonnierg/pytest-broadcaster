@@ -54,7 +54,10 @@ class CommonTestSetup:
                         "entries": [
                             line
                             for line in value["entries"]
-                            if "importlib" not in line["path"]
+                            if (
+                                "importlib" not in line["path"]
+                                and "pytest_asyncio" not in line["path"]
+                            )
                         ],
                     }
                 elif isinstance(value, dict):
