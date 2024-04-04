@@ -1,15 +1,27 @@
 [project]
 name = "pytest-discover"
 description = "Pytest plugin to record discovered tests in a file"
-authors = [
-    { name = "Guillaume Charbonnier", email = "gu.charbon@gmail.com" }
-]
-urls = {"Source" = "https://github.com/charbonnierg/pytest-discover", "Tracker" = "https://github.com/charbonnierg/pytest-discover/issues"}
+authors = [{ name = "Guillaume Charbonnier", email = "gu.charbon@gmail.com" }]
+urls = { "Source" = "https://github.com/charbonnierg/pytest-discover", "Tracker" = "https://github.com/charbonnierg/pytest-discover/issues" }
 
 dependencies = ["pytest"]
 dynamic = ["version"]
 readme = "README.md"
 requires-python = ">= 3.8"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Framework :: Pytest",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Testing",
+]
 
 [project.entry-points.pytest11]
 pytest_discover = "pytest_discover.plugin"
@@ -53,19 +65,34 @@ htmlcov = "python -m http.server 8080 --directory coverage-report"
 # Automate pre-commit
 pre = { chain = ["generate", "__format", "__lint", "test", "__typecheck"] }
 # Automate CI
-ci = { chain = ["bootstrap", "diff", "__formatcheck", "__lint", "test", "__typecheck"] }
+ci = { chain = [
+    "bootstrap",
+    "diff",
+    "__formatcheck",
+    "__lint",
+    "test",
+    "__typecheck",
+] }
 # Automate project install
 bootstrap = { chain = ["__install-project"] }
 # Run code generation
-generate = { chain = ["__generate-models", "__format-models", "__generate-schemas"] }
+generate = { chain = [
+    "__generate-models",
+    "__format-models",
+    "__generate-schemas",
+] }
 # Verify generated code is up-to-date
-diff = { chain = ["__generate-models-check", "__format-models-check", "__generate-models-diff"] }
+diff = { chain = [
+    "__generate-models-check",
+    "__format-models-check",
+    "__generate-models-diff",
+] }
 # Generate version file
 version = "hatch --quiet build --hooks-only"
 __test = "coverage run --rcfile=pyproject.toml -m pytest"
 __coverage-html = "coverage html"
 # Private tasks used for chaining
-__typecheck = { cmd = "pyright", env =  {PYRIGHT_PYTHON_FORCE_VERSION="latest" }}
+__typecheck = { cmd = "pyright", env = { PYRIGHT_PYTHON_FORCE_VERSION = "latest" } }
 __lint = "rye lint"
 __format = "rye fmt"
 __formatcheck = "rye fmt --check"
@@ -78,7 +105,14 @@ __format-models-check = "rye fmt check"
 __install-project = "rye sync --no-lock --force"
 
 [tool.pytest.ini_options]
-markers=["basic", "filetree", "suites", "markers", "parametrization", "buildmeta"]
+markers = [
+    "basic",
+    "filetree",
+    "suites",
+    "markers",
+    "parametrization",
+    "buildmeta",
+]
 testpaths = ["tests"]
 
 [tool.coverage.run]
@@ -101,7 +135,7 @@ exclude_also = [
 
     # Don't complain about abstract methods, they aren't run:
     "@(abc\\.)?abstractmethod",
-    ]
+]
 [tool.coverage.html]
 directory = "coverage-report"
 
