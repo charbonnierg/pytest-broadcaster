@@ -20,20 +20,25 @@ from ..models.warning_message import WarningMessage
 
 
 class Destination(metaclass=abc.ABCMeta):
-    @abc.abstractmethod
-    def write_event(self, event: DiscoveryEvent) -> None: ...
+    """An interface where you can write events and results."""
 
     @abc.abstractmethod
-    def write_results(self, result: DiscoveryResult) -> None: ...
+    def write_event(self, event: DiscoveryEvent) -> None:
+        """Write an event to the destination."""
 
     @abc.abstractmethod
-    def summary(self) -> str | None: ...
+    def write_results(self, result: DiscoveryResult) -> None:
+        """Write the session result to the destination."""
+
+    @abc.abstractmethod
+    def summary(self) -> str | None:
+        """Return a summary of the destination."""
 
     def open(self) -> None:
-        pass
+        """Open the destination. No-op by default."""
 
     def close(self) -> None:
-        pass
+        """Close the destination. No-op by default."""
 
     def __enter__(self) -> Destination:
         self.open()
@@ -44,14 +49,19 @@ class Destination(metaclass=abc.ABCMeta):
 
 
 class Reporter(metaclass=abc.ABCMeta):
-    @abc.abstractmethod
-    def make_session_result(self) -> DiscoveryResult | None: ...
+    """An interface to create events and results."""
 
     @abc.abstractmethod
-    def make_session_start(self) -> SessionStart: ...
+    def make_session_result(self) -> DiscoveryResult | None:
+        """Return the session result, if session is done, else returns None."""
 
     @abc.abstractmethod
-    def make_session_finish(self, exit_status: int) -> SessionFinish: ...
+    def make_session_start(self) -> SessionStart:
+        """Return a session start event."""
+
+    @abc.abstractmethod
+    def make_session_finish(self, exit_status: int) -> SessionFinish:
+        """Return a session finish event."""
 
     @abc.abstractmethod
     def make_warning_message(
@@ -59,18 +69,25 @@ class Reporter(metaclass=abc.ABCMeta):
         warning_message: warnings.WarningMessage,
         when: Literal["config", "collect", "runtest"],
         nodeid: str,
-    ) -> WarningMessage: ...
+    ) -> WarningMessage:
+        """Return a warning message event."""
 
     @abc.abstractmethod
     def make_error_message(
         self, report: pytest.CollectReport, call: pytest.CallInfo[Any]
-    ) -> ErrorMessage: ...
-    def make_collect_report(self, report: pytest.CollectReport) -> CollectReport: ...
+    ) -> ErrorMessage:
+        """Return an error message event."""
+
+    @abc.abstractmethod
+    def make_collect_report(self, report: pytest.CollectReport) -> CollectReport:
+        """Return a collect report event."""
 
     @abc.abstractmethod
     def make_test_case_step(
         self, report: pytest.TestReport
-    ) -> TestCaseCall | TestCaseSetup | TestCaseTeardown: ...
+    ) -> TestCaseCall | TestCaseSetup | TestCaseTeardown:
+        """Return a test case step event."""
 
     @abc.abstractmethod
-    def make_test_case_finished(self, node_id: str) -> TestCaseFinished: ...
+    def make_test_case_finished(self, node_id: str) -> TestCaseFinished:
+        """Return a test case finished event."""

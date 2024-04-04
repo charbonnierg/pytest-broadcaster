@@ -28,6 +28,12 @@ logger = logging.getLogger("pytest-discover")
 # Register argparse-style options and ini-style config values, called once at the beginning of a test run.
 # https://docs.pytest.org/en/latest/reference/reference.html#pytest.hookspec.pytest_addoption
 def pytest_addoption(parser: pytest.Parser) -> None:
+    """Performs the following action:
+
+    - Get or create the `terminal reporting` group in the parser.
+    - Add the `--collect-report` option to the group.
+    - Add the `--collect-log` option to the group.
+    """
     group = parser.getgroup(
         name="terminal reporting",
         description="pytest-discover plugin options",
@@ -53,30 +59,49 @@ def pytest_addoption(parser: pytest.Parser) -> None:
 def pytest_configure(config: pytest.Config) -> None:
     """Performs the following actions:
 
-    - Extract the JSON output file path from the command line options.
-    - Extract the JSON Lines output file path from the command line options.
-    - Skip if neither JSON or JSON Lines output file path is provided.
     - Skip if workerinput is present, which means we are in a worker process.
-    - Create and register the plugin instance.
+    - Create a JSONFile destination if the JSON output file path is present.
+    - Create a JSONLinesFile destination if the JSON Lines output file path is present.
+    - Let the user add their own destinations if they want to.
+    - Create the default reporter.
+    - Let the user set the reporter if they want to.
+    - Create, open and register the plugin instance.
     - Store the plugin instance in the config object.
     """
     # Skip if pytest-xdist worker
     if hasattr(config, "workerinput"):
         return
+
     # Create publishers
-    publishers: list[Destination] = []
+    destinations: list[Destination] = []
+
     if json_path := config.option.collect_report:
-        publishers.append(JSONFile(json_path))
+        destinations.append(JSONFile(json_path))
+
     if json_lines_path := config.option.collect_log:
-        publishers.append(JSONLinesFile(json_lines_path))
-    config.hook.pytest_discover_register_publisher(publishers=publishers)
-    # Create reporter instance
-    reporter = DefaultReporter()
+        destinations.append(JSONLinesFile(json_lines_path))
+
+    def add_destination(destination: Destination) -> None:
+        destinations.append(destination)
+
+    # Let the user add their own destinations if they want to
+    config.hook.pytest_discover_add_destination(add=add_destination)
+
+    # Create default reporter
+    reporter_to_use = DefaultReporter()
+
+    def set_reporter(reporter: Reporter) -> None:
+        nonlocal reporter_to_use
+        reporter_to_use = reporter
+
+    # Let the user set the reporter if they want to
+    config.hook.pytest_discover_set_reporter(set=set_reporter)
+
     # Create plugin instance.
     plugin = PytestDiscoverPlugin(
         config=config,
-        reporter=reporter,
-        publishers=publishers,
+        reporter=reporter_to_use,
+        publishers=destinations,
     )
     # Open the plugin
     plugin.open()
@@ -88,6 +113,11 @@ def pytest_configure(config: pytest.Config) -> None:
 # Called at plugin registration time to allow adding new hooks via a call to pluginmanager.add_hookspecs(module_or_class, prefix).
 # Ref: https://docs.pytest.org/en/7.1.x/reference/reference.html#pytest.hookspec.pytest_addhooks
 def pytest_addhooks(pluginmanager: pytest.PytestPluginManager) -> None:
+    """Add the plugin hooks to the plugin manager:
+
+    - pytest_discover_add_destination: Add a destination to the plugin.
+    - pytest_discover_set_reporter: Set the reporter to use.
+    """
     pluginmanager.add_hookspecs(hooks)
 
 
