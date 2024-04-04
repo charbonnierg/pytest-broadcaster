@@ -6,17 +6,17 @@ from typing import Any, Literal
 
 import pytest
 
-from .models.collect_report import CollectReport
-from .models.discovery_event import DiscoveryEvent
-from .models.discovery_result import DiscoveryResult
-from .models.error_message import ErrorMessage
-from .models.session_finish import SessionFinish
-from .models.session_start import SessionStart
-from .models.test_case_call import TestCaseCall
-from .models.test_case_finished import TestCaseFinished
-from .models.test_case_setup import TestCaseSetup
-from .models.test_case_teardown import TestCaseTeardown
-from .models.warning_message import WarningMessage
+from ..models.collect_report import CollectReport
+from ..models.discovery_event import DiscoveryEvent
+from ..models.discovery_result import DiscoveryResult
+from ..models.error_message import ErrorMessage
+from ..models.session_finish import SessionFinish
+from ..models.session_start import SessionStart
+from ..models.test_case_call import TestCaseCall
+from ..models.test_case_finished import TestCaseFinished
+from ..models.test_case_setup import TestCaseSetup
+from ..models.test_case_teardown import TestCaseTeardown
+from ..models.warning_message import WarningMessage
 
 
 class Destination(metaclass=abc.ABCMeta):

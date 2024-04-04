@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+from pytest_discover._internal._json_files import JSONFile, JSONLinesFile
 from pytest_discover.interfaces import Destination
-from pytest_discover.internal._json_files import JSONFile, JSONLinesFile
 
 pytest_plugins = "pytester"
 

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import warnings
 from contextlib import ExitStack
 from typing import TYPE_CHECKING, Any, Literal
@@ -7,10 +8,10 @@ from typing import TYPE_CHECKING, Any, Literal
 import pytest
 from _pytest.terminal import TerminalReporter
 
-from pytest_discover import hook_spec
+from pytest_discover import hooks
+from pytest_discover._internal._json_files import JSONFile, JSONLinesFile
+from pytest_discover._internal._reporter import DefaultReporter
 from pytest_discover.interfaces import Destination, Reporter
-from pytest_discover.internal._json_files import JSONFile, JSONLinesFile
-from pytest_discover.internal._reporter import DefaultReporter
 from pytest_discover.models.discovery_event import DiscoveryEvent
 from pytest_discover.models.discovery_result import DiscoveryResult
 
@@ -19,6 +20,9 @@ if TYPE_CHECKING:
 
 
 __PLUGIN_ATTR__ = "_collect_log_plugin"
+
+
+logger = logging.getLogger("pytest-discover")
 
 
 # Register argparse-style options and ini-style config values, called once at the beginning of a test run.
@@ -84,7 +88,7 @@ def pytest_configure(config: pytest.Config) -> None:
 # Called at plugin registration time to allow adding new hooks via a call to pluginmanager.add_hookspecs(module_or_class, prefix).
 # Ref: https://docs.pytest.org/en/7.1.x/reference/reference.html#pytest.hookspec.pytest_addhooks
 def pytest_addhooks(pluginmanager: pytest.PytestPluginManager) -> None:
-    pluginmanager.add_hookspecs(hook_spec)
+    pluginmanager.add_hookspecs(hooks)
 
 
 # Perform final plugin teardown, called once after all test are executed.
@@ -127,7 +131,10 @@ class PytestDiscoverPlugin:
         - Open the JSON Lines output file in write mode (erasing any previous content)
         """
         for publisher in self.publishers:
-            self.stack.enter_context(publisher)
+            try:
+                self.stack.enter_context(publisher)
+            except Exception:
+                logger.error("Failed to open publisher: %s", publisher)
 
     def close(self) -> None:
         """Close the plugin instance. It performs the following actions:
@@ -135,12 +142,9 @@ class PytestDiscoverPlugin:
         - Close the JSON Lines output file (if any).
         - Write the results to the JSON output file (if any)
         """
-        try:
-            result = self.reporter.make_session_result()
-            if result is not None:
-                self._write_result(result)
-        finally:
-            self.stack.close()
+        if result := self.reporter.make_session_result():
+            self._write_result(result)
+        self.stack.close()
 
     def _write_event(self, event: DiscoveryEvent) -> None:
         """Write a discovery event to the JSON Lines output file."""
@@ -148,7 +152,7 @@ class PytestDiscoverPlugin:
             try:
                 publisher.write_event(event)
             except Exception:
-                continue
+                logger.error("Failed to write event to destination: %s", publisher)
 
     def _write_result(self, result: DiscoveryResult) -> None:
         """Write the discovery result to the JSON output file."""
@@ -156,7 +160,7 @@ class PytestDiscoverPlugin:
             try:
                 publisher.write_results(result)
             except Exception:
-                continue
+                logger.error("Failed to write result to destination: %s", publisher)
 
     # Called after the Session object has been created and before performing collection and entering the run test loop.
     # Ref: https://docs.pytest.org/en/latest/reference/reference.html#pytest.hookspec.pytest_sessionstart
