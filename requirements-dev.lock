@@ -16,6 +16,7 @@ black==24.3.0
     # via datamodel-code-generator
 click==8.1.7
     # via black
+coverage==7.4.4
 datamodel-code-generator==0.25.5
 dnspython==2.6.1
     # via email-validator

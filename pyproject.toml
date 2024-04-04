@@ -41,13 +41,16 @@ dev-dependencies = [
     "datamodel-code-generator>=0.25.5",
     "pyright>=1.1.355",
     "tomli>=2.0.1 ; python_version < '3.12'",
+    "coverage>=7.4.4",
 ]
 
 [tool.rye.scripts]
+# Run test with coverage
+test = { chain = ["__test", "__coverage-html"] }
 # Automate pre-commit
-pre = { chain = ["generate", "__format", "__lint", "__test", "__typecheck"] }
+pre = { chain = ["generate", "__format", "__lint", "test", "__typecheck"] }
 # Automate CI
-ci = { chain = ["bootstrap", "diff", "__formatcheck", "__lint", "__test", "__typecheck"] }
+ci = { chain = ["bootstrap", "diff", "__formatcheck", "__lint", "test", "__typecheck"] }
 # Automate project install
 bootstrap = { chain = ["__install-project"] }
 # Run code generation
@@ -56,10 +59,11 @@ generate = { chain = ["__generate-models", "__format-models", "__generate-schema
 diff = { chain = ["__generate-models-check", "__format-models-check", "__generate-models-diff"] }
 # Generate version file
 version = "hatch --quiet build --hooks-only"
+__test = "coverage run --rcfile=pyproject.toml -m pytest"
+__coverage-html = "coverage html"
 # Private tasks used for chaining
 __typecheck = { cmd = "pyright", env =  {PYRIGHT_PYTHON_FORCE_VERSION="latest" }}
 __lint = "rye lint"
-__test = "rye test"
 __format = "rye fmt"
 __formatcheck = "rye fmt --check"
 __generate-schemas = "python scripts/generate-json-schemas.py"
@@ -73,6 +77,30 @@ __install-project = "rye sync --no-lock --force"
 [tool.pytest.ini_options]
 markers=["basic", "filetree", "suites", "markers", "parametrization", "buildmeta"]
 testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["src/pytest_discover"]
+branch = true
+[tool.coverage.report]
+# Regexes for lines to exclude from consideration
+exclude_also = [
+    # Don't complain about missing debug-only code:
+    "if TYPE_CHECKING:",
+    "if self\\.debug",
+
+    # Don't complain if tests don't hit defensive assertion code:
+    "raise AssertionError",
+    "raise NotImplementedError",
+
+    # Don't complain if non-runnable code isn't run:
+    "if 0:",
+    "if __name__ == .__main__.:",
+
+    # Don't complain about abstract methods, they aren't run:
+    "@(abc\\.)?abstractmethod",
+    ]
+[tool.coverage.html]
+directory = "coverage-report"
 
 [tool.pyright]
 pythonVersion = "3.8"

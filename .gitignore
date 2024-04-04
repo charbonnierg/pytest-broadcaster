@@ -13,3 +13,6 @@ wheels/
 .vscode
 /check
 /debug
+.coverage
+collect.json
+collect.jsonl
