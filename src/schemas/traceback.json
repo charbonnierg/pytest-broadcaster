@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2019-09/schema",
   "$id": "traceback.json",
   "title": "Traceback",
-  "description": "Error traceback",
+  "description": "An error traceback.",
   "type": "object",
   "required": [
     "entries"
@@ -10,7 +10,7 @@
   "properties": {
     "entries": {
       "type": "array",
-      "description": "Traceback entries",
+      "description": "Traceback entries.",
       "items": {
         "type": "object",
         "required": [
@@ -21,15 +21,15 @@
         "properties": {
           "path": {
             "type": "string",
-            "description": "File path"
+            "description": "File path."
           },
           "lineno": {
             "type": "integer",
-            "description": "Line number"
+            "description": "Line number."
           },
           "message": {
             "type": "string",
-            "description": "Error message"
+            "description": "Error message."
           }
         }
       }

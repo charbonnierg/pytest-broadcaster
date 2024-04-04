@@ -2,7 +2,7 @@
     "$schema": "https://json-schema.org/draft/2019-09/schema",
     "$id": "test_module.json",
     "title": "Test Module",
-    "description": "Pytest Test Module",
+    "description": "A collected test module (test file).",
     "type": "object",
     "required": [
       "node_id",
@@ -15,30 +15,30 @@
     "properties": {
       "node_id": {
         "type": "string",
-        "description": "Node ID"
+        "description": "The node ID of the test module."
       },
       "node_type": {
         "const": "module",
-        "description": "Node Type"
+        "description": "The node type. Always 'module'."
       },
       "name": {
         "type": "string",
-        "description": "Module name"
+        "description": "The module name."
       },
       "path": {
         "type": "string",
-        "description": "File path"
+        "description": "The module file path."
       },
       "doc": {
         "type": "string",
-        "description": "Module docstring"
+        "description": "The module docstring."
       },
       "markers": {
         "type": "array",
         "items": {
           "type": "string"
         },
-        "description": "Test markers"
+        "description": "Test markers. Each marker is a string."
       }
     }
   }

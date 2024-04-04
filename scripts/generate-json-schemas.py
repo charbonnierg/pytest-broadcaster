@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urljoin
 
-REPOSITORY = "https://raw.githubusercontent.com/charbonnierg/pytest-discover"
+REPOSITORY = "https://raw.githubusercontent.com/charbonnierg/pytest-broadcaster"
 REFERENCE = "main"
 OUTPUT = "schemas"
 SOURCES = Path(__file__).parent.parent.joinpath("src/schemas")

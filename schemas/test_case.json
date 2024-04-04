@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/test_case.json",
+  "$id": "https://raw.githubusercontent.com/charbonnierg/pytest-broadcaster/main/schemas/test_case.json",
   "title": "Test Case",
-  "description": "Pytest Test Case",
+  "description": "A collected test case.",
   "type": "object",
   "required": [
     "node_id",
@@ -16,46 +16,46 @@
   "properties": {
     "node_id": {
       "type": "string",
-      "description": "Node ID"
+      "description": "The node ID of the test case."
     },
     "node_type": {
       "const": "case",
-      "description": "Node Type"
+      "description": "The node type. Always 'case'."
     },
     "path": {
       "type": "string",
-      "description": "File path"
-    },
-    "module": {
-      "type": "string",
-      "description": "Module name"
-    },
-    "suite": {
-      "type": "string",
-      "description": "Parent suite"
-    },
-    "function": {
-      "type": "string",
-      "description": "Function name"
+      "description": "The file path where the test case is defined."
     },
     "name": {
       "type": "string",
       "description": "Test Name"
     },
+    "module": {
+      "type": "string",
+      "description": "The module name where the test case is defined (optional)."
+    },
+    "suite": {
+      "type": "string",
+      "description": "The test suite name where the test case is defined (optional)."
+    },
+    "function": {
+      "type": "string",
+      "description": "The function name (optional)."
+    },
     "doc": {
       "type": "string",
-      "description": "Test docstring"
+      "description": "The test docstring (optional)."
     },
     "markers": {
       "type": "array",
       "items": {
         "type": "string"
       },
-      "description": "Test markers"
+      "description": "The test markers. Each marker is a string."
     },
     "parameters": {
       "type": "object",
-      "description": "Test parameters names and types",
+      "description": "Test parameters names and types. Each key is a parameter name and each value is a parameter type as a string.",
       "additionalProperties": {
         "type": "string"
       }

@@ -69,7 +69,7 @@ pydantic-core==2.16.3
     # via pydantic
 pyright==1.1.357
 pytest==8.1.1
-    # via pytest-discover
+    # via pytest-broadcaster
 pyyaml==6.0.1
     # via datamodel-code-generator
 toml==0.10.2

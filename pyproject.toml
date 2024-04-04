@@ -1,8 +1,8 @@
 [project]
-name = "pytest-discover"
-description = "Pytest plugin to record discovered tests in a file"
+name = "pytest-broadcaster"
+description = "Pytest plugin to broadcast pytest output to various destinations"
 authors = [{ name = "Guillaume Charbonnier", email = "gu.charbon@gmail.com" }]
-urls = { "Source" = "https://github.com/charbonnierg/pytest-discover", "Tracker" = "https://github.com/charbonnierg/pytest-discover/issues" }
+urls = { "Source" = "https://github.com/charbonnierg/pytest-broadcaster", "Tracker" = "https://github.com/charbonnierg/pytest-broadcaster/issues" }
 
 dependencies = ["pytest"]
 dynamic = ["version"]
@@ -24,7 +24,7 @@ classifiers = [
 ]
 
 [project.entry-points.pytest11]
-pytest_discover = "pytest_discover.plugin"
+pytest_broadcaster = "pytest_broadcaster.plugin"
 
 [build-system]
 requires = ["hatchling", "hatch-vcs"]
@@ -35,7 +35,7 @@ source = "vcs"
 fallback-version = "v0.0.0-dev"
 
 [tool.hatch.build.hooks.vcs]
-version-file = "src/pytest_discover/__about__.py"
+version-file = "src/pytest_broadcaster/__about__.py"
 template = """# file generated with command: 'rye run version'
 # don't change, don't track in version control
 __version__ = version = {version!r}
@@ -45,7 +45,7 @@ __version_tuple__ = version_tuple = {version_tuple!r}"""
 allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/pytest_discover"]
+packages = ["src/pytest_broadcaster"]
 
 [tool.rye]
 managed = true
@@ -83,6 +83,7 @@ generate = { chain = [
 ] }
 # Verify generated code is up-to-date
 diff = { chain = [
+    "__remove-previous-check",
     "__generate-models-check",
     "__format-models-check",
     "__generate-models-diff",
@@ -97,11 +98,12 @@ __lint = "rye lint"
 __format = "rye fmt"
 __formatcheck = "rye fmt --check"
 __generate-schemas = "python scripts/generate-json-schemas.py"
-__generate-models = "datamodel-codegen --input src/schemas/ --output src/pytest_discover/models --input-file-type jsonschema --disable-timestamp --output-model-type=dataclasses.dataclass --use-field-description --use-schema-description"
+__generate-models = "datamodel-codegen --input src/schemas/ --output src/pytest_broadcaster/models --input-file-type jsonschema --disable-timestamp --output-model-type=dataclasses.dataclass --use-field-description --use-schema-description"
 __generate-models-check = "datamodel-codegen --input src/schemas/ --output check --input-file-type jsonschema --disable-timestamp --output-model-type=dataclasses.dataclass --use-field-description --use-schema-description"
-__generate-models-diff = "diff --exclude __pycache__ -r src/pytest_discover/models check"
-__format-models = "rye fmt src/pytest_discover/models"
+__generate-models-diff = "diff --exclude __pycache__ -r src/pytest_broadcaster/models check"
+__format-models = "rye fmt src/pytest_broadcaster/models"
 __format-models-check = "rye fmt check"
+__remove-previous-check = "rm -rf check"
 __install-project = "rye sync --no-lock --force"
 
 [tool.pytest.ini_options]
@@ -116,7 +118,7 @@ markers = [
 testpaths = ["tests"]
 
 [tool.coverage.run]
-source = ["src/pytest_discover"]
+source = ["src/pytest_broadcaster"]
 branch = true
 [tool.coverage.report]
 # Regexes for lines to exclude from consideration

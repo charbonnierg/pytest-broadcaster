@@ -13,6 +13,7 @@ wheels/
 .vscode
 /check
 /debug
+/demo-project
 .coverage
 collect.json
 collect.jsonl

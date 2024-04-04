@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 from fake_lib import filename
-from pytest_discover import __version__
+from pytest_broadcaster import __version__
 
 from ._utils import CommonTestSetup
 

@@ -7,7 +7,7 @@ from typing import Any
 
 import flask
 import pytest
-from pytest_discover import __version__
+from pytest_broadcaster import __version__
 from werkzeug.serving import make_server
 
 
@@ -107,9 +107,9 @@ class TestHttpDestination:
 
     def make_test_directory(self) -> Path:
         self.test_dir.makeconftest("""
-        from pytest_discover import HTTPWebhook
+        from pytest_broadcaster import HTTPWebhook
 
-        def pytest_discover_add_destination(add):
+        def pytest_broadcaster_add_destination(add):
             add(HTTPWebhook("http://localhost:8000/webhooks/TestWebhook"))
         """)
         return self.make_testfile(

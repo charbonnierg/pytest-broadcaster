@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/error_message.json",
+  "$id": "https://raw.githubusercontent.com/charbonnierg/pytest-broadcaster/main/schemas/error_message.json",
   "title": "Error Message",
-  "description": "An error message",
+  "description": "An error message.",
   "type": "object",
   "required": [
     "event",
@@ -15,7 +15,7 @@
   "properties": {
     "event": {
       "const": "ErrorMessage",
-      "description": "The event type"
+      "description": "The event type."
     },
     "when": {
       "enum": [
@@ -23,23 +23,23 @@
         "collect",
         "runtest"
       ],
-      "description": "When the error message is emitted"
+      "description": "When the error message is emitted."
     },
     "location": {
-      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/location.json",
-      "description": "The location of the error"
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-broadcaster/main/schemas/location.json",
+      "description": "The location of the error."
     },
     "exception_type": {
       "type": "string",
-      "description": "The exception type"
+      "description": "The exception type."
     },
     "exception_value": {
       "type": "string",
-      "description": "The exception value"
+      "description": "The exception value."
     },
     "traceback": {
-      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-discover/main/schemas/traceback.json",
-      "description": "The traceback of the error"
+      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-broadcaster/main/schemas/traceback.json",
+      "description": "The traceback of the error."
     }
   }
 }
