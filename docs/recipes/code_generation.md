@@ -6,25 +6,31 @@ They can be used to generate code in various languages:
 
 === "Python Dataclasses"
 
-    It' possible to generate Python dataclasses from the JSON Schemas:
+    It' possible to generate Python [dataclasses][dataclasses.dataclass] from the JSON Schemas using [`datamodel-code-generator`](https://github.com/koxudaxi/datamodel-code-generator):
 
-    First clone the repository:
+    1. First clone the repository:
 
-    ```bash
-    git clone https://github.com/charbonnierg/pytest-broadcaster
-    cd pytest-broadcaster
+    <!-- termynal -->
+
+    ```
+    $ git clone https://github.com/charbonnierg/pytest-broadcaster
+    $ cd pytest-broadcaster
     ```
 
-    Then install `datamodel-code-generator`:
+    2. Then install [`datamodel-code-generator`](https://github.com/koxudaxi/datamodel-code-generator):
 
-    ```bash
-    pip install --user datamodel-code-generator
+    <!-- termynal -->
+
+    ```
+    $ pip install --user datamodel-code-generator
     ```
 
-    Then generate the code:
+    3. Then generate the code:
 
-    ```bash
-    datamodel-codegen \
+    <!-- termynal -->
+
+    ```
+    $ datamodel-codegen \
         --input docs/schemas/ \
         --output models/ \
         --input-file-type jsonschema \
@@ -38,25 +44,31 @@ They can be used to generate code in various languages:
 
 === "Python Pydantic (v2)"
 
-    It' possible to generate Pydantic BaseModel classes from the JSON Schemas:
+    It' possible to generate [Pydantic](https://docs.pydantic.dev/latest/) [BaseModel][pydantic.BaseModel] classes from the JSON Schemas using [`datamodel-code-generator`](https://github.com/koxudaxi/datamodel-code-generator):
 
-        First clone the repository:
+    1. First clone the repository:
 
-    ```bash
-    git clone https://github.com/charbonnierg/pytest-broadcaster
-    cd pytest-broadcaster
+    <!-- termynal -->
+
+    ```
+    $ git clone https://github.com/charbonnierg/pytest-broadcaster
+    $ cd pytest-broadcaster
     ```
 
-    Then install `datamodel-code-generator`:
+    2. Then install [`datamodel-code-generator`](https://github.com/koxudaxi/datamodel-code-generator):
 
-    ```bash
-    pip install --user datamodel-code-generator
+    <!-- termynal -->
+
+    ```
+    $ pip install --user datamodel-code-generator
     ```
 
-    Then generate the code:
+    3. Then generate the code:
 
-    ```bash
-    datamodel-codegen \
+    <!-- termynal -->
+
+    ```
+    $ datamodel-codegen \
         --input docs/schemas/ \
         --output models/ \
         --input-file-type jsonschema \
@@ -70,25 +82,31 @@ They can be used to generate code in various languages:
 
 === "Python Pydantic (v1)"
 
-    It' possible to generate Pydantic BaseModel classes from the JSON Schemas:
+    It' possible to generate [Pydantic](https://docs.pydantic.dev/1.10/) [BaseModel](https://docs.pydantic.dev/1.10/usage/models/#basic-model-usage) classes from the JSON Schemas using [`datamodel-code-generator`](https://github.com/koxudaxi/datamodel-code-generator):
 
-    First clone the repository:
+    1. First clone the repository:
 
-    ```bash
-    git clone https://github.com/charbonnierg/pytest-broadcaster
+    <!-- termynal -->
+
+    ```
+    $ git clone https://github.com/charbonnierg/pytest-broadcaster
     cd pytest-broadcaster
     ```
 
-    Then install `datamodel-code-generator`:
+    2. Then install [`datamodel-code-generator`](https://github.com/koxudaxi/datamodel-code-generator):
 
-    ```bash
-    pip install --user datamodel-code-generator
+    <!-- termynal -->
+
+    ```
+    $ pip install --user datamodel-code-generator
     ```
 
-    Then generate the code:
+    3. Then generate the code:
 
-    ```bash
-    datamodel-codegen \
+    <!-- termynal -->
+
+    ```
+    $ datamodel-codegen \
         --input docs/schemas/ \
         --output models/ \
         --input-file-type jsonschema \
@@ -103,25 +121,31 @@ They can be used to generate code in various languages:
 
 === "Typescript `.d.ts`"
 
-    It's possible to generate `.d.ts` files for Typescript:
+    It's possible to generate `.d.ts` files for [Typescript](https://www.typescriptlang.org/) using [`json-schema-to-typescript`](https://github.com/bcherny/json-schema-to-typescript):
 
-    First clone the repository:
+    1. First clone the repository:
 
-    ```bash
-    git clone https://github.com/charbonnierg/pytest-broadcaster
+    <!-- termynal -->
+
+    ```
+    $ git clone https://github.com/charbonnierg/pytest-broadcaster
     cd pytest-broadcaster
     ```
 
-    Then install `json-schema-to-typescript`:
+    2. Then install `json-schema-to-typescript`:
 
-    ```bash
-    npm install -g json-schema-to-typescript
+    <!-- termynal -->
+
+    ```
+    $ npm install -g json-schema-to-typescript
     ```
 
-    Then generate the code:
+    3. Then generate the code:
 
-    ```bash
-    json2ts -i docs/schemas/ -o types/
+    <!-- termynal -->
+
+    ```
+    $ json2ts -i docs/schemas/ -o types/
     ```
 
     The generated code will be in the `types/` directory.

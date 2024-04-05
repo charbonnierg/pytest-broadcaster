@@ -2,8 +2,7 @@
 
 ::: pytest_broadcaster.hooks.pytest_broadcaster_set_reporter
     options:
-      show_root_heading: false
-
+      show_source: false
 
 <style>
   .md-content__button {

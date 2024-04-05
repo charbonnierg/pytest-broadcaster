@@ -106,6 +106,7 @@ plugins:
         - https://docs.python.org/3/objects.inv
         - https://mkdocstrings.github.io/autorefs/objects.inv
         - https://docs.pytest.org/en/latest/objects.inv
+        - https://docs.pydantic.dev/latest/objects.inv
         paths: [src]
         options:
           docstring_options:
