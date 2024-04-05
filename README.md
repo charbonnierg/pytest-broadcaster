@@ -1,3 +1,6 @@
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pytest-broadcaster)](https://pypi.org/project/pytest-broadcaster)
+[![GitHub deployments](https://img.shields.io/github/deployments/charbonnierg/pytest-broadcaster/github-pages?label=documentation&link=https%3A%2F%2Fcharbonnierg.github.io%2Fpytest-broadcaster)](https://charbonnierg.github.io/pytest-broadcaster)
+
 # pytest-broadcaster
 
 A plugin to write pytest collect output to various destinations.
