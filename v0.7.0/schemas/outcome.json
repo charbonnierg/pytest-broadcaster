@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "https://charbonnierg.github.io/pytest-broadcaster/schemas/v0.7.0/outcome.json",
+  "$id": "https://charbonnierg.github.io/pytest-broadcaster/v0.7.0/schemas/outcome.json",
   "title": "Outcome",
   "description": "The outcome of a case step or a whole test case.",
   "enum": [

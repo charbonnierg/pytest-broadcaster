@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "https://charbonnierg.github.io/pytest-broadcaster/schemas/v0.7.0/warning_message.json",
+  "$id": "https://charbonnierg.github.io/pytest-broadcaster/v0.7.0/schemas/warning_message.json",
   "title": "Warning Message",
   "description": "A warning message.",
   "type": "object",
@@ -29,7 +29,7 @@
       "description": "The node ID of the node where the warning message is emitted."
     },
     "location": {
-      "$ref": "https://charbonnierg.github.io/pytest-broadcaster/schemas/v0.7.0/location.json#",
+      "$ref": "https://charbonnierg.github.io/pytest-broadcaster/v0.7.0/schemas/location.json#",
       "description": "The location of the warning message."
     },
     "message": {

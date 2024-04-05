@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "https://charbonnierg.github.io/pytest-broadcaster/schemas/v0.7.0/session_result.json",
+  "$id": "https://charbonnierg.github.io/pytest-broadcaster/v0.7.0/schemas/session_result.json",
   "title": "Session Result",
   "description": "Result of a pytest session, including collect reports and test reports.",
   "type": "object",
@@ -30,28 +30,28 @@
       "type": "array",
       "description": "Errors generated during the session.",
       "items": {
-        "$ref": "https://charbonnierg.github.io/pytest-broadcaster/schemas/v0.7.0/error_message.json"
+        "$ref": "https://charbonnierg.github.io/pytest-broadcaster/v0.7.0/schemas/error_message.json"
       }
     },
     "warnings": {
       "type": "array",
       "description": "Warnings generated during the session.",
       "items": {
-        "$ref": "https://charbonnierg.github.io/pytest-broadcaster/schemas/v0.7.0/warning_message.json"
+        "$ref": "https://charbonnierg.github.io/pytest-broadcaster/v0.7.0/schemas/warning_message.json"
       }
     },
     "collect_reports": {
       "type": "array",
       "description": "Collect reports generated during the session.",
       "items": {
-        "$ref": "https://charbonnierg.github.io/pytest-broadcaster/schemas/v0.7.0/collect_report.json"
+        "$ref": "https://charbonnierg.github.io/pytest-broadcaster/v0.7.0/schemas/collect_report.json"
       }
     },
     "test_reports": {
       "type": "array",
       "description": "Test reports generated during the session.",
       "items": {
-        "$ref": "https://charbonnierg.github.io/pytest-broadcaster/schemas/v0.7.0/test_case_report.json"
+        "$ref": "https://charbonnierg.github.io/pytest-broadcaster/v0.7.0/schemas/test_case_report.json"
       }
     }
   }

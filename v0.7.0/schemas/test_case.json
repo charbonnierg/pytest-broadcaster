@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "https://charbonnierg.github.io/pytest-broadcaster/schemas/v0.7.0/test_case.json",
+  "$id": "https://charbonnierg.github.io/pytest-broadcaster/v0.7.0/schemas/test_case.json",
   "title": "Test Case",
   "description": "A collected test case.",
   "type": "object",

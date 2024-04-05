@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "https://charbonnierg.github.io/pytest-broadcaster/schemas/v0.7.0/traceback.json",
+  "$id": "https://charbonnierg.github.io/pytest-broadcaster/v0.7.0/schemas/traceback.json",
   "title": "Traceback",
   "description": "An error traceback.",
   "type": "object",

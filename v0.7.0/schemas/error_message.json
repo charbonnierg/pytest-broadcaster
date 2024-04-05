@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "https://charbonnierg.github.io/pytest-broadcaster/schemas/v0.7.0/error_message.json",
+  "$id": "https://charbonnierg.github.io/pytest-broadcaster/v0.7.0/schemas/error_message.json",
   "title": "Error Message",
   "description": "An error message.",
   "type": "object",
@@ -26,7 +26,7 @@
       "description": "When the error message is emitted."
     },
     "location": {
-      "$ref": "https://charbonnierg.github.io/pytest-broadcaster/schemas/v0.7.0/location.json",
+      "$ref": "https://charbonnierg.github.io/pytest-broadcaster/v0.7.0/schemas/location.json",
       "description": "The location of the error."
     },
     "exception_type": {
@@ -38,7 +38,7 @@
       "description": "The exception value as a string."
     },
     "traceback": {
-      "$ref": "https://charbonnierg.github.io/pytest-broadcaster/schemas/v0.7.0/traceback.json",
+      "$ref": "https://charbonnierg.github.io/pytest-broadcaster/v0.7.0/schemas/traceback.json",
       "description": "The traceback of the error. A traceback contains entries for each frame of the call stack."
     }
   }
