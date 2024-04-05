@@ -62,6 +62,7 @@ dev-dependencies = [
     "mkdocstrings[python]",
     "pymdown-extensions",
     "termynal",
+    "mike>=2.0.0",
 ]
 
 [tool.rye.scripts]
