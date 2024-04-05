@@ -15,17 +15,23 @@ from pytest_broadcaster.interfaces import Destination, Reporter
 from pytest_broadcaster.models.session_event import SessionEvent
 from pytest_broadcaster.models.session_result import SessionResult
 
-__PLUGIN_ATTR__ = "_collect_log_plugin"
+__PLUGIN_ATTR__ = "_broadcaster_plugin"
 
 
-# Register argparse-style options and ini-style config values, called once at the beginning of a test run.
-# https://docs.pytest.org/en/latest/reference/reference.html#pytest.hookspec.pytest_addoption
 def pytest_addoption(parser: pytest.Parser) -> None:
-    """Performs the following action:
+    """Register argparse-style options and ini-style config values.
+
+    This function is called once at the beginning of a test run.
+
+    Performs the following action:
 
     - Get or create the `terminal reporting` group in the parser.
     - Add the `--collect-report` option to the group.
     - Add the `--collect-log` option to the group.
+    - Add the `--collect-url` option to the group.
+    - Add the `--collect-log-url` option to the group.
+
+    See [pytest.hookspec.pytest_addoption][_pytest.hookspec.pytest_addoption].
     """
     group = parser.getgroup(
         name="terminal reporting",
@@ -61,19 +67,25 @@ def pytest_addoption(parser: pytest.Parser) -> None:
     )
 
 
-# Perform initial plugin configuration, called once after command line options have been parsed.
-# Ref: https://docs.pytest.org/en/latest/reference/reference.html#pytest.hookspec.pytest_configure
 def pytest_configure(config: pytest.Config) -> None:
-    """Performs the following actions:
+    """Perform initial plugin configuration.
+
+    This function is called once after command line options have been parsed.
+
+    Performs the following actions:
 
     - Skip if workerinput is present, which means we are in a worker process.
     - Create a JSONFile destination if the JSON output file path is present.
     - Create a JSONLinesFile destination if the JSON Lines output file path is present.
+    - Create an HTTPWebhook destination if the URL is present.
+    - Create an HTTPWebhook destination if the URL for the JSON Lines output file is present.
     - Let the user add their own destinations if they want to.
     - Create the default reporter.
     - Let the user set the reporter if they want to.
     - Create, open and register the plugin instance.
     - Store the plugin instance in the config object.
+
+    See [pytest.hookspec.pytest_configure][_pytest.hookspec.pytest_configure].
     """
     # Skip if pytest-xdist worker
     if hasattr(config, "workerinput"):
@@ -113,7 +125,7 @@ def pytest_configure(config: pytest.Config) -> None:
     config.hook.pytest_broadcaster_set_reporter(set=set_reporter)
 
     # Create plugin instance.
-    plugin = PytestDiscoverPlugin(
+    plugin = PytestBroadcasterPlugin(
         config=config,
         reporter=reporter_to_use,
         publishers=destinations,
@@ -125,35 +137,40 @@ def pytest_configure(config: pytest.Config) -> None:
     setattr(config, __PLUGIN_ATTR__, plugin)
 
 
-# Called at plugin registration time to allow adding new hooks via a call to pluginmanager.add_hookspecs(module_or_class, prefix).
-# Ref: https://docs.pytest.org/en/7.1.x/reference/reference.html#pytest.hookspec.pytest_addhooks
 def pytest_addhooks(pluginmanager: pytest.PytestPluginManager) -> None:
-    """Add the plugin hooks to the plugin manager:
+    """Called at plugin registration time to allow adding new hooks via a call to [pytest.pluginmanager.add_hookspecs][_pytest.pluginmanager.add_hookspecs].
 
-    - pytest_broadcaster_add_destination: Add a destination to the plugin.
-    - pytest_broadcaster_set_reporter: Set the reporter to use.
+    See [pytest.hookspec.pytest_addhooks][_pytest.hookspec.pytest_addhooks].
+
+    Add the plugin hooks to the plugin manager:
+
+    - [pytest_broadcaster_add_destination][pytest_broadcaster.hooks.pytest_broadcaster_add_destination]: Add a destination to the plugin.
+    - [pytest_broadcaster_set_reporter][pytest_broadcaster.hooks.pytest_broadcaster_set_reporter]: Set the reporter to use.
     """
     pluginmanager.add_hookspecs(hooks)
 
 
-# Perform final plugin teardown, called once after all test are executed.
-# Called once before test process is exited.
-# Ref: https://docs.pytest.org/en/latest/reference/reference.html#pytest.hookspec.pytest_unconfigure
 def pytest_unconfigure(config: pytest.Config) -> None:
-    """Performs the following actions:
+    """Perform final plugin teardown.
+
+    This function is called once after all test are executed and before test process is exited.
+
+    See [pytest.hookspec.pytest_unconfigure][_pytest.hookspec.pytest_unconfigure].
+
+    Performs the following actions:
 
     - Extract the plugin instance from the config object.
     - Close the plugin instance.
     - Delete the plugin instance from the config object.
     """
-    plugin: PytestDiscoverPlugin | None = getattr(config, __PLUGIN_ATTR__, None)
+    plugin: PytestBroadcasterPlugin | None = getattr(config, __PLUGIN_ATTR__, None)
     if plugin:
         plugin.close()
         config.pluginmanager.unregister(plugin)
         delattr(config, __PLUGIN_ATTR__)
 
 
-class PytestDiscoverPlugin:
+class PytestBroadcasterPlugin:
     """A pytest plugin to log collection to a line-based JSON file."""
 
     def __init__(
@@ -191,6 +208,89 @@ class PytestDiscoverPlugin:
             self._write_result(result)
         self.stack.close()
 
+    def pytest_sessionstart(self) -> None:
+        """Called after the [Session object][pytest.Session] has been created and before performing collection and entering the run test loop.
+
+        See [pytest.hookspec.pytest_sessionstart][_pytest.hookspec.pytest_sessionstart].
+        """
+        self._write_event(self.reporter.make_session_start())
+
+    def pytest_sessionfinish(self, exitstatus: int) -> None:
+        """Called after whole test run finished, right before returning the exit status to the system.
+
+        See [pytest.hookspec.pytest_sessionfinish][_pytest.hookspec.pytest_sessionfinish].
+        """
+        self._write_event(self.reporter.make_session_finish(exitstatus))
+
+    def pytest_warning_recorded(
+        self,
+        warning_message: warnings.WarningMessage,
+        when: Literal["config", "collect", "runtest"],
+        nodeid: str,
+        location: tuple[str, int, str] | None,
+    ):
+        """Process a warning captured during the session.
+
+        See [pytest.hookspec.pytest_warning_recorded][_pytest.hookspec.pytest_warning_recorded].
+        """
+        self._write_event(
+            self.reporter.make_warning_message(
+                warning_message=warning_message,
+                when=when,
+                nodeid=nodeid,
+            )
+        )
+
+    def pytest_exception_interact(
+        self,
+        node: pytest.Item | pytest.Collector,
+        call: pytest.CallInfo[Any],
+        report: pytest.TestReport | pytest.CollectReport,
+    ) -> None:
+        """Collector encountered an error.
+
+        See [pytest.hookspec.pytest_exception_interact][_pytest.hookspec.pytest_exception_interact].
+        """
+        # Skip if the report is not a test report.
+        if isinstance(report, pytest.TestReport):
+            return
+        self._write_event(self.reporter.make_error_message(report, call))
+
+    def pytest_collectreport(self, report: pytest.CollectReport) -> None:
+        """Collector finished collecting a node.
+
+        See [pytest.hookspec.pytest_collectreport][_pytest.hookspec.pytest_collectreport].
+        """
+        # Skip if the report failed.
+        if report.failed:
+            return
+        self._write_event(self.reporter.make_collect_report(report))
+
+    def pytest_runtest_logreport(self, report: pytest.TestReport) -> None:
+        """Process the [TestReport][pytest.TestReport] produced for each of the setup, call and teardown runtest steps of a test case.
+
+        See [pytest.hookspec.pytest_runtest_logreport][_pytest.hookspec.pytest_runtest_logreport].
+        """
+        self._write_event(self.reporter.make_test_case_step(report))
+
+    def pytest_runtest_logfinish(
+        self, nodeid: str, location: tuple[str, int | None, str]
+    ) -> None:
+        """Called at the end of running the runtest protocol for a single item.
+
+        See [pytest.hookspec.pytest_runtest_logfinish][_pytest.hookspec.pytest_runtest_logfinish].
+        """
+        self._write_event(self.reporter.make_test_case_finished(nodeid))
+
+    def pytest_terminal_summary(self, terminalreporter: TerminalReporter):
+        """Add a section to terminal summary reporting.
+
+        See [pytest.hookspec.pytest_terminal_summary][_pytest.hookspec.pytest_terminal_summary].
+        """
+        for publisher in self.publishers:
+            if summary := publisher.summary():
+                terminalreporter.write_sep("-", f"generated report log file: {summary}")
+
     def _write_event(self, event: SessionEvent) -> None:
         """Write a session event to the destinations."""
         for publisher in self.publishers:
@@ -210,70 +310,3 @@ class PytestDiscoverPlugin:
                 warnings.warn(
                     f"Failed to write result to destination: {publisher} - {repr(e)}",
                 )
-
-    # Called after the Session object has been created and before performing collection and entering the run test loop.
-    # Ref: https://docs.pytest.org/en/latest/reference/reference.html#pytest.hookspec.pytest_sessionstart
-    def pytest_sessionstart(self) -> None:
-        self._write_event(self.reporter.make_session_start())
-
-    # Called after whole test run finished, right before returning the exit status to the system.
-    # Ref: https://docs.pytest.org/en/latest/reference/reference.html#pytest.hookspec.pytest_sessionfinish
-    def pytest_sessionfinish(self, exitstatus: int) -> None:
-        self._write_event(self.reporter.make_session_finish(exitstatus))
-
-    # Process a warning captured by the internal pytest warnings plugin.
-    # Ref: https://docs.pytest.org/en/latest/reference/reference.html#pytest.hookspec.pytest_warning_recorded
-    def pytest_warning_recorded(
-        self,
-        warning_message: warnings.WarningMessage,
-        when: Literal["config", "collect", "runtest"],
-        nodeid: str,
-        location: tuple[str, int, str] | None,
-    ):
-        self._write_event(
-            self.reporter.make_warning_message(
-                warning_message=warning_message,
-                when=when,
-                nodeid=nodeid,
-            )
-        )
-
-    # Collector encountered an error
-    # Ref: https://docs.pytest.org/en/latest/reference/reference.html#pytest.hookspec.pytest_exception_interact
-    def pytest_exception_interact(
-        self,
-        node: pytest.Item | pytest.Collector,
-        call: pytest.CallInfo[Any],
-        report: pytest.TestReport | pytest.CollectReport,
-    ) -> None:
-        # Skip if the report is not a test report.
-        if isinstance(report, pytest.TestReport):
-            return
-        self._write_event(self.reporter.make_error_message(report, call))
-
-    # Collector finished collecting.
-    # Ref: https://docs.pytest.org/en/latest/reference/reference.html#pytest.hookspec.pytest_collectreport
-    def pytest_collectreport(self, report: pytest.CollectReport) -> None:
-        # Skip if the report failed.
-        if report.failed:
-            return
-        self._write_event(self.reporter.make_collect_report(report))
-
-    # Process the TestReport produced for each of the setup, call and teardown runtest steps of an item.
-    # Ref: https://docs.pytest.org/en/7.1.x/reference/reference.html#pytest.hookspec.pytest_runtest_logreport
-    def pytest_runtest_logreport(self, report: pytest.TestReport) -> None:
-        self._write_event(self.reporter.make_test_case_step(report))
-
-    # Called at the end of running the runtest protocol for a single item.
-    # Ref: https://docs.pytest.org/en/7.1.x/reference/reference.html#pytest.hookspec.pytest_runtest_logfinish
-    def pytest_runtest_logfinish(
-        self, nodeid: str, location: tuple[str, int | None, str]
-    ) -> None:
-        self._write_event(self.reporter.make_test_case_finished(nodeid))
-
-    # Add a section to terminal summary reporting.
-    # Ref: https://docs.pytest.org/en/latest/reference/reference.html#pytest.hookspec.pytest_terminal_summary
-    def pytest_terminal_summary(self, terminalreporter: TerminalReporter):
-        for publisher in self.publishers:
-            if summary := publisher.summary():
-                terminalreporter.write_sep("-", f"generated report log file: {summary}")
