@@ -105,6 +105,7 @@ plugins:
         import:
         - https://docs.python.org/3/objects.inv
         - https://mkdocstrings.github.io/autorefs/objects.inv
+        - https://docs.pytest.org/en/latest/objects.inv
         paths: [src]
         options:
           docstring_options:
@@ -123,6 +124,9 @@ plugins:
           show_symbol_type_toc: true
           signature_crossrefs: true
           summary: true
+          preload_modules: [pytest]
+          allow_inspection: true
+          find_stubs_package: true
 
 extra:
   social:
