@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "https://charbonnierg.github.com/pytest-broadcaster/schemas/location.json",
+  "$id": "https://charbonnierg.github.io/pytest-broadcaster/schemas/latest/location.json",
   "title": "Location",
   "description": "Location in code source.",
   "type": "object",

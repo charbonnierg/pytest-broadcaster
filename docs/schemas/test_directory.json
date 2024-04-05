@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "https://charbonnierg.github.com/pytest-broadcaster/schemas/test_directory.json",
+  "$id": "https://charbonnierg.github.io/pytest-broadcaster/schemas/latest/test_directory.json",
   "title": "Test Directory",
   "description": "A collected test directory.",
   "type": "object",
