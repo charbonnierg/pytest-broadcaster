@@ -98,7 +98,7 @@ diff = { chain = [
 # Generate version file
 version = "hatch --quiet build --hooks-only"
 # Private tasks used for chaining
-__deploy-docs = "mike deploy --push $VERSION $ALIAS"
+__deploy-docs = { cmd = "bash ./scripts/deploy-docs.sh" }
 __test = "coverage run --rcfile=pyproject.toml -m pytest"
 __coverage-html = "coverage html"
 __typecheck = { cmd = "pyright", env = { PYRIGHT_PYTHON_FORCE_VERSION = "latest" } }
