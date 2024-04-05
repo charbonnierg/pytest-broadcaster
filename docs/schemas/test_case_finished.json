@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "https://raw.githubusercontent.com/charbonnierg/pytest-broadcaster/main/schemas/test_case_outcome.json",
+  "$id": "https://charbonnierg.github.com/pytest-broadcaster/schemas/test_case_outcome.json",
   "title": "Test Case Finished",
   "description": "Event emitted when a test case is finished (meaning all of setup, call and teardown steps are finished).",
   "type": "object",
@@ -23,7 +23,7 @@
       "description": "Event Type."
     },
     "outcome": {
-      "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-broadcaster/main/schemas/outcome.json",
+      "$ref": "https://charbonnierg.github.com/pytest-broadcaster/schemas/outcome.json",
       "description": "Outcome of the test case."
     },
     "duration": {

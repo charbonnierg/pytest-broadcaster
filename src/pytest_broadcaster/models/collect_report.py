@@ -17,7 +17,7 @@ class CollectReport:
 
     node_id: str
     """
-    The node id of the collector (if any).
+    The node id of the node for which items were collected (the top level root directory has an empty node id).
     """
     items: List[
         Union[
@@ -32,5 +32,5 @@ class CollectReport:
     """
     event: str = "CollectReport"
     """
-    The event type.
+    The event type. Always 'CollectReport'.
     """

@@ -88,11 +88,7 @@ ci = { chain = [
 # Automate project install
 bootstrap = { chain = ["__install-project"] }
 # Run code generation
-generate = { chain = [
-    "__generate-models",
-    "__format-models",
-    "__generate-schemas",
-] }
+generate = { chain = ["__generate-models", "__format-models", "build-docs"] }
 # Verify generated code is up-to-date
 diff = { chain = [
     "__remove-previous-check",
@@ -109,7 +105,6 @@ __typecheck = { cmd = "pyright", env = { PYRIGHT_PYTHON_FORCE_VERSION = "latest"
 __lint = "rye lint"
 __format = "rye fmt"
 __formatcheck = "rye fmt --check"
-__generate-schemas = "python scripts/generate-json-schemas.py"
 __generate-models = "datamodel-codegen --input src/schemas/ --output src/pytest_broadcaster/models --input-file-type jsonschema --disable-timestamp --output-model-type=dataclasses.dataclass --use-field-description --use-schema-description"
 __generate-models-check = "datamodel-codegen --input src/schemas/ --output check --input-file-type jsonschema --disable-timestamp --output-model-type=dataclasses.dataclass --use-field-description --use-schema-description"
 __generate-models-diff = "diff --exclude __pycache__ -r src/pytest_broadcaster/models check"
@@ -155,7 +150,7 @@ directory = "coverage-report"
 
 [tool.pyright]
 pythonVersion = "3.8"
-include = ["tests", "src"]
+include = ["tests", "src", "scripts"]
 strict = ["src"]
 exclude = ["**/.venv", "**/node_modules", "**/__pycache__", ".git", "**/build"]
 venv = ".venv"

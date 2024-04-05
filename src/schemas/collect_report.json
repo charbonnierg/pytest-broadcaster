@@ -12,11 +12,11 @@
   "properties": {
     "event": {
       "const": "CollectReport",
-      "description": "The event type."
+      "description": "The event type. Always 'CollectReport'."
     },
     "node_id": {
       "type": "string",
-      "description": "The node id of the collector (if any)."
+      "description": "The node id of the node for which items were collected (the top level root directory has an empty node id)."
     },
     "items": {
       "type": "array",

@@ -25,7 +25,7 @@ They can be used to generate code in various languages:
 
     ```bash
     datamodel-codegen \
-        --input schemas/ \
+        --input docs/schemas/ \
         --output models/ \
         --input-file-type jsonschema \
         --disable-timestamp \
@@ -57,7 +57,7 @@ They can be used to generate code in various languages:
 
     ```bash
     datamodel-codegen \
-        --input schemas/ \
+        --input docs/schemas/ \
         --output models/ \
         --input-file-type jsonschema \
         --disable-timestamp \
@@ -89,7 +89,7 @@ They can be used to generate code in various languages:
 
     ```bash
     datamodel-codegen \
-        --input schemas/ \
+        --input docs/schemas/ \
         --output models/ \
         --input-file-type jsonschema \
         --disable-timestamp \
@@ -121,7 +121,7 @@ They can be used to generate code in various languages:
     Then generate the code:
 
     ```bash
-    json2ts -i schemas/ -o types/
+    json2ts -i docs/schemas/ -o types/
     ```
 
     The generated code will be in the `types/` directory.

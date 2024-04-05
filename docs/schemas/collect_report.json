@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "https://raw.githubusercontent.com/charbonnierg/pytest-broadcaster/main/schemas/collect_report.json",
+  "$id": "https://charbonnierg.github.com/pytest-broadcaster/schemas/collect_report.json",
   "title": "Collect Report",
   "description": "A report of collected items.",
   "type": "object",
@@ -12,11 +12,11 @@
   "properties": {
     "event": {
       "const": "CollectReport",
-      "description": "The event type."
+      "description": "The event type. Always 'CollectReport'."
     },
     "node_id": {
       "type": "string",
-      "description": "The node id of the collector (if any)."
+      "description": "The node id of the node for which items were collected (the top level root directory has an empty node id)."
     },
     "items": {
       "type": "array",
@@ -24,19 +24,19 @@
       "items": {
         "oneOf": [
           {
-            "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-broadcaster/main/schemas/test_directory.json",
+            "$ref": "https://charbonnierg.github.com/pytest-broadcaster/schemas/test_directory.json",
             "description": "A test directory."
           },
           {
-            "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-broadcaster/main/schemas/test_module.json",
+            "$ref": "https://charbonnierg.github.com/pytest-broadcaster/schemas/test_module.json",
             "description": "A test module."
           },
           {
-            "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-broadcaster/main/schemas/test_suite.json",
+            "$ref": "https://charbonnierg.github.com/pytest-broadcaster/schemas/test_suite.json",
             "description": "A test suite."
           },
           {
-            "$ref": "https://raw.githubusercontent.com/charbonnierg/pytest-broadcaster/main/schemas/test_case.json",
+            "$ref": "https://charbonnierg.github.com/pytest-broadcaster/schemas/test_case.json",
             "description": "A test case."
           }
         ]
