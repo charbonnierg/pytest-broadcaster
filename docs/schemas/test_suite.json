@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "https://charbonnierg.github.io/pytest-broadcaster/schemas/latest/test_suite.json",
+  "$id": "https://charbonnierg.github.io/pytest-broadcaster/latest/schemas/test_suite.json",
   "title": "Test Suite",
   "description": "A collected test suite (test class).",
   "type": "object",

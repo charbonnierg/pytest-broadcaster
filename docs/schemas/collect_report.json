@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "https://charbonnierg.github.io/pytest-broadcaster/schemas/latest/collect_report.json",
+  "$id": "https://charbonnierg.github.io/pytest-broadcaster/latest/schemas/collect_report.json",
   "title": "Collect Report",
   "description": "A report of collected items.",
   "type": "object",
@@ -24,19 +24,19 @@
       "items": {
         "oneOf": [
           {
-            "$ref": "https://charbonnierg.github.io/pytest-broadcaster/schemas/latest/test_directory.json",
+            "$ref": "https://charbonnierg.github.io/pytest-broadcaster/latest/schemas/test_directory.json",
             "description": "A test directory."
           },
           {
-            "$ref": "https://charbonnierg.github.io/pytest-broadcaster/schemas/latest/test_module.json",
+            "$ref": "https://charbonnierg.github.io/pytest-broadcaster/latest/schemas/test_module.json",
             "description": "A test module."
           },
           {
-            "$ref": "https://charbonnierg.github.io/pytest-broadcaster/schemas/latest/test_suite.json",
+            "$ref": "https://charbonnierg.github.io/pytest-broadcaster/latest/schemas/test_suite.json",
             "description": "A test suite."
           },
           {
-            "$ref": "https://charbonnierg.github.io/pytest-broadcaster/schemas/latest/test_case.json",
+            "$ref": "https://charbonnierg.github.io/pytest-broadcaster/latest/schemas/test_case.json",
             "description": "A test case."
           }
         ]

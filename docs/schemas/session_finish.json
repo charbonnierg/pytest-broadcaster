@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "https://charbonnierg.github.io/pytest-broadcaster/schemas/latest/session_finish.json",
+  "$id": "https://charbonnierg.github.io/pytest-broadcaster/latest/schemas/session_finish.json",
   "title": "Session Finish",
   "description": "Event emitted when the session is finished.",
   "type": "object",

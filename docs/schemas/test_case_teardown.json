@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "https://charbonnierg.github.io/pytest-broadcaster/schemas/latest/test_case_teardown.json",
+  "$id": "https://charbonnierg.github.io/pytest-broadcaster/latest/schemas/test_case_teardown.json",
   "title": "Test Case Teardown",
   "description": "Pytest Test Case Teardown",
   "type": "object",
@@ -22,7 +22,7 @@
       "description": "The event type. Always set to 'case_teardown'."
     },
     "outcome": {
-      "$ref": "https://charbonnierg.github.io/pytest-broadcaster/schemas/latest/outcome.json",
+      "$ref": "https://charbonnierg.github.io/pytest-broadcaster/latest/schemas/outcome.json",
       "description": "Outcome of the teardown step."
     },
     "duration": {
@@ -40,7 +40,7 @@
       "description": "Stop time of the teardown step in ISO 8601 format."
     },
     "error": {
-      "$ref": "https://charbonnierg.github.io/pytest-broadcaster/schemas/latest/test_case_error.json",
+      "$ref": "https://charbonnierg.github.io/pytest-broadcaster/latest/schemas/test_case_error.json",
       "description": "Error details if the teardown step failed."
     }
   }

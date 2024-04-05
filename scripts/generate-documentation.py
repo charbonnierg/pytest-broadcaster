@@ -16,17 +16,15 @@ REPOSITORY = "https://charbonnierg.github.io/pytest-broadcaster"
 
 SOURCES = Path(__file__).parent.parent.joinpath("src/schemas")
 
-VERSION = os.environ.get("VERSION", "latest")
-
 
 def replace_refs_and_ids(schema: dict[str, Any], ref_prefix: str) -> None:
     if "$ref" in schema:
         ref_template: str = schema["$ref"]
         ref_value = ref_template.split("/")[0]
-        schema["$ref"] = f"{ref_prefix}/{VERSION}/{ref_value}"
+        schema["$ref"] = f"{ref_prefix}/{ref_value}"
     if "$id" in schema:
         id_value = schema["$id"]
-        schema["$id"] = f"{ref_prefix}/{VERSION}/{id_value}"
+        schema["$id"] = f"{ref_prefix}/{id_value}"
     for value in schema.values():
         if isinstance(value, dict):
             replace_refs_and_ids(value, ref_prefix)
@@ -43,12 +41,17 @@ def create_schema(source: Path, output_directory: Path, ref_prefix: str) -> None
     destination.write_text(json.dumps(content, indent=2))
 
 
-def generate_schemas(ref_prefix: str, output_directory: str):
+def generate_schemas(version: str, repository: str, output_directory: str):
     # Validate reference and output
-    if not (ref_prefix and output_directory):
-        raise ValueError("repository and output_directory are required")
+    if not (version and repository and output_directory):
+        raise ValueError("version, repository and output_directory are required")
     if output_directory.startswith("/"):
         raise ValueError("output must be relative")
+    ref_prefix = repository
+    if not ref_prefix.endswith("/"):
+        ref_prefix += "/"
+    # Join with version
+    ref_prefix = urljoin(ref_prefix, version)
     # Clean output directory
     destination = Path(output_directory)
     shutil.rmtree(destination, ignore_errors=True)
@@ -131,6 +134,7 @@ def generate_license_file() -> None:
 # generate_references()
 generate_license_file()
 generate_schemas(
-    ref_prefix=environ.get("REPOSITORY", REPOSITORY),
+    version=os.environ.get("VERSION", "latest"),
+    repository=environ.get("REPOSITORY", REPOSITORY),
     output_directory="docs/schemas",
 )
