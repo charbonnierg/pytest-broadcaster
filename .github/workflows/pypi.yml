@@ -1,4 +1,4 @@
-name: GitHub Pages Documentation
+name: PyPi Release
 
 on:
   push:
@@ -24,19 +24,10 @@ jobs:
         uses: eifinger/setup-rye@v2
         with:
           enable-cache: true
-          cache-prefix: 'docs'
-
-      - name: Configure git user
-        run: |
-          git config user.name mkdocs-bot
-          git config user.email mkdocs-bot@github.com
-          git fetch origin gh-pages --depth=1
+          cache-prefix: 'pypi'
 
       - name: Build the docs
-        run: rye run ci-docs
-        env:
-          VERSION: "${{  github.ref_name }}"
-          ALIAS: latest
+        run: rye run bootstrap
 
       - name: Build and publish the packag on pypi
         run: |
