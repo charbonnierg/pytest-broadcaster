@@ -2,7 +2,7 @@
 
 !!! example "JSON Schema"
 
-    https://github.com/charbonnierg/pytest-broadcaster/blob/main/schemas/test_directory.json
+    https://charbonnierg.github.io/pytest-broadcaster/schemas/test_directory.json
 
 ::: pytest_broadcaster.models.test_directory.TestDirectory
 

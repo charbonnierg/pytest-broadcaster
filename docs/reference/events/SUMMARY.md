@@ -10,6 +10,12 @@
     * [Test Case Call](./steps/test_case_call.md)
     * [Test Case Teardown](./steps/test_case_teardown.md)
     * [Test Case Finished](./steps/test_case_finished.md)
+    * Test Case Fields
+        * [Test Case Error](./steps/test_case_error.md)
+        * [Outcome](./steps/outcome.md)
 * [Warning Message](./warning_message.md)
 * [Error Message](./error_message.md)
+* Warning & Errors Fields
+    * [Location](./location.md)
+    * [Traceback](./traceback.md)
 * [Session Finish](./session_finish.md)

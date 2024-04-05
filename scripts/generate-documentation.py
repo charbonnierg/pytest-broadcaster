@@ -61,10 +61,43 @@ def generate_schemas(ref_prefix: str, output_directory: str):
         target = target[5:]
     ref_prefix = urljoin(ref_prefix, target)
     # Generate all schemas
+    schemas: dict[str, dict[str, Any]] = {}
     for source in SOURCES.glob("*.json"):
+        module = source.name.replace(".json", "")
+        schema_content = json.loads(source.read_text())
+        title = "".join([part.capitalize() for part in schema_content.get("title", module).split(" ")])
+        schema_import = f"pytest_broadcaster.models.{module}.{title}"
+        schema_url = f"{ref_prefix}/{source.name}"
+        schema_description = schema_content.get("description", "")
+        name = f"[{title}][{schema_import}]"
+        schemas[name] = {
+            "description": schema_description,
+            "url": schema_url,
+        }
         create_schema(
             source=source, output_directory=destination, ref_prefix=ref_prefix
         )
+    generate_schemas_index(schemas)
+
+
+def generate_schemas_index(schemas: dict[str, dict[str, Any]]) -> None:
+    """Generate the schemas index page."""
+    with mkdocs_gen_files.open("schemas/index.md", "w") as index:
+        content = ""
+        content += "# JSON Schemas"
+        content += "\n\n"
+        content += "The table below contains the JSON schemas used in the project:"
+        content += "\n\n"
+        content += "| Schema | Description | URL |"
+        content += "\n"
+        content += "| ------ | ----------- | --- |"
+        content += "\n"
+        for schema_name, schema in schemas.items():
+            schema_description = schema["description"]
+            schema_url = schema["url"]
+            content += f"| {schema_name} | {schema_description} | [{schema_url}]({schema_url}) |"
+            content += "\n"
+        index.write(content)
 
 
 def generate_license_file() -> None:
