@@ -9,9 +9,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
       # Uses the same action as rye
       # See: https://github.com/astral-sh/rye/blob/main/.github/workflows/python-lint.yml
       - name: Install the latest version of rye
