@@ -65,7 +65,12 @@ def generate_schemas(ref_prefix: str, output_directory: str):
     for source in SOURCES.glob("*.json"):
         module = source.name.replace(".json", "")
         schema_content = json.loads(source.read_text())
-        title = "".join([part.capitalize() for part in schema_content.get("title", module).split(" ")])
+        title = "".join(
+            [
+                part.capitalize()
+                for part in schema_content.get("title", module).split(" ")
+            ]
+        )
         schema_import = f"pytest_broadcaster.models.{module}.{title}"
         schema_url = f"{ref_prefix}/{source.name}"
         schema_description = schema_content.get("description", "")

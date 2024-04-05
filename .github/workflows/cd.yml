@@ -38,3 +38,7 @@ jobs:
           VERSION: "${{  github.ref_name }}"
           ALIAS: latest
 
+      - name: Build and publish the packag on pypi
+        run: |
+          rye build --clean
+          rye publish --yes --token ${{ secrets.PYPI_TOKEN }}
