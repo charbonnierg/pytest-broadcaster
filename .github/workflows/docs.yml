@@ -24,6 +24,7 @@ jobs:
         uses: eifinger/setup-rye@v2
         with:
           enable-cache: true
+          cache-prefix: 'docs'
 
       - name: Configure git user
         run: |
