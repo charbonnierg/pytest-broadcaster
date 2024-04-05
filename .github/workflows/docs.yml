@@ -30,6 +30,7 @@ jobs:
         run: |
           git config user.name mkdocs-bot
           git config user.email mkdocs-bot@github.com
+          git fetch origin gh-pages --depth=1
 
       - name: Build the docs
         run: rye run ci-docs
