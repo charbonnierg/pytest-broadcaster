@@ -8,7 +8,7 @@ from enum import Enum
 
 class Outcome(Enum):
     """
-    Test case result.
+    The outcome of a case step or a whole test case.
     """
 
     passed = "passed"

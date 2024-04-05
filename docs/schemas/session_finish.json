@@ -10,12 +10,12 @@
   ],
   "properties": {
     "event": {
-      "const": "SessionFinish",
-      "description": "The event type."
+      "const": "session_finish",
+      "description": "The event type. Always set to 'session_finish'."
     },
     "exit_status": {
       "type": "integer",
-      "description": "The status which pytest will return to the system."
+      "description": "The status which pytest will return to the system. 0 means success, 1 means test failure, anything else is an error."
     }
   }
 }

@@ -11,8 +11,8 @@
   ],
   "properties": {
     "event": {
-      "const": "SessionStart",
-      "description": "The event type."
+      "const": "session_start",
+      "description": "The event type. Always set to `session_start`."
     },
     "pytest_version": {
       "type": "string",

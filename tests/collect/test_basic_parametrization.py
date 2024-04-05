@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
+
 from pytest_broadcaster import __version__
 
 from ._utils import CommonTestSetup
@@ -43,7 +44,7 @@ class TestBasicParametrization(CommonTestSetup):
             "test_reports": [],
             "collect_reports": [
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": "",
                     "items": [
                         {
@@ -55,7 +56,7 @@ class TestBasicParametrization(CommonTestSetup):
                     ],
                 },
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": "test_basic_parametrization.py",
                     "items": [
                         {
@@ -103,7 +104,7 @@ class TestBasicParametrization(CommonTestSetup):
                     ],
                 },
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": ".",
                     "items": [
                         {
@@ -134,10 +135,10 @@ class TestBasicParametrization(CommonTestSetup):
             {
                 "pytest_version": pytest.__version__,
                 "plugin_version": __version__,
-                "event": "SessionStart",
+                "event": "session_start",
             },
             {
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": "",
                 "items": [
                     {
@@ -193,11 +194,11 @@ class TestBasicParametrization(CommonTestSetup):
                         "function": "test_ok",
                     },
                 ],
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": "test_basic_parametrization.py",
             },
             {
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": ".",
                 "items": [
                     {
@@ -212,5 +213,5 @@ class TestBasicParametrization(CommonTestSetup):
                     }
                 ],
             },
-            {"exit_status": 0, "event": "SessionFinish"},
+            {"exit_status": 0, "event": "session_finish"},
         ]

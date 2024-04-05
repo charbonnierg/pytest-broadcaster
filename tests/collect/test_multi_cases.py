@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
+
 from pytest_broadcaster import __version__
 
 from ._utils import CommonTestSetup
@@ -44,7 +45,7 @@ class TestMultiCases(CommonTestSetup):
             "test_reports": [],
             "collect_reports": [
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": "",
                     "items": [
                         {
@@ -56,7 +57,7 @@ class TestMultiCases(CommonTestSetup):
                     ],
                 },
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": "test_multi_cases.py",
                     "items": [
                         {
@@ -90,7 +91,7 @@ class TestMultiCases(CommonTestSetup):
                     ],
                 },
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": ".",
                     "items": [
                         {
@@ -121,10 +122,10 @@ class TestMultiCases(CommonTestSetup):
             {
                 "pytest_version": pytest.__version__,
                 "plugin_version": __version__,
-                "event": "SessionStart",
+                "event": "session_start",
             },
             {
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": "",
                 "items": [
                     {
@@ -166,11 +167,11 @@ class TestMultiCases(CommonTestSetup):
                         "function": "test_2",
                     },
                 ],
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": "test_multi_cases.py",
             },
             {
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": ".",
                 "items": [
                     {
@@ -185,5 +186,5 @@ class TestMultiCases(CommonTestSetup):
                     }
                 ],
             },
-            {"exit_status": 0, "event": "SessionFinish"},
+            {"exit_status": 0, "event": "session_finish"},
         ]

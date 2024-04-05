@@ -37,7 +37,7 @@ class TestCaseTeardown:
     """
     event_type: str = "case_teardown"
     """
-    The event type. Always 'case_teardown'.
+    The event type. Always set to 'case_teardown'.
     """
     error: Optional[test_case_error.TestCaseError] = None
     """

@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
+
 from fake_lib import filename
 from pytest_broadcaster import __version__
 
@@ -40,7 +41,7 @@ class TestErrorsThirdParty(CommonTestSetup):
             "warnings": [],
             "errors": [
                 {
-                    "event": "ErrorMessage",
+                    "event": "error_message",
                     "when": "collect",
                     "location": {
                         "filename": filename("with_errors.py"),
@@ -63,7 +64,7 @@ class TestErrorsThirdParty(CommonTestSetup):
             "test_reports": [],
             "collect_reports": [
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": "",
                     "items": [
                         {
@@ -90,10 +91,10 @@ class TestErrorsThirdParty(CommonTestSetup):
             {
                 "pytest_version": pytest.__version__,
                 "plugin_version": __version__,
-                "event": "SessionStart",
+                "event": "session_start",
             },
             {
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": "",
                 "items": [
                     {
@@ -105,7 +106,7 @@ class TestErrorsThirdParty(CommonTestSetup):
                 ],
             },
             {
-                "event": "ErrorMessage",
+                "event": "error_message",
                 "when": "collect",
                 "location": {
                     "filename": filename("with_errors.py"),
@@ -124,5 +125,5 @@ class TestErrorsThirdParty(CommonTestSetup):
                 "exception_type": "RuntimeError",
                 "exception_value": "BOOM",
             },
-            {"exit_status": 3, "event": "SessionFinish"},
+            {"exit_status": 3, "event": "session_finish"},
         ]

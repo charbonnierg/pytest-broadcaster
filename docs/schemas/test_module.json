@@ -19,7 +19,7 @@
     },
     "node_type": {
       "const": "module",
-      "description": "The node type. Always 'module'."
+      "description": "The node type. Always set to 'module'."
     },
     "name": {
       "type": "string",

@@ -35,5 +35,5 @@ class TestModule:
     """
     node_type: str = "module"
     """
-    The node type. Always 'module'.
+    The node type. Always set to 'module'.
     """

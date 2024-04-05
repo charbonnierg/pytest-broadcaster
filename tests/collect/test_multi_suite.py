@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
+
 from pytest_broadcaster import __version__
 
 from ._utils import CommonTestSetup
@@ -75,7 +76,7 @@ class TestMultiSuite(CommonTestSetup):
             "test_reports": [],
             "collect_reports": [
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": "",
                     "items": [
                         {
@@ -87,7 +88,7 @@ class TestMultiSuite(CommonTestSetup):
                     ],
                 },
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": "test_module_1.py::TestSuite1",
                     "items": [
                         {
@@ -121,7 +122,7 @@ class TestMultiSuite(CommonTestSetup):
                     ],
                 },
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": "test_module_1.py::TestSuite2",
                     "items": [
                         {
@@ -155,7 +156,7 @@ class TestMultiSuite(CommonTestSetup):
                     ],
                 },
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": "test_module_1.py",
                     "items": [
                         {
@@ -183,7 +184,7 @@ class TestMultiSuite(CommonTestSetup):
                     ],
                 },
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": "test_module_2.py::TestSuite3",
                     "items": [
                         {
@@ -217,7 +218,7 @@ class TestMultiSuite(CommonTestSetup):
                     ],
                 },
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": "test_module_2.py::TestSuite4",
                     "items": [
                         {
@@ -251,7 +252,7 @@ class TestMultiSuite(CommonTestSetup):
                     ],
                 },
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": "test_module_2.py",
                     "items": [
                         {
@@ -279,7 +280,7 @@ class TestMultiSuite(CommonTestSetup):
                     ],
                 },
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": ".",
                     "items": [
                         {
@@ -320,10 +321,10 @@ class TestMultiSuite(CommonTestSetup):
             {
                 "pytest_version": pytest.__version__,
                 "plugin_version": __version__,
-                "event": "SessionStart",
+                "event": "session_start",
             },
             {
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": "",
                 "items": [
                     {
@@ -335,7 +336,7 @@ class TestMultiSuite(CommonTestSetup):
                 ],
             },
             {
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": "test_module_1.py::TestSuite1",
                 "items": [
                     {
@@ -369,7 +370,7 @@ class TestMultiSuite(CommonTestSetup):
                 ],
             },
             {
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": "test_module_1.py::TestSuite2",
                 "items": [
                     {
@@ -403,7 +404,7 @@ class TestMultiSuite(CommonTestSetup):
                 ],
             },
             {
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": "test_module_1.py",
                 "items": [
                     {
@@ -431,7 +432,7 @@ class TestMultiSuite(CommonTestSetup):
                 ],
             },
             {
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": "test_module_2.py::TestSuite3",
                 "items": [
                     {
@@ -465,7 +466,7 @@ class TestMultiSuite(CommonTestSetup):
                 ],
             },
             {
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": "test_module_2.py::TestSuite4",
                 "items": [
                     {
@@ -499,7 +500,7 @@ class TestMultiSuite(CommonTestSetup):
                 ],
             },
             {
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": "test_module_2.py",
                 "items": [
                     {
@@ -527,7 +528,7 @@ class TestMultiSuite(CommonTestSetup):
                 ],
             },
             {
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": ".",
                 "items": [
                     {
@@ -552,5 +553,5 @@ class TestMultiSuite(CommonTestSetup):
                     },
                 ],
             },
-            {"exit_status": 0, "event": "SessionFinish"},
+            {"exit_status": 0, "event": "session_finish"},
         ]

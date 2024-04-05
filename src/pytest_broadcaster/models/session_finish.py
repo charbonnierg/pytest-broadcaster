@@ -14,9 +14,9 @@ class SessionFinish:
 
     exit_status: int
     """
-    The status which pytest will return to the system.
+    The status which pytest will return to the system. 0 means success, 1 means test failure, anything else is an error.
     """
-    event: str = "SessionFinish"
+    event: str = "session_finish"
     """
-    The event type.
+    The event type. Always set to 'session_finish'.
     """

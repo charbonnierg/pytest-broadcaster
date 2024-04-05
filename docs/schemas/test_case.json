@@ -20,7 +20,7 @@
     },
     "node_type": {
       "const": "case",
-      "description": "The node type. Always 'case'."
+      "description": "The node type. Always set to 'case'."
     },
     "path": {
       "type": "string",

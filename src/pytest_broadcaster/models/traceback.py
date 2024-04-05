@@ -11,15 +11,15 @@ from typing import List
 class Entry:
     path: str
     """
-    File path.
+    The file path of this frame entry.
     """
     lineno: int
     """
-    Line number.
+    The line number of this frame entry.
     """
     message: str
     """
-    Error message.
+    The message of this frame entry.
     """
 
 
@@ -31,5 +31,5 @@ class Traceback:
 
     entries: List[Entry]
     """
-    Traceback entries.
+    Traceback frame entries.
     """

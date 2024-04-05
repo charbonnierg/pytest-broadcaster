@@ -11,8 +11,8 @@
   ],
   "properties": {
     "event": {
-      "const": "CollectReport",
-      "description": "The event type. Always 'CollectReport'."
+      "const": "collect_report",
+      "description": "The event type. Always set to 'collect_report'."
     },
     "node_id": {
       "type": "string",
@@ -20,7 +20,7 @@
     },
     "items": {
       "type": "array",
-      "description": "The collected items.",
+      "description": "An array of collected items. Each collected item is a test directory, test module, test suite, or test case. Top level directory is always first element in the array, followed by test cases, then test suites, then test modules, then test directories for each level of nesting.",
       "items": {
         "oneOf": [
           {"$ref": "test_directory.json/#", "description": "A test directory."},

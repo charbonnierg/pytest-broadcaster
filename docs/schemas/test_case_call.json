@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2019-09/schema",
   "$id": "https://charbonnierg.github.com/pytest-broadcaster/schemas/test_case_call.json",
   "title": "Test Case Call",
-  "description": "Event emitted when a call step is executed in a test case.",
+  "description": "Event emitted when a call step has been executed in a test case.",
   "type": "object",
   "required": [
     "node_id",
@@ -15,11 +15,11 @@
   "properties": {
     "node_id": {
       "type": "string",
-      "description": "Node ID."
+      "description": "The node ID of the test case."
     },
     "event_type": {
       "const": "case_call",
-      "description": "Event Type."
+      "description": "The event type. Always set to 'case_call'."
     },
     "outcome": {
       "$ref": "https://charbonnierg.github.com/pytest-broadcaster/schemas/outcome.json",

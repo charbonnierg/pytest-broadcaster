@@ -20,7 +20,7 @@ class SessionStart:
     """
     The version of pytest-broadcaster plugin that is used to produce the report.
     """
-    event: str = "SessionStart"
+    event: str = "session_start"
     """
-    The event type.
+    The event type. Always set to `session_start`.
     """

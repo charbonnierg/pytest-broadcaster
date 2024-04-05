@@ -19,7 +19,7 @@
     },
     "event_type": {
       "const": "case_setup",
-      "description": "The event type. Always 'case_setup'."
+      "description": "The event type. Always set to 'case_setup'."
     },
     "outcome": {
       "$ref": "https://charbonnierg.github.com/pytest-broadcaster/schemas/outcome.json",

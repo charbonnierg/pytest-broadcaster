@@ -35,17 +35,17 @@ class ErrorMessage:
     """
     exception_type: str
     """
-    The exception type.
+    The exception type as a string.
     """
     exception_value: str
     """
-    The exception value.
+    The exception value as a string.
     """
     traceback: traceback.Traceback
     """
-    The traceback of the error.
+    The traceback of the error. A traceback contains entries for each frame of the call stack.
     """
-    event: str = "ErrorMessage"
+    event: str = "error_message"
     """
-    The event type.
+    The event type. Always 'error_message'.
     """

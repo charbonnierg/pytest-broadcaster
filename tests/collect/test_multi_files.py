@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
+
 from pytest_broadcaster import __version__
 
 from ._utils import CommonTestSetup
@@ -57,7 +58,7 @@ class TestMultiFiles(CommonTestSetup):
             "test_reports": [],
             "collect_reports": [
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": "",
                     "items": [
                         {
@@ -69,7 +70,7 @@ class TestMultiFiles(CommonTestSetup):
                     ],
                 },
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": "test_module_1.py",
                     "items": [
                         {
@@ -103,7 +104,7 @@ class TestMultiFiles(CommonTestSetup):
                     ],
                 },
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": "test_module_2.py",
                     "items": [
                         {
@@ -137,7 +138,7 @@ class TestMultiFiles(CommonTestSetup):
                     ],
                 },
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": ".",
                     "items": [
                         {
@@ -178,10 +179,10 @@ class TestMultiFiles(CommonTestSetup):
             {
                 "pytest_version": pytest.__version__,
                 "plugin_version": __version__,
-                "event": "SessionStart",
+                "event": "session_start",
             },
             {
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": "",
                 "items": [
                     {
@@ -193,7 +194,7 @@ class TestMultiFiles(CommonTestSetup):
                 ],
             },
             {
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": "test_module_1.py",
                 "items": [
                     {
@@ -227,7 +228,7 @@ class TestMultiFiles(CommonTestSetup):
                 ],
             },
             {
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": "test_module_2.py",
                 "items": [
                     {
@@ -261,7 +262,7 @@ class TestMultiFiles(CommonTestSetup):
                 ],
             },
             {
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": ".",
                 "items": [
                     {
@@ -286,5 +287,5 @@ class TestMultiFiles(CommonTestSetup):
                     },
                 ],
             },
-            {"exit_status": 0, "event": "SessionFinish"},
+            {"exit_status": 0, "event": "session_finish"},
         ]

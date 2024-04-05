@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
+
 from fake_lib import filename
 from pytest_broadcaster import __version__
 
@@ -50,14 +51,14 @@ class TestWarningsThirdParty(CommonTestSetup):
                         "lineno": 3,
                     },
                     "message": "Hey, you've been warned",
-                    "event": "WarningMessage",
+                    "event": "warning_message",
                     "category": "UserWarning",
                 },
                 {
                     "when": "collect",
                     "node_id": "",
                     "message": "Hey, you've been warned twice !",
-                    "event": "WarningMessage",
+                    "event": "warning_message",
                     "location": {
                         "filename": filename("with_warnings.py"),
                         "lineno": 4,
@@ -67,7 +68,7 @@ class TestWarningsThirdParty(CommonTestSetup):
             ],
             "collect_reports": [
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": "",
                     "items": [
                         {
@@ -79,7 +80,7 @@ class TestWarningsThirdParty(CommonTestSetup):
                     ],
                 },
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": "test_warnings.py",
                     "items": [
                         {
@@ -99,7 +100,7 @@ class TestWarningsThirdParty(CommonTestSetup):
                     ],
                 },
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": ".",
                     "items": [
                         {
@@ -130,10 +131,10 @@ class TestWarningsThirdParty(CommonTestSetup):
             {
                 "pytest_version": pytest.__version__,
                 "plugin_version": __version__,
-                "event": "SessionStart",
+                "event": "session_start",
             },
             {
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": "",
                 "items": [
                     {
@@ -145,7 +146,7 @@ class TestWarningsThirdParty(CommonTestSetup):
                 ],
             },
             {
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": "test_warnings.py",
                 "items": [
                     {
@@ -165,7 +166,7 @@ class TestWarningsThirdParty(CommonTestSetup):
                 ],
             },
             {
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": ".",
                 "items": [
                     {
@@ -188,7 +189,7 @@ class TestWarningsThirdParty(CommonTestSetup):
                     "lineno": 3,
                 },
                 "message": "Hey, you've been warned",
-                "event": "WarningMessage",
+                "event": "warning_message",
                 "category": "UserWarning",
             },
             {
@@ -199,8 +200,8 @@ class TestWarningsThirdParty(CommonTestSetup):
                     "lineno": 4,
                 },
                 "message": "Hey, you've been warned twice !",
-                "event": "WarningMessage",
+                "event": "warning_message",
                 "category": "UserWarning",
             },
-            {"exit_status": 0, "event": "SessionFinish"},
+            {"exit_status": 0, "event": "session_finish"},
         ]

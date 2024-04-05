@@ -19,7 +19,7 @@
     },
     "event_type": {
       "const": "case_teardown",
-      "description": "The event type. Always 'case_teardown'."
+      "description": "The event type. Always set to 'case_teardown'."
     },
     "outcome": {
       "$ref": "outcome.json/#",

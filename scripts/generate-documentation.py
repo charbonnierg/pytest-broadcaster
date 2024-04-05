@@ -1,4 +1,5 @@
 """Generate the code reference pages."""
+
 from __future__ import annotations
 
 import json
@@ -65,6 +66,7 @@ def generate_schemas(ref_prefix: str, output_directory: str):
             source=source, output_directory=destination, ref_prefix=ref_prefix
         )
 
+
 def generate_license_file() -> None:
     """Generate the LICENSE.md file."""
 
@@ -88,6 +90,6 @@ def generate_license_file() -> None:
 # generate_references()
 generate_license_file()
 generate_schemas(
-      ref_prefix=environ.get("REPOSITORY", REPOSITORY),
-      output_directory="docs/schemas",
-  )
+    ref_prefix=environ.get("REPOSITORY", REPOSITORY),
+    output_directory="docs/schemas",
+)

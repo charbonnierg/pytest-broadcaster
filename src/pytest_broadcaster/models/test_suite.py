@@ -39,5 +39,5 @@ class TestSuite:
     """
     node_type: str = "suite"
     """
-    The node type. Always 'suite'.
+    The node type. Always set to 'suite'.
     """

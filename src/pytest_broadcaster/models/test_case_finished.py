@@ -16,7 +16,7 @@ class TestCaseFinished:
 
     node_id: str
     """
-    Node ID.
+    The node ID of the test case.
     """
     outcome: outcome.Outcome
     """
@@ -36,5 +36,5 @@ class TestCaseFinished:
     """
     event_type: str = "case_finished"
     """
-    Event Type.
+    The event type. Always set to 'case_finished'.
     """

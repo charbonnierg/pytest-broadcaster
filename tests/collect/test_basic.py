@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
+
 from pytest_broadcaster import __version__
 
 from ._utils import CommonTestSetup
@@ -42,7 +43,7 @@ class TestBasic(CommonTestSetup):
             "test_reports": [],
             "collect_reports": [
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": "",
                     "items": [
                         {
@@ -54,7 +55,7 @@ class TestBasic(CommonTestSetup):
                     ],
                 },
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": "test_basic.py",
                     "items": [
                         {
@@ -74,7 +75,7 @@ class TestBasic(CommonTestSetup):
                     ],
                 },
                 {
-                    "event": "CollectReport",
+                    "event": "collect_report",
                     "node_id": ".",
                     "items": [
                         {
@@ -105,10 +106,10 @@ class TestBasic(CommonTestSetup):
             {
                 "pytest_version": pytest.__version__,
                 "plugin_version": __version__,
-                "event": "SessionStart",
+                "event": "session_start",
             },
             {
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": "",
                 "items": [
                     {
@@ -120,7 +121,7 @@ class TestBasic(CommonTestSetup):
                 ],
             },
             {
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": "test_basic.py",
                 "items": [
                     {
@@ -140,7 +141,7 @@ class TestBasic(CommonTestSetup):
                 ],
             },
             {
-                "event": "CollectReport",
+                "event": "collect_report",
                 "node_id": ".",
                 "items": [
                     {
@@ -155,5 +156,5 @@ class TestBasic(CommonTestSetup):
                     }
                 ],
             },
-            {"exit_status": 0, "event": "SessionFinish"},
+            {"exit_status": 0, "event": "session_finish"},
         ]

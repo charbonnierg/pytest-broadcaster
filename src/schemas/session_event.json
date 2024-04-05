@@ -7,23 +7,23 @@
   "oneOf": [
     {
       "$ref": "collect_report.json/#",
-      "description": "A collect report."
+      "description": "A node was collected (directory, module or suite)."
     },
     {
       "$ref": "test_case_finished.json/#",
-      "description": "A test case finished."
+      "description": "A test case finished. Finished event is always emitted even if test is skipped or failed."
     },
     {
       "$ref": "test_case_setup.json/#",
-      "description": "A test case setup step finished."
+      "description": "A test case setup step finished. Setup step is always emitted even if test is skipped."
     },
     {
       "$ref": "test_case_teardown.json/#",
-      "description": "A test case teardown step finished."
+      "description": "A test case teardown step finished. Teardown step is always emitted even if test is skipped or failed."
     },
     {
       "$ref": "test_case_call.json/#",
-      "description": "A test case call step finished."
+      "description": "A test case call step finished. Call step may not be emitted for skipped tests or tests with setup errors."
     },
     {
       "$ref": "error_message.json/#",
@@ -35,11 +35,11 @@
     },
     {
       "$ref": "session_start.json/#",
-      "description": "A session started."
+      "description": "The test session started. This is always the first event emitted."
     },
     {
       "$ref": "session_finish.json/#",
-      "description": "A session finished."
+      "description": "The test session finished. This is always the last event emitted."
     }
   ]
 }

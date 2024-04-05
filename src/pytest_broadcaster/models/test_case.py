@@ -39,7 +39,7 @@ class TestCase:
     """
     node_type: str = "case"
     """
-    The node type. Always 'case'.
+    The node type. Always set to 'case'.
     """
     module: Optional[str] = None
     """

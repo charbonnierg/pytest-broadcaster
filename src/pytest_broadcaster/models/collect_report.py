@@ -28,9 +28,9 @@ class CollectReport:
         ]
     ]
     """
-    The collected items.
+    An array of collected items. Each collected item is a test directory, test module, test suite, or test case. Top level directory is always first element in the array, followed by test cases, then test suites, then test modules, then test directories for each level of nesting.
     """
-    event: str = "CollectReport"
+    event: str = "collect_report"
     """
-    The event type. Always 'CollectReport'.
+    The event type. Always set to 'collect_report'.
     """

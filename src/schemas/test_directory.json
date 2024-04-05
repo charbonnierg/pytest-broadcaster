@@ -17,7 +17,7 @@
       },
       "node_type": {
         "const": "directory",
-        "description": "The node type. Always 'directory'."
+        "description": "The node type. Always set to 'directory'."
       },
       "name": {
         "type": "string",

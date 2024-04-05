@@ -14,8 +14,8 @@
   ],
   "properties": {
     "event": {
-      "const": "ErrorMessage",
-      "description": "The event type."
+      "const": "error_message",
+      "description": "The event type. Always 'error_message'."
     },
     "when": {
       "enum": [
@@ -31,15 +31,15 @@
     },
     "exception_type": {
       "type": "string",
-      "description": "The exception type."
+      "description": "The exception type as a string."
     },
     "exception_value": {
       "type": "string",
-      "description": "The exception value."
+      "description": "The exception value as a string."
     },
     "traceback": {
       "$ref": "https://charbonnierg.github.com/pytest-broadcaster/schemas/traceback.json",
-      "description": "The traceback of the error."
+      "description": "The traceback of the error. A traceback contains entries for each frame of the call stack."
     }
   }
 }

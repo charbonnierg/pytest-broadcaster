@@ -42,9 +42,9 @@ class WarningMessage:
     """
     The string content of the warning message.
     """
-    event: str = "WarningMessage"
+    event: str = "warning_message"
     """
-    The event type. Always 'WarningMessage'.
+    The event type. Always 'warning_message'.
     """
     category: Optional[str] = None
     """

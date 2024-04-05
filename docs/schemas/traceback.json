@@ -10,7 +10,7 @@
   "properties": {
     "entries": {
       "type": "array",
-      "description": "Traceback entries.",
+      "description": "Traceback frame entries.",
       "items": {
         "type": "object",
         "required": [
@@ -21,15 +21,15 @@
         "properties": {
           "path": {
             "type": "string",
-            "description": "File path."
+            "description": "The file path of this frame entry."
           },
           "lineno": {
             "type": "integer",
-            "description": "Line number."
+            "description": "The line number of this frame entry."
           },
           "message": {
             "type": "string",
-            "description": "Error message."
+            "description": "The message of this frame entry."
           }
         }
       }

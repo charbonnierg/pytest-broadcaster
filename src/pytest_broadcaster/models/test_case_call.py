@@ -12,12 +12,12 @@ from . import outcome, test_case_error
 @dataclass
 class TestCaseCall:
     """
-    Event emitted when a call step is executed in a test case.
+    Event emitted when a call step has been executed in a test case.
     """
 
     node_id: str
     """
-    Node ID.
+    The node ID of the test case.
     """
     outcome: outcome.Outcome
     """
@@ -37,7 +37,7 @@ class TestCaseCall:
     """
     event_type: str = "case_call"
     """
-    Event Type.
+    The event type. Always set to 'case_call'.
     """
     error: Optional[test_case_error.TestCaseError] = None
     """

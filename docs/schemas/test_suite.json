@@ -20,7 +20,7 @@
     },
     "node_type": {
       "const": "suite",
-      "description": "The node type. Always 'suite'."
+      "description": "The node type. Always set to 'suite'."
     },
     "name": {
       "type": "string",

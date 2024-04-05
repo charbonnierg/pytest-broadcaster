@@ -7,8 +7,9 @@ from typing import Any
 
 import flask
 import pytest
-from pytest_broadcaster import __version__
 from werkzeug.serving import make_server
+
+from pytest_broadcaster import __version__
 
 
 @dataclass
@@ -142,7 +143,7 @@ class TestHttpDestination:
                     "test_reports": [],
                     "collect_reports": [
                         {
-                            "event": "CollectReport",
+                            "event": "collect_report",
                             "node_id": "",
                             "items": [
                                 {
@@ -154,7 +155,7 @@ class TestHttpDestination:
                             ],
                         },
                         {
-                            "event": "CollectReport",
+                            "event": "collect_report",
                             "node_id": "test_basic.py",
                             "items": [
                                 {
@@ -174,7 +175,7 @@ class TestHttpDestination:
                             ],
                         },
                         {
-                            "event": "CollectReport",
+                            "event": "collect_report",
                             "node_id": ".",
                             "items": [
                                 {

@@ -37,7 +37,7 @@ class TestCaseSetup:
     """
     event_type: str = "case_setup"
     """
-    The event type. Always 'case_setup'.
+    The event type. Always set to 'case_setup'.
     """
     error: Optional[test_case_error.TestCaseError] = None
     """

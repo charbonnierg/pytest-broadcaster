@@ -26,5 +26,5 @@ class TestDirectory:
     """
     node_type: str = "directory"
     """
-    The node type. Always 'directory'.
+    The node type. Always set to 'directory'.
     """

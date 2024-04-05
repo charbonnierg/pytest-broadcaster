@@ -16,11 +16,11 @@
   "properties": {
     "node_id": {
       "type": "string",
-      "description": "Node ID."
+      "description": "The node ID of the test case."
     },
     "event_type": {
       "const": "case_finished",
-      "description": "Event Type."
+      "description": "The event type. Always set to 'case_finished'."
     },
     "outcome": {
       "$ref": "https://charbonnierg.github.com/pytest-broadcaster/schemas/outcome.json",
