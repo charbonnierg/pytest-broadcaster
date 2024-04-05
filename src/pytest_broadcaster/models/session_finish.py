@@ -12,6 +12,14 @@ class SessionFinish:
     Event emitted when the session is finished.
     """
 
+    session_id: str
+    """
+    The unique if of this test session used to aggregate events together.
+    """
+    timestamp: str
+    """
+    The time when the session finished in ISO 8601 format.
+    """
     exit_status: int
     """
     The status which pytest will return to the system. 0 means success, 1 means test failure, anything else is an error.

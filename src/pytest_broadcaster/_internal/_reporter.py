@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+import datetime
 import warnings
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Literal
+from typing import TYPE_CHECKING, Any, Callable, Literal
 
 import pytest
 
@@ -31,10 +32,22 @@ from . import _fields as api
 
 
 class DefaultReporter(Reporter):
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        session_id: str | None = None,
+        clock: Callable[[], datetime.datetime] | None = None,
+    ) -> None:
+        self._clock = clock or (lambda: datetime.datetime.now(tz=datetime.timezone.utc))
+        self._session_id = session_id or api.make_session_id()
+        self._python = api.field_python()
         self._roots: dict[str, str] = {}
         self._pending_report: TestCaseReport | None = None
+        self._start_timestamp = api.make_timestamp_from_datetime(self._clock())
         self._result = SessionResult(
+            session_id=self._session_id,
+            start_timestamp=self._start_timestamp,
+            stop_timestamp=self._start_timestamp,  # will be replaced later
+            python=self._python,
             pytest_version=pytest.__version__,
             plugin_version=__version__,
             exit_status=0,
@@ -66,13 +79,23 @@ class DefaultReporter(Reporter):
 
     def make_session_start(self) -> SessionStart:
         return SessionStart(
-            pytest_version=pytest.__version__, plugin_version=__version__
+            session_id=self._session_id,
+            timestamp=self._start_timestamp,
+            python=self._python,
+            pytest_version=pytest.__version__,
+            plugin_version=__version__,
         )
 
     def make_session_finish(self, exit_status: int) -> SessionFinish:
+        stop_timestamp = api.make_timestamp_from_datetime(self._clock())
+        self._result.stop_timestamp = stop_timestamp
         self._result.exit_status = exit_status
         self._done = True
-        return SessionFinish(exit_status=exit_status)
+        return SessionFinish(
+            session_id=self._session_id,
+            timestamp=stop_timestamp,
+            exit_status=exit_status,
+        )
 
     def make_warning_message(
         self,
@@ -179,8 +202,10 @@ class DefaultReporter(Reporter):
                 items.append(item)
         # Generate a collect report event.
         collect_report = CollectReport(
-            items=items,
+            session_id=self._session_id,
+            timestamp=api.make_timestamp_from_datetime(self._clock()),
             node_id=report.nodeid or "",
+            items=items,
         )
         self._result.collect_reports.append(collect_report)
         return collect_report
@@ -206,12 +231,13 @@ class DefaultReporter(Reporter):
         step: TestCaseSetup | TestCaseCall | TestCaseTeardown
         if report.when == "setup":
             step = TestCaseSetup(
+                session_id=self._session_id,
                 node_id=report.nodeid,
-                outcome=outcome,
+                start_timestamp=api.make_timestamp(report.start),
+                stop_timestamp=api.make_timestamp(report.stop),
                 duration=report.duration,
+                outcome=outcome,
                 error=error,
-                start=api.make_timestamp(report.start),
-                stop=api.make_timestamp(report.stop),
             )
             self._pending_report = TestCaseReport(
                 node_id=report.nodeid,
@@ -225,12 +251,13 @@ class DefaultReporter(Reporter):
             if outcome == Outcome.skipped and hasattr(report, "wasxfail"):
                 outcome = Outcome.xfailed
             step = TestCaseCall(
+                session_id=self._session_id,
                 node_id=report.nodeid,
-                outcome=outcome,
+                start_timestamp=api.make_timestamp(report.start),
+                stop_timestamp=api.make_timestamp(report.stop),
                 duration=report.duration,
+                outcome=outcome,
                 error=error,
-                start=api.make_timestamp(report.start),
-                stop=api.make_timestamp(report.stop),
             )
             assert (
                 self._pending_report
@@ -239,12 +266,13 @@ class DefaultReporter(Reporter):
 
         elif report.when == "teardown":
             step = TestCaseTeardown(
+                session_id=self._session_id,
                 node_id=report.nodeid,
                 outcome=outcome,
                 duration=report.duration,
                 error=error,
-                start=api.make_timestamp(report.start),
-                stop=api.make_timestamp(report.stop),
+                start_timestamp=api.make_timestamp(report.start),
+                stop_timestamp=api.make_timestamp(report.stop),
             )
             assert (
                 self._pending_report
@@ -288,17 +316,18 @@ class DefaultReporter(Reporter):
         duration = sum(report.duration for report in reports)
         # Create the finished event
         finished = TestCaseFinished(
+            session_id=self._session_id,
             node_id=node_id,
+            start_timestamp=pending_report.setup.start_timestamp,
+            stop_timestamp=pending_report.teardown.stop_timestamp,
+            total_duration=duration,
             outcome=outcome,
-            duration=duration,
-            start=pending_report.setup.start,
-            stop=pending_report.teardown.stop,
         )
         # Create the report
         report = TestCaseReport(
             node_id=node_id,
             outcome=finished.outcome,
-            duration=finished.duration,
+            duration=finished.total_duration,
             finished=finished,
             setup=pending_report.setup,
             call=pending_report.call,
@@ -310,4 +339,4 @@ class DefaultReporter(Reporter):
 
 if TYPE_CHECKING:
     # Make sure that the class implements the interface
-    DefaultReporter()
+    DefaultReporter("fake-id", datetime.datetime.now)

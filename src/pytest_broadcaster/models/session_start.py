@@ -5,6 +5,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from . import python_distribution
+
 
 @dataclass
 class SessionStart:
@@ -12,6 +14,18 @@ class SessionStart:
     Event emitted when the test session is started.
     """
 
+    session_id: str
+    """
+    The unique if of this test session used to aggregate events together.
+    """
+    timestamp: str
+    """
+    The date and time when the test session was started in ISO 8601 format.
+    """
+    python: python_distribution.PythonDistribution
+    """
+    The Python distribution that is running the tests.
+    """
     pytest_version: str
     """
     The version of pytest that is running the tests.

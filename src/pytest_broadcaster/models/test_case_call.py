@@ -19,23 +19,27 @@ class TestCaseCall:
     """
     The node ID of the test case.
     """
-    outcome: outcome.Outcome
+    session_id: str
     """
-    Outcome of the call step.
+    The unique if of this test session used to aggregate events together.
+    """
+    start_timestamp: str
+    """
+    Start time of the call step in ISO 8601 format.
+    """
+    stop_timestamp: str
+    """
+    Stop time of the call step in ISO 8601 format.
     """
     duration: float
     """
     Duration of the call step in seconds.
     """
-    start: str
+    outcome: outcome.Outcome
     """
-    Start time of the call step in ISO 8601 format.
+    Outcome of the call step.
     """
-    stop: str
-    """
-    Stop time of the call step in ISO 8601 format.
-    """
-    event_type: str = "case_call"
+    event: str = "case_call"
     """
     The event type. Always set to 'case_call'.
     """

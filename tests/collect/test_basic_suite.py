@@ -1,12 +1,12 @@
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 
 import pytest
 
+from _testing.setup import CommonTestSetup
 from pytest_broadcaster import __version__
-
-from ._utils import CommonTestSetup
 
 
 @pytest.mark.suites
@@ -39,7 +39,21 @@ class TestBasicSuite(CommonTestSetup):
         )
         assert result.ret == 0
         assert self.json_file.exists()
-        assert self.read_json_file() == {
+        assert self.sanitize(self.read_json_file()) == {
+            "session_id": "omitted",
+            "start_timestamp": "omitted",
+            "stop_timestamp": "omitted",
+            "python": {
+                "version": {
+                    "major": sys.version_info.major,
+                    "minor": sys.version_info.minor,
+                    "micro": sys.version_info.micro,
+                    "releaselevel": sys.version_info.releaselevel,
+                },
+                "platform": "omitted",
+                "processor": "omitted",
+                "packages": {},
+            },
             "pytest_version": pytest.__version__,
             "plugin_version": __version__,
             "exit_status": 0,
@@ -49,7 +63,9 @@ class TestBasicSuite(CommonTestSetup):
             "collect_reports": [
                 {
                     "event": "collect_report",
+                    "session_id": "omitted",
                     "node_id": "",
+                    "timestamp": "omitted",
                     "items": [
                         {
                             "node_id": ".",
@@ -61,7 +77,9 @@ class TestBasicSuite(CommonTestSetup):
                 },
                 {
                     "event": "collect_report",
+                    "session_id": "omitted",
                     "node_id": "test_basic_suite.py::TestOk",
+                    "timestamp": "omitted",
                     "items": [
                         {
                             "node_id": "test_basic_suite.py::TestOk::test_1",
@@ -95,7 +113,9 @@ class TestBasicSuite(CommonTestSetup):
                 },
                 {
                     "event": "collect_report",
+                    "session_id": "omitted",
                     "node_id": "test_basic_suite.py",
+                    "timestamp": "omitted",
                     "items": [
                         {
                             "node_id": "test_basic_suite.py::TestOk",
@@ -112,7 +132,9 @@ class TestBasicSuite(CommonTestSetup):
                 },
                 {
                     "event": "collect_report",
+                    "session_id": "omitted",
                     "node_id": ".",
+                    "timestamp": "omitted",
                     "items": [
                         {
                             "node_id": "test_basic_suite.py",
@@ -138,15 +160,30 @@ class TestBasicSuite(CommonTestSetup):
         )
         assert result.ret == 0
         assert self.json_lines_file.exists()
-        assert self.read_json_lines_file() == [
+        assert self.sanitize(self.read_json_lines_file()) == [
             {
+                "session_id": "omitted",
+                "timestamp": "omitted",
+                "python": {
+                    "version": {
+                        "major": sys.version_info.major,
+                        "minor": sys.version_info.minor,
+                        "micro": sys.version_info.micro,
+                        "releaselevel": sys.version_info.releaselevel,
+                    },
+                    "platform": "omitted",
+                    "processor": "omitted",
+                    "packages": {},
+                },
                 "pytest_version": pytest.__version__,
                 "plugin_version": __version__,
                 "event": "session_start",
             },
             {
                 "event": "collect_report",
+                "session_id": "omitted",
                 "node_id": "",
+                "timestamp": "omitted",
                 "items": [
                     {
                         "node_id": ".",
@@ -158,7 +195,9 @@ class TestBasicSuite(CommonTestSetup):
             },
             {
                 "event": "collect_report",
+                "session_id": "omitted",
                 "node_id": "test_basic_suite.py::TestOk",
+                "timestamp": "omitted",
                 "items": [
                     {
                         "node_id": "test_basic_suite.py::TestOk::test_1",
@@ -192,7 +231,9 @@ class TestBasicSuite(CommonTestSetup):
             },
             {
                 "event": "collect_report",
+                "session_id": "omitted",
                 "node_id": "test_basic_suite.py",
+                "timestamp": "omitted",
                 "items": [
                     {
                         "node_id": "test_basic_suite.py::TestOk",
@@ -209,7 +250,9 @@ class TestBasicSuite(CommonTestSetup):
             },
             {
                 "event": "collect_report",
+                "session_id": "omitted",
                 "node_id": ".",
+                "timestamp": "omitted",
                 "items": [
                     {
                         "node_id": "test_basic_suite.py",
@@ -223,5 +266,10 @@ class TestBasicSuite(CommonTestSetup):
                     }
                 ],
             },
-            {"exit_status": 0, "event": "session_finish"},
+            {
+                "exit_status": 0,
+                "event": "session_finish",
+                "session_id": "omitted",
+                "timestamp": "omitted",
+            },
         ]

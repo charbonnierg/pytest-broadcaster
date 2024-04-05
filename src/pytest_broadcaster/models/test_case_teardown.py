@@ -15,27 +15,31 @@ class TestCaseTeardown:
     Pytest Test Case Teardown
     """
 
+    session_id: str
+    """
+    The unique if of this test session used to aggregate events together.
+    """
     node_id: str
     """
     The node ID of the test case.
     """
-    outcome: outcome.Outcome
+    start_timestamp: str
     """
-    Outcome of the teardown step.
+    Start time of the teardown step in ISO 8601 format.
+    """
+    stop_timestamp: str
+    """
+    Stop time of the teardown step in ISO 8601 format.
     """
     duration: float
     """
     Duration of the teardown step in seconds.
     """
-    start: str
+    outcome: outcome.Outcome
     """
-    Start time of the teardown step in ISO 8601 format.
+    Outcome of the teardown step.
     """
-    stop: str
-    """
-    Stop time of the teardown step in ISO 8601 format.
-    """
-    event_type: str = "case_teardown"
+    event: str = "case_teardown"
     """
     The event type. Always set to 'case_teardown'.
     """

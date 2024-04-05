@@ -1,12 +1,12 @@
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 
 import pytest
 
+from _testing.setup import CommonTestSetup
 from pytest_broadcaster import __version__
-
-from ._utils import CommonTestSetup
 
 
 @pytest.mark.markers
@@ -36,7 +36,21 @@ class TestNestedMarker(CommonTestSetup):
         )
         assert result.ret == 0
         assert self.json_file.exists()
-        assert self.read_json_file() == {
+        assert self.sanitize(self.read_json_file()) == {
+            "session_id": "omitted",
+            "start_timestamp": "omitted",
+            "stop_timestamp": "omitted",
+            "python": {
+                "version": {
+                    "major": sys.version_info.major,
+                    "minor": sys.version_info.minor,
+                    "micro": sys.version_info.micro,
+                    "releaselevel": sys.version_info.releaselevel,
+                },
+                "platform": "omitted",
+                "processor": "omitted",
+                "packages": {},
+            },
             "pytest_version": pytest.__version__,
             "plugin_version": __version__,
             "exit_status": 0,
@@ -46,7 +60,9 @@ class TestNestedMarker(CommonTestSetup):
             "collect_reports": [
                 {
                     "event": "collect_report",
+                    "session_id": "omitted",
                     "node_id": "",
+                    "timestamp": "omitted",
                     "items": [
                         {
                             "node_id": ".",
@@ -58,7 +74,9 @@ class TestNestedMarker(CommonTestSetup):
                 },
                 {
                     "event": "collect_report",
+                    "session_id": "omitted",
                     "node_id": "test_markers.py::TestMarked",
+                    "timestamp": "omitted",
                     "items": [
                         {
                             "node_id": "test_markers.py::TestMarked::test_marked",
@@ -78,7 +96,9 @@ class TestNestedMarker(CommonTestSetup):
                 },
                 {
                     "event": "collect_report",
+                    "session_id": "omitted",
                     "node_id": "test_markers.py",
+                    "timestamp": "omitted",
                     "items": [
                         {
                             "node_id": "test_markers.py::TestMarked",
@@ -95,7 +115,9 @@ class TestNestedMarker(CommonTestSetup):
                 },
                 {
                     "event": "collect_report",
+                    "session_id": "omitted",
                     "node_id": ".",
+                    "timestamp": "omitted",
                     "items": [
                         {
                             "node_id": "test_markers.py",
@@ -121,15 +143,30 @@ class TestNestedMarker(CommonTestSetup):
         )
         assert result.ret == 0
         assert self.json_lines_file.exists()
-        assert self.read_json_lines_file() == [
+        assert self.sanitize(self.read_json_lines_file()) == [
             {
+                "session_id": "omitted",
+                "timestamp": "omitted",
+                "python": {
+                    "version": {
+                        "major": sys.version_info.major,
+                        "minor": sys.version_info.minor,
+                        "micro": sys.version_info.micro,
+                        "releaselevel": sys.version_info.releaselevel,
+                    },
+                    "platform": "omitted",
+                    "processor": "omitted",
+                    "packages": {},
+                },
                 "pytest_version": pytest.__version__,
                 "plugin_version": __version__,
                 "event": "session_start",
             },
             {
                 "event": "collect_report",
+                "session_id": "omitted",
                 "node_id": "",
+                "timestamp": "omitted",
                 "items": [
                     {
                         "node_id": ".",
@@ -141,7 +178,9 @@ class TestNestedMarker(CommonTestSetup):
             },
             {
                 "event": "collect_report",
+                "session_id": "omitted",
                 "node_id": "test_markers.py::TestMarked",
+                "timestamp": "omitted",
                 "items": [
                     {
                         "node_id": "test_markers.py::TestMarked::test_marked",
@@ -161,7 +200,9 @@ class TestNestedMarker(CommonTestSetup):
             },
             {
                 "event": "collect_report",
+                "session_id": "omitted",
                 "node_id": "test_markers.py",
+                "timestamp": "omitted",
                 "items": [
                     {
                         "node_id": "test_markers.py::TestMarked",
@@ -178,7 +219,9 @@ class TestNestedMarker(CommonTestSetup):
             },
             {
                 "event": "collect_report",
+                "session_id": "omitted",
                 "node_id": ".",
+                "timestamp": "omitted",
                 "items": [
                     {
                         "node_id": "test_markers.py",
@@ -192,5 +235,10 @@ class TestNestedMarker(CommonTestSetup):
                     }
                 ],
             },
-            {"exit_status": 0, "event": "session_finish"},
+            {
+                "exit_status": 0,
+                "event": "session_finish",
+                "session_id": "omitted",
+                "timestamp": "omitted",
+            },
         ]

@@ -1,12 +1,12 @@
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 
 import pytest
 
+from _testing.setup import CommonTestSetup
 from pytest_broadcaster import __version__
-
-from ._utils import CommonTestSetup
 
 
 @pytest.mark.basic
@@ -44,7 +44,21 @@ class TestBasicxFail(CommonTestSetup):
         result = self.test_dir.runpytest("--collect-report", self.json_file.as_posix())
         assert result.ret == 0
         assert self.json_file.exists()
-        assert self.omit_durations_and_times(self.read_json_file()) == {
+        assert self.sanitize(self.read_json_file()) == {
+            "session_id": "omitted",
+            "start_timestamp": "omitted",
+            "stop_timestamp": "omitted",
+            "python": {
+                "version": {
+                    "major": sys.version_info.major,
+                    "minor": sys.version_info.minor,
+                    "micro": sys.version_info.micro,
+                    "releaselevel": sys.version_info.releaselevel,
+                },
+                "platform": "omitted",
+                "processor": "omitted",
+                "packages": {},
+            },
             "pytest_version": pytest.__version__,
             "plugin_version": __version__,
             "exit_status": 0,
@@ -56,39 +70,43 @@ class TestBasicxFail(CommonTestSetup):
                     "outcome": "passed",
                     "duration": "omitted",
                     "setup": {
-                        "event_type": "case_setup",
+                        "event": "case_setup",
+                        "session_id": "omitted",
                         "node_id": "test_basic.py::test_ok",
                         "outcome": "passed",
                         "duration": "omitted",
-                        "start": "omitted",
-                        "stop": "omitted",
+                        "start_timestamp": "omitted",
+                        "stop_timestamp": "omitted",
                         "error": None,
                     },
                     "call": {
-                        "event_type": "case_call",
+                        "event": "case_call",
+                        "session_id": "omitted",
                         "node_id": "test_basic.py::test_ok",
                         "outcome": "passed",
                         "duration": "omitted",
-                        "start": "omitted",
-                        "stop": "omitted",
+                        "start_timestamp": "omitted",
+                        "stop_timestamp": "omitted",
                         "error": None,
                     },
                     "teardown": {
-                        "event_type": "case_teardown",
+                        "event": "case_teardown",
+                        "session_id": "omitted",
                         "node_id": "test_basic.py::test_ok",
                         "outcome": "passed",
                         "duration": "omitted",
-                        "start": "omitted",
-                        "stop": "omitted",
+                        "start_timestamp": "omitted",
+                        "stop_timestamp": "omitted",
                         "error": None,
                     },
                     "finished": {
-                        "event_type": "case_finished",
+                        "event": "case_finished",
+                        "session_id": "omitted",
                         "node_id": "test_basic.py::test_ok",
                         "outcome": "passed",
-                        "duration": "omitted",
-                        "start": "omitted",
-                        "stop": "omitted",
+                        "total_duration": "omitted",
+                        "start_timestamp": "omitted",
+                        "stop_timestamp": "omitted",
                     },
                 },
                 {
@@ -96,46 +114,52 @@ class TestBasicxFail(CommonTestSetup):
                     "outcome": "xfailed",
                     "duration": "omitted",
                     "setup": {
-                        "event_type": "case_setup",
+                        "event": "case_setup",
+                        "session_id": "omitted",
                         "node_id": "test_basic_xfail.py::test_xfail",
                         "outcome": "passed",
                         "duration": "omitted",
-                        "start": "omitted",
-                        "stop": "omitted",
+                        "start_timestamp": "omitted",
+                        "stop_timestamp": "omitted",
                         "error": None,
                     },
                     "call": {
-                        "event_type": "case_call",
+                        "event": "case_call",
+                        "session_id": "omitted",
                         "node_id": "test_basic_xfail.py::test_xfail",
                         "outcome": "xfailed",
                         "duration": "omitted",
-                        "start": "omitted",
-                        "stop": "omitted",
+                        "start_timestamp": "omitted",
+                        "stop_timestamp": "omitted",
                         "error": None,
                     },
                     "teardown": {
-                        "event_type": "case_teardown",
+                        "event": "case_teardown",
+                        "session_id": "omitted",
                         "node_id": "test_basic_xfail.py::test_xfail",
                         "outcome": "passed",
                         "duration": "omitted",
-                        "start": "omitted",
-                        "stop": "omitted",
+                        "start_timestamp": "omitted",
+                        "stop_timestamp": "omitted",
                         "error": None,
                     },
                     "finished": {
-                        "event_type": "case_finished",
+                        "event": "case_finished",
+                        "session_id": "omitted",
                         "node_id": "test_basic_xfail.py::test_xfail",
                         "outcome": "xfailed",
-                        "duration": "omitted",
-                        "start": "omitted",
-                        "stop": "omitted",
+                        "total_duration": "omitted",
+                        "start_timestamp": "omitted",
+                        "stop_timestamp": "omitted",
                     },
                 },
             ],
             "collect_reports": [
                 {
                     "event": "collect_report",
+                    "session_id": "omitted",
                     "node_id": "",
+                    "timestamp": "omitted",
                     "items": [
                         {
                             "node_id": ".",
@@ -147,7 +171,9 @@ class TestBasicxFail(CommonTestSetup):
                 },
                 {
                     "event": "collect_report",
+                    "session_id": "omitted",
                     "node_id": "test_basic.py",
+                    "timestamp": "omitted",
                     "items": [
                         {
                             "node_id": "test_basic.py::test_ok",
@@ -167,7 +193,9 @@ class TestBasicxFail(CommonTestSetup):
                 },
                 {
                     "event": "collect_report",
+                    "session_id": "omitted",
                     "node_id": "test_basic_xfail.py",
+                    "timestamp": "omitted",
                     "items": [
                         {
                             "node_id": "test_basic_xfail.py::test_xfail",
@@ -187,7 +215,9 @@ class TestBasicxFail(CommonTestSetup):
                 },
                 {
                     "event": "collect_report",
+                    "session_id": "omitted",
                     "node_id": ".",
+                    "timestamp": "omitted",
                     "items": [
                         {
                             "node_id": "test_basic.py",
@@ -223,15 +253,30 @@ class TestBasicxFail(CommonTestSetup):
         )
         assert result.ret == 0
         assert self.json_lines_file.exists()
-        assert self.omit_durations_and_times(self.read_json_lines_file()) == [
+        assert self.sanitize(self.read_json_lines_file()) == [
             {
+                "session_id": "omitted",
+                "timestamp": "omitted",
+                "python": {
+                    "version": {
+                        "major": sys.version_info.major,
+                        "minor": sys.version_info.minor,
+                        "micro": sys.version_info.micro,
+                        "releaselevel": sys.version_info.releaselevel,
+                    },
+                    "platform": "omitted",
+                    "processor": "omitted",
+                    "packages": {},
+                },
                 "pytest_version": pytest.__version__,
                 "plugin_version": __version__,
                 "event": "session_start",
             },
             {
                 "event": "collect_report",
+                "session_id": "omitted",
                 "node_id": "",
+                "timestamp": "omitted",
                 "items": [
                     {
                         "node_id": ".",
@@ -243,7 +288,9 @@ class TestBasicxFail(CommonTestSetup):
             },
             {
                 "event": "collect_report",
+                "session_id": "omitted",
                 "node_id": "test_basic.py",
+                "timestamp": "omitted",
                 "items": [
                     {
                         "node_id": "test_basic.py::test_ok",
@@ -263,7 +310,9 @@ class TestBasicxFail(CommonTestSetup):
             },
             {
                 "event": "collect_report",
+                "session_id": "omitted",
                 "node_id": "test_basic_xfail.py",
+                "timestamp": "omitted",
                 "items": [
                     {
                         "node_id": "test_basic_xfail.py::test_xfail",
@@ -283,7 +332,9 @@ class TestBasicxFail(CommonTestSetup):
             },
             {
                 "event": "collect_report",
+                "session_id": "omitted",
                 "node_id": ".",
+                "timestamp": "omitted",
                 "items": [
                     {
                         "node_id": "test_basic.py",
@@ -308,74 +359,87 @@ class TestBasicxFail(CommonTestSetup):
                 ],
             },
             {
-                "event_type": "case_setup",
+                "event": "case_setup",
+                "session_id": "omitted",
                 "node_id": "test_basic.py::test_ok",
                 "outcome": "passed",
                 "duration": "omitted",
-                "start": "omitted",
-                "stop": "omitted",
+                "start_timestamp": "omitted",
+                "stop_timestamp": "omitted",
                 "error": None,
             },
             {
-                "event_type": "case_call",
+                "event": "case_call",
+                "session_id": "omitted",
                 "node_id": "test_basic.py::test_ok",
                 "outcome": "passed",
                 "duration": "omitted",
-                "start": "omitted",
-                "stop": "omitted",
+                "start_timestamp": "omitted",
+                "stop_timestamp": "omitted",
                 "error": None,
             },
             {
-                "event_type": "case_teardown",
+                "event": "case_teardown",
+                "session_id": "omitted",
                 "node_id": "test_basic.py::test_ok",
                 "outcome": "passed",
                 "duration": "omitted",
-                "start": "omitted",
-                "stop": "omitted",
+                "start_timestamp": "omitted",
+                "stop_timestamp": "omitted",
                 "error": None,
             },
             {
-                "event_type": "case_finished",
+                "event": "case_finished",
+                "session_id": "omitted",
                 "node_id": "test_basic.py::test_ok",
                 "outcome": "passed",
-                "duration": "omitted",
-                "start": "omitted",
-                "stop": "omitted",
+                "total_duration": "omitted",
+                "start_timestamp": "omitted",
+                "stop_timestamp": "omitted",
             },
             {
-                "event_type": "case_setup",
+                "event": "case_setup",
+                "session_id": "omitted",
                 "node_id": "test_basic_xfail.py::test_xfail",
                 "outcome": "passed",
                 "duration": "omitted",
-                "start": "omitted",
-                "stop": "omitted",
+                "start_timestamp": "omitted",
+                "stop_timestamp": "omitted",
                 "error": None,
             },
             {
-                "event_type": "case_call",
-                "node_id": "test_basic_xfail.py::test_xfail",
-                "outcome": "xfailed",
-                "duration": "omitted",
-                "start": "omitted",
-                "stop": "omitted",
-                "error": None,
-            },
-            {
-                "event_type": "case_teardown",
-                "node_id": "test_basic_xfail.py::test_xfail",
-                "outcome": "passed",
-                "duration": "omitted",
-                "start": "omitted",
-                "stop": "omitted",
-                "error": None,
-            },
-            {
-                "event_type": "case_finished",
+                "event": "case_call",
+                "session_id": "omitted",
                 "node_id": "test_basic_xfail.py::test_xfail",
                 "outcome": "xfailed",
                 "duration": "omitted",
-                "start": "omitted",
-                "stop": "omitted",
+                "start_timestamp": "omitted",
+                "stop_timestamp": "omitted",
+                "error": None,
             },
-            {"exit_status": 0, "event": "session_finish"},
+            {
+                "event": "case_teardown",
+                "session_id": "omitted",
+                "node_id": "test_basic_xfail.py::test_xfail",
+                "outcome": "passed",
+                "duration": "omitted",
+                "start_timestamp": "omitted",
+                "stop_timestamp": "omitted",
+                "error": None,
+            },
+            {
+                "event": "case_finished",
+                "session_id": "omitted",
+                "node_id": "test_basic_xfail.py::test_xfail",
+                "outcome": "xfailed",
+                "total_duration": "omitted",
+                "start_timestamp": "omitted",
+                "stop_timestamp": "omitted",
+            },
+            {
+                "exit_status": 0,
+                "event": "session_finish",
+                "session_id": "omitted",
+                "timestamp": "omitted",
+            },
         ]

@@ -15,9 +15,17 @@ class CollectReport:
     A report of collected items.
     """
 
+    session_id: str
+    """
+    The unique if of this test session used to aggregate events together.
+    """
     node_id: str
     """
     The node id of the node for which items were collected (the top level root directory has an empty node id).
+    """
+    timestamp: str
+    """
+    The date and time when the report was generated in ISO 8601 format.
     """
     items: List[
         Union[

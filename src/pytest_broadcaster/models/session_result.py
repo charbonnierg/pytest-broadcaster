@@ -6,7 +6,13 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import List
 
-from . import collect_report, error_message, test_case_report, warning_message
+from . import (
+    collect_report,
+    error_message,
+    python_distribution,
+    test_case_report,
+    warning_message,
+)
 
 
 @dataclass
@@ -15,6 +21,22 @@ class SessionResult:
     Result of a pytest session, including collect reports and test reports.
     """
 
+    session_id: str
+    """
+    The unique if of this test session.
+    """
+    start_timestamp: str
+    """
+    The start time of the pytest session in ISO 8601 format.
+    """
+    stop_timestamp: str
+    """
+    The stop time of the pytest session in ISO 8601 format.
+    """
+    python: python_distribution.PythonDistribution
+    """
+    The Python distribution that ran the tests.
+    """
     pytest_version: str
     """
     The version of pytest that generated the report.

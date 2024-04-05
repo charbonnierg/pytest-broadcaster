@@ -35,37 +35,53 @@ class CommonTestSetup:
         else:
             raise ValueError("Filename must end with '.py'")
         kwargs = {filename: content}
-        return self.test_dir.makepyfile(**kwargs)
+        return self.test_dir.makepyfile(**kwargs)  # pyright: ignore[reportUnknownMemberType]
 
-    def filter_traceback(
-        self, data: dict[str, Any] | list[Any]
-    ) -> dict[str, Any] | list[Any]:
-        return self._filter_traceback(deepcopy(data))
+    def sanitize(self, data: dict[str, Any] | list[Any]) -> dict[str, Any] | list[Any]:
+        return self._sanitize(deepcopy(data))
 
-    def _filter_traceback(
+    def _sanitize(
         self,
         data: Any,
     ) -> Any:
         if isinstance(data, dict):
-            for key, value in data.items():
+            for key, value in data.items():  # pyright: ignore[reportUnknownVariableType]
                 if key == "traceback":
                     data[key] = {
                         **data[key],
                         "entries": [
                             line
-                            for line in value["entries"]
+                            for line in value["entries"]  # pyright: ignore[reportUnknownVariableType]
                             if (
                                 "importlib" not in line["path"]
                                 and "pytest_asyncio" not in line["path"]
                             )
                         ],
                     }
+                elif key == "duration":
+                    data[key] = "omitted"
+                elif key == "total_duration":
+                    data[key] = "omitted"
+                elif key == "start_timestamp":
+                    data[key] = "omitted"
+                elif key == "stop_timestamp":
+                    data[key] = "omitted"
+                elif key == "timestamp":
+                    data[key] = "omitted"
+                elif key == "platform":
+                    data[key] = "omitted"
+                elif key == "processor":
+                    data[key] = "omitted"
+                elif key == "session_id":
+                    data[key] = "omitted"
+                elif key == "packages":
+                    data[key] = {}
                 elif isinstance(value, dict):
-                    data[key] = self._filter_traceback(value)
+                    data[key] = self._sanitize(value)
                 elif isinstance(value, list):
-                    data[key] = self._filter_traceback(value)
+                    data[key] = self._sanitize(value)
         elif isinstance(data, list):
-            data = [self._filter_traceback(item) for item in data]
+            data = [self._sanitize(item) for item in data]  # pyright: ignore[reportUnknownVariableType]
         else:
             return data
-        return data
+        return data  # pyright: ignore[reportUnknownVariableType]

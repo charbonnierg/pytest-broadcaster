@@ -5,6 +5,10 @@
   "description": "Result of a pytest session, including collect reports and test reports.",
   "type": "object",
   "required": [
+    "session_id",
+    "start_timestamp",
+    "stop_timestamp",
+    "python",
     "pytest_version",
     "plugin_version",
     "exit_status",
@@ -14,6 +18,24 @@
     "test_reports"
   ],
   "properties": {
+    "session_id": {
+      "type": "string",
+      "description": "The unique if of this test session."
+    },
+    "start_timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The start time of the pytest session in ISO 8601 format."
+    },
+    "stop_timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The stop time of the pytest session in ISO 8601 format."
+    },
+    "python": {
+      "$ref": "python_distribution.json",
+      "description": "The Python distribution that ran the tests."
+    },
     "pytest_version": {
       "type": "string",
       "description": "The version of pytest that generated the report."

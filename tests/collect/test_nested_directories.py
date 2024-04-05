@@ -1,12 +1,12 @@
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 
 import pytest
 
+from _testing.setup import CommonTestSetup
 from pytest_broadcaster import __version__
-
-from ._utils import CommonTestSetup
 
 
 @pytest.mark.basic
@@ -46,7 +46,21 @@ class TestBasic(CommonTestSetup):
         )
         assert result.ret == 0
         assert self.json_file.exists()
-        assert self.read_json_file() == {
+        assert self.sanitize(self.read_json_file()) == {
+            "session_id": "omitted",
+            "start_timestamp": "omitted",
+            "stop_timestamp": "omitted",
+            "python": {
+                "version": {
+                    "major": sys.version_info.major,
+                    "minor": sys.version_info.minor,
+                    "micro": sys.version_info.micro,
+                    "releaselevel": sys.version_info.releaselevel,
+                },
+                "platform": "omitted",
+                "processor": "omitted",
+                "packages": {},
+            },
             "pytest_version": pytest.__version__,
             "plugin_version": __version__,
             "exit_status": 0,
@@ -56,7 +70,9 @@ class TestBasic(CommonTestSetup):
             "collect_reports": [
                 {
                     "event": "collect_report",
+                    "session_id": "omitted",
                     "node_id": "",
+                    "timestamp": "omitted",
                     "items": [
                         {
                             "node_id": ".",
@@ -68,7 +84,9 @@ class TestBasic(CommonTestSetup):
                 },
                 {
                     "event": "collect_report",
+                    "session_id": "omitted",
                     "node_id": "subdirectory_1/test_module_1.py",
+                    "timestamp": "omitted",
                     "items": [
                         {
                             "node_id": "subdirectory_1/test_module_1.py::test_1",
@@ -90,7 +108,9 @@ class TestBasic(CommonTestSetup):
                 },
                 {
                     "event": "collect_report",
+                    "session_id": "omitted",
                     "node_id": "subdirectory_1",
+                    "timestamp": "omitted",
                     "items": [
                         {
                             "node_id": "subdirectory_1/test_module_1.py",
@@ -108,7 +128,9 @@ class TestBasic(CommonTestSetup):
                 },
                 {
                     "event": "collect_report",
+                    "session_id": "omitted",
                     "node_id": "subdirectory_2/test_module_2.py",
+                    "timestamp": "omitted",
                     "items": [
                         {
                             "node_id": "subdirectory_2/test_module_2.py::test_2",
@@ -130,7 +152,9 @@ class TestBasic(CommonTestSetup):
                 },
                 {
                     "event": "collect_report",
+                    "session_id": "omitted",
                     "node_id": "subdirectory_2",
+                    "timestamp": "omitted",
                     "items": [
                         {
                             "node_id": "subdirectory_2/test_module_2.py",
@@ -147,7 +171,10 @@ class TestBasic(CommonTestSetup):
                     ],
                 },
                 {
+                    "event": "collect_report",
+                    "session_id": "omitted",
                     "node_id": ".",
+                    "timestamp": "omitted",
                     "items": [
                         {
                             "node_id": "subdirectory_1",
@@ -166,7 +193,6 @@ class TestBasic(CommonTestSetup):
                             "node_type": "directory",
                         },
                     ],
-                    "event": "collect_report",
                 },
             ],
         }
@@ -180,15 +206,30 @@ class TestBasic(CommonTestSetup):
         )
         assert result.ret == 0
         assert self.json_lines_file.exists()
-        assert self.read_json_lines_file() == [
+        assert self.sanitize(self.read_json_lines_file()) == [
             {
+                "session_id": "omitted",
+                "timestamp": "omitted",
+                "python": {
+                    "version": {
+                        "major": sys.version_info.major,
+                        "minor": sys.version_info.minor,
+                        "micro": sys.version_info.micro,
+                        "releaselevel": sys.version_info.releaselevel,
+                    },
+                    "platform": "omitted",
+                    "processor": "omitted",
+                    "packages": {},
+                },
                 "pytest_version": pytest.__version__,
                 "plugin_version": __version__,
                 "event": "session_start",
             },
             {
                 "event": "collect_report",
+                "session_id": "omitted",
                 "node_id": "",
+                "timestamp": "omitted",
                 "items": [
                     {
                         "node_id": ".",
@@ -200,7 +241,9 @@ class TestBasic(CommonTestSetup):
             },
             {
                 "event": "collect_report",
+                "session_id": "omitted",
                 "node_id": "subdirectory_1/test_module_1.py",
+                "timestamp": "omitted",
                 "items": [
                     {
                         "node_id": "subdirectory_1/test_module_1.py::test_1",
@@ -220,7 +263,9 @@ class TestBasic(CommonTestSetup):
             },
             {
                 "event": "collect_report",
+                "session_id": "omitted",
                 "node_id": "subdirectory_1",
+                "timestamp": "omitted",
                 "items": [
                     {
                         "node_id": "subdirectory_1/test_module_1.py",
@@ -236,7 +281,9 @@ class TestBasic(CommonTestSetup):
             },
             {
                 "event": "collect_report",
+                "session_id": "omitted",
                 "node_id": "subdirectory_2/test_module_2.py",
+                "timestamp": "omitted",
                 "items": [
                     {
                         "node_id": "subdirectory_2/test_module_2.py::test_2",
@@ -256,7 +303,9 @@ class TestBasic(CommonTestSetup):
             },
             {
                 "event": "collect_report",
+                "session_id": "omitted",
                 "node_id": "subdirectory_2",
+                "timestamp": "omitted",
                 "items": [
                     {
                         "node_id": "subdirectory_2/test_module_2.py",
@@ -271,7 +320,10 @@ class TestBasic(CommonTestSetup):
                 ],
             },
             {
+                "event": "collect_report",
+                "session_id": "omitted",
                 "node_id": ".",
+                "timestamp": "omitted",
                 "items": [
                     {
                         "node_id": "subdirectory_1",
@@ -290,7 +342,11 @@ class TestBasic(CommonTestSetup):
                         "node_type": "directory",
                     },
                 ],
-                "event": "collect_report",
             },
-            {"exit_status": 0, "event": "session_finish"},
+            {
+                "exit_status": 0,
+                "event": "session_finish",
+                "session_id": "omitted",
+                "timestamp": "omitted",
+            },
         ]

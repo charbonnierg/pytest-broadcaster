@@ -1,10 +1,22 @@
 from __future__ import annotations
 
 import datetime
+import importlib.metadata
+import platform
+import sys
+from uuid import uuid4
 from warnings import WarningMessage
 
 import pytest
 from _pytest._code.code import ReprTraceback
+
+from pytest_broadcaster.models.python_distribution import (
+    Package,
+    Platform,
+    PythonDistribution,
+    Releaselevel,
+    Version,
+)
 
 from ._utils import (
     NodeID,
@@ -17,6 +29,10 @@ from ._utils import (
     make_traceback_line,
     parse_node_id,
 )
+
+
+def make_session_id() -> str:
+    return str(uuid4())
 
 
 def make_node_id(
@@ -59,6 +75,45 @@ def field_parameters(item: pytest.Item) -> dict[str, str]:
     return {k: type(v).__name__ for k, v in sorted(get_test_args(item).items())}
 
 
+def field_python() -> PythonDistribution:
+    packages = [
+        Package(name=x.metadata.get("Name"), version=x.version)
+        for x in importlib.metadata.distributions()
+    ]
+    platform_os = platform.system()
+    if platform_os == "Linux":
+        platform_os = Platform.linux
+    elif platform_os == "Darwin":
+        platform_os = Platform.darwin
+    elif platform_os == "Windows":
+        platform_os = Platform.windows
+    elif platform_os == "Java":
+        platform_os = Platform.java
+    else:
+        platform_os = Platform.unknown
+    processor_architecture = platform.processor()
+    level = sys.version_info.releaselevel
+    if level == "final":
+        level = Releaselevel.final
+    elif level == "beta":
+        level = Releaselevel.beta
+    elif level == "alpha":
+        level = Releaselevel.alpha
+    else:
+        level = Releaselevel.candidate
+    return PythonDistribution(
+        version=Version(
+            major=sys.version_info.major,
+            minor=sys.version_info.minor,
+            micro=sys.version_info.micro,
+            releaselevel=level,
+        ),
+        packages=packages,
+        platform=platform_os,
+        processor=processor_architecture,
+    )
+
+
 def make_warning_message(warning: WarningMessage) -> str:
     if isinstance(warning.message, str):
         return warning.message
@@ -67,6 +122,10 @@ def make_warning_message(warning: WarningMessage) -> str:
 
 def make_timestamp(epoch: float) -> str:
     return datetime.datetime.fromtimestamp(epoch).isoformat()
+
+
+def make_timestamp_from_datetime(dt: datetime.datetime) -> str:
+    return dt.astimezone(datetime.timezone.utc).isoformat()
 
 
 def make_traceback(report: pytest.TestReport) -> list[TracebackLine]:
