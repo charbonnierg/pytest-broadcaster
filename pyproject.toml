@@ -68,8 +68,6 @@ dev-dependencies = [
 [tool.rye.scripts]
 # Serve documentation
 docs = "mkdocs serve"
-# Build documentation
-build-docs = "mkdocs build"
 # Run test with coverage
 test = { chain = ["__test", "__coverage-html"] }
 # View coverage report
@@ -77,7 +75,7 @@ htmlcov = "python -m http.server 8080 --directory coverage-report"
 # Automate pre-commit
 pre = { chain = ["generate", "__format", "__lint", "test", "__typecheck"] }
 # Automate CI
-ci-docs = { chain = ["bootstrap", "diff", "build-docs"] }
+ci-docs = { chain = ["bootstrap", "diff", "__deploy-docs"] }
 ci = { chain = [
     "bootstrap",
     "diff",
@@ -89,7 +87,7 @@ ci = { chain = [
 # Automate project install
 bootstrap = { chain = ["__install-project"] }
 # Run code generation
-generate = { chain = ["__generate-models", "__format-models", "build-docs"] }
+generate = { chain = ["__generate-models", "__format-models"] }
 # Verify generated code is up-to-date
 diff = { chain = [
     "__remove-previous-check",
@@ -100,6 +98,7 @@ diff = { chain = [
 # Generate version file
 version = "hatch --quiet build --hooks-only"
 # Private tasks used for chaining
+__deploy-docs = "mike deploy --push $VERSION $ALIAS"
 __test = "coverage run --rcfile=pyproject.toml -m pytest"
 __coverage-html = "coverage html"
 __typecheck = { cmd = "pyright", env = { PYRIGHT_PYTHON_FORCE_VERSION = "latest" } }
