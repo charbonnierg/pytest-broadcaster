@@ -85,7 +85,7 @@ def field_parameters(item: pytest.Item) -> dict[str, str]:
 
 def field_python() -> PythonDistribution:
     packages = [
-        Package(name=x.metadata.get("Name"), version=x.version)
+        Package(name=x.metadata.get("Name"), version=x.version)  # pyright: ignore[reportAttributeAccessIssue]
         for x in importlib.metadata.distributions()
     ]
     platform_os = platform.system()
