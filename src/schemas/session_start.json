@@ -37,6 +37,10 @@
     "plugin_version": {
       "type": "string",
       "description": "The version of pytest-broadcaster plugin that is used to produce the report."
+    },
+    "project": {
+      "$ref": "project.json/#",
+      "description": "The project that is being tested."
     }
   }
 }

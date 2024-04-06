@@ -4,11 +4,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List
+from typing import List, Optional
 
 from . import (
     collect_report,
     error_message,
+    project,
     python_distribution,
     test_case_report,
     warning_message,
@@ -64,4 +65,8 @@ class SessionResult:
     test_reports: List[test_case_report.TestCaseReport]
     """
     Test reports generated during the session.
+    """
+    project: Optional[project.Project] = None
+    """
+    The project that is being tested.
     """

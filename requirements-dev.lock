@@ -166,9 +166,10 @@ six==1.16.0
 termynal==0.12.1
 toml==0.10.2
     # via datamodel-code-generator
-tomli==2.0.1 ; python_version < "3.12"
+tomli==2.0.1 ; python_version < "3.11"
     # via black
     # via pytest
+    # via pytest-broadcaster
 typing-extensions==4.10.0
     # via annotated-types
     # via black

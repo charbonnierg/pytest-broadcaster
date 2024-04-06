@@ -75,6 +75,10 @@
       "items": {
         "$ref": "test_case_report.json/#"
       }
+    },
+    "project": {
+      "$ref": "project.json/#",
+      "description": "The project that is being tested."
     }
   }
 }

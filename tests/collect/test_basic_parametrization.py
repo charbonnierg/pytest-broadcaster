@@ -39,6 +39,7 @@ class TestBasicParametrization(CommonTestSetup):
             "session_id": "omitted",
             "start_timestamp": "omitted",
             "stop_timestamp": "omitted",
+            "project": None,
             "python": {
                 "version": {
                     "major": sys.version_info.major,
@@ -155,6 +156,7 @@ class TestBasicParametrization(CommonTestSetup):
             {
                 "session_id": "omitted",
                 "timestamp": "omitted",
+                "project": None,
                 "python": {
                     "version": {
                         "major": sys.version_info.major,

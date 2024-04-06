@@ -4,8 +4,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Optional
 
-from . import python_distribution
+from . import project, python_distribution
 
 
 @dataclass
@@ -37,4 +38,8 @@ class SessionStart:
     event: str = "session_start"
     """
     The event type. Always set to `session_start`.
+    """
+    project: Optional[project.Project] = None
+    """
+    The project that is being tested.
     """

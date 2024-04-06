@@ -4,7 +4,7 @@ description = "Pytest plugin to broadcast pytest output to various destinations"
 authors = [{ name = "Guillaume Charbonnier", email = "gu.charbon@gmail.com" }]
 urls = { "Source" = "https://github.com/charbonnierg/pytest-broadcaster", "Tracker" = "https://github.com/charbonnierg/pytest-broadcaster/issues" }
 
-dependencies = ["pytest"]
+dependencies = ["pytest", 'tomli>=1; python_version < "3.11"']
 dynamic = ["version"]
 readme = "README.md"
 requires-python = ">= 3.8"
@@ -52,7 +52,6 @@ managed = true
 dev-dependencies = [
     "datamodel-code-generator>=0.25.5",
     "pyright>=1.1.355",
-    "tomli>=2.0.1 ; python_version < '3.12'",
     "coverage>=7.4.4",
     "flask>=3.0.2",
     "mkdocs-gen-files",

@@ -40,6 +40,7 @@ class DefaultReporter(Reporter):
         self._clock = clock or (lambda: datetime.datetime.now(tz=datetime.timezone.utc))
         self._session_id = session_id or api.make_session_id()
         self._python = api.field_python()
+        self._project = api.field_project()
         self._roots: dict[str, str] = {}
         self._pending_report: TestCaseReport | None = None
         self._start_timestamp = api.make_timestamp_from_datetime(self._clock())
@@ -55,6 +56,7 @@ class DefaultReporter(Reporter):
             errors=[],
             collect_reports=[],
             test_reports=[],
+            project=self._project,
         )
         self._done = False
 
@@ -84,6 +86,7 @@ class DefaultReporter(Reporter):
             python=self._python,
             pytest_version=pytest.__version__,
             plugin_version=__version__,
+            project=self._project,
         )
 
     def make_session_finish(self, exit_status: int) -> SessionFinish:

@@ -10,6 +10,7 @@ from warnings import WarningMessage
 import pytest
 from _pytest._code.code import ReprTraceback
 
+from pytest_broadcaster.models.project import Project
 from pytest_broadcaster.models.python_distribution import (
     Package,
     Platform,
@@ -18,6 +19,13 @@ from pytest_broadcaster.models.python_distribution import (
     Version,
 )
 
+from ._pyproject import (
+    get_project_name,
+    get_project_url,
+    get_project_version,
+    get_pyproject,
+    get_pyproject_data,
+)
 from ._utils import (
     NodeID,
     TracebackLine,
@@ -112,6 +120,17 @@ def field_python() -> PythonDistribution:
         platform=platform_os,
         processor=processor_architecture,
     )
+
+
+def field_project() -> Project | None:
+    pyproject_path = get_pyproject()
+    if pyproject_path is None:
+        return None
+    pyproject_data = get_pyproject_data(pyproject_path)
+    project_name = get_project_name(pyproject_data)
+    project_url = get_project_url(pyproject_data)
+    project_version = get_project_version(project_name)
+    return Project(project_name, project_version, project_url)
 
 
 def make_warning_message(warning: WarningMessage) -> str:
