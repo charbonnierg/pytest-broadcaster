@@ -5,10 +5,10 @@ from importlib.metadata import version
 from pathlib import Path
 from typing import Any
 
-if not sys.version_info > (3, 11):
-    import tomli as toml
-else:
+if sys.version_info >= (3, 11):
     import tomllib as toml
+else:
+    import tomli as toml
 
 
 def get_pyproject() -> Path | None:
