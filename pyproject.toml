@@ -72,19 +72,21 @@ test = { chain = ["__test", "__coverage-html"] }
 # View coverage report
 htmlcov = "python -m http.server 8080 --directory coverage-report"
 # Automate pre-commit
-pre = { chain = ["generate", "__format", "__lint", "test", "__typecheck"] }
+pre = { chain = ["generate", "format", "lint", "test", "typecheck"] }
 # Automate CI
 ci-docs = { chain = ["bootstrap", "diff", "__deploy-docs"] }
 ci = { chain = [
     "bootstrap",
     "diff",
     "__formatcheck",
-    "__lint",
+    "lint",
     "test",
-    "__typecheck",
+    "typecheck",
 ] }
 # Automate project install
 bootstrap = { chain = ["__install-project"] }
+# Run pyright static type checker
+typecheck = { cmd = "pyright", env = { PYRIGHT_PYTHON_FORCE_VERSION = "latest" } }
 # Run code generation
 generate = { chain = ["__generate-models", "__format-models"] }
 # Verify generated code is up-to-date
@@ -96,13 +98,14 @@ diff = { chain = [
 ] }
 # Generate version file
 version = "hatch --quiet build --hooks-only"
+# Run linter
+lint = "rye lint"
+# Run formatter
+format = "rye fmt"
 # Private tasks used for chaining
 __deploy-docs = { cmd = "bash ./scripts/deploy-docs.sh" }
 __test = "coverage run --rcfile=pyproject.toml -m pytest"
 __coverage-html = "coverage html"
-__typecheck = { cmd = "pyright", env = { PYRIGHT_PYTHON_FORCE_VERSION = "latest" } }
-__lint = "rye lint"
-__format = "rye fmt"
 __formatcheck = "rye fmt --check"
 __generate-models = "datamodel-codegen --input src/schemas/ --output src/pytest_broadcaster/models --input-file-type jsonschema --disable-timestamp --output-model-type=dataclasses.dataclass --use-field-description --use-schema-description"
 __generate-models-check = "datamodel-codegen --input src/schemas/ --output check --input-file-type jsonschema --disable-timestamp --output-model-type=dataclasses.dataclass --use-field-description --use-schema-description"
@@ -148,6 +151,7 @@ exclude_also = [
 directory = "coverage-report"
 
 [tool.pyright]
+pythonVersion = "3.8"
 include = ["tests", "src", "scripts"]
 strict = ["src"]
 exclude = ["**/.venv", "**/node_modules", "**/__pycache__", ".git", "**/build"]
