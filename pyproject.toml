@@ -148,7 +148,6 @@ exclude_also = [
 directory = "coverage-report"
 
 [tool.pyright]
-pythonVersion = "3.8"
 include = ["tests", "src", "scripts"]
 strict = ["src"]
 exclude = ["**/.venv", "**/node_modules", "**/__pycache__", ".git", "**/build"]

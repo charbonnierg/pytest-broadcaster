@@ -12,8 +12,6 @@ annotated-types==0.6.0
     # via pydantic
 argcomplete==3.2.3
     # via datamodel-code-generator
-astunparse==1.6.3
-    # via griffe
 babel==2.14.0
     # via mkdocs-material
 black==24.3.0
@@ -38,8 +36,6 @@ dnspython==2.6.1
     # via email-validator
 email-validator==2.1.1
     # via pydantic
-exceptiongroup==1.2.0
-    # via pytest
 flask==3.0.2
 genson==1.2.2
     # via datamodel-code-generator
@@ -51,11 +47,7 @@ idna==3.6
     # via email-validator
     # via requests
 importlib-metadata==7.1.0
-    # via flask
-    # via markdown
     # via mike
-    # via mkdocs
-    # via mkdocstrings
 importlib-resources==6.4.0
     # via mike
 inflect==5.6.2
@@ -146,8 +138,6 @@ pytest==8.1.1
     # via pytest-broadcaster
 python-dateutil==2.9.0.post0
     # via ghp-import
-pytz==2024.1
-    # via babel
 pyyaml==6.0.1
     # via datamodel-code-generator
     # via mike
@@ -161,19 +151,9 @@ regex==2023.12.25
 requests==2.31.0
     # via mkdocs-material
 six==1.16.0
-    # via astunparse
     # via python-dateutil
 termynal==0.12.1
-toml==0.10.2
-    # via datamodel-code-generator
-tomli==2.0.1 ; python_version < "3.11"
-    # via black
-    # via pytest
-    # via pytest-broadcaster
 typing-extensions==4.10.0
-    # via annotated-types
-    # via black
-    # via mkdocstrings
     # via pydantic
     # via pydantic-core
 urllib3==2.2.1
@@ -184,10 +164,7 @@ watchdog==4.0.0
     # via mkdocs
 werkzeug==3.0.2
     # via flask
-wheel==0.43.0
-    # via astunparse
 zipp==3.18.1
     # via importlib-metadata
-    # via importlib-resources
 setuptools==69.2.0
     # via nodeenv

@@ -5,7 +5,7 @@ from importlib.metadata import version
 from pathlib import Path
 from typing import Any
 
-if sys.version_info < (3, 11):
+if not sys.version_info > (3, 11):
     import tomli as toml
 else:
     import tomllib as toml
