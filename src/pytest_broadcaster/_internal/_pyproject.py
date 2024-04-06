@@ -8,7 +8,7 @@ from typing import Any
 if sys.version_info < (3, 11):
     import tomli as toml
 else:
-    import toml
+    import tomllib as toml
 
 
 def get_pyproject() -> Path | None:
