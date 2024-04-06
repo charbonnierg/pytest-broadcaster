@@ -2,7 +2,7 @@
 
 !!! example "JSON Schema"
 
-    https://charbonnierg.github.io/pytest-broadcaster/schemas/session_start.json
+    https://charbonnierg.github.io/pytest-broadcaster/latest/schemas/session_start.json
 
 
 ::: pytest_broadcaster.models.session_start.SessionStart

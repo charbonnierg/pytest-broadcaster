@@ -2,7 +2,7 @@
 
 !!! example "JSON Schema"
 
-    https://charbonnierg.github.io/pytest-broadcaster/schemas/traceback.json
+    https://charbonnierg.github.io/pytest-broadcaster/latest/schemas/traceback.json
 
 ::: pytest_broadcaster.models.traceback.Traceback
 

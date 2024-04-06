@@ -2,7 +2,7 @@
 
 !!! example "JSON Schema"
 
-    https://charbonnierg.github.io/pytest-broadcaster/schemas/error_message.json
+    https://charbonnierg.github.io/pytest-broadcaster/latest/schemas/error_message.json
 
 ::: pytest_broadcaster.models.error_message.ErrorMessage
 

@@ -5,40 +5,44 @@
   "description": "Event emitted when a test case is finished (meaning all of setup, call and teardown steps are finished).",
   "type": "object",
   "required": [
+    "event",
+    "session_id",
     "node_id",
-    "event_type",
-    "outcome",
-    "finished",
-    "duration",
-    "start",
-    "stop"
+    "start_timestamp",
+    "stop_timestamp",
+    "total_duration",
+    "outcome"
   ],
   "properties": {
+    "event": {
+      "const": "case_finished",
+      "description": "The event type. Always set to 'case_finished'."
+    },
+    "session_id": {
+      "type": "string",
+      "description": "The unique if of this test session used to aggregate events together."
+    },
     "node_id": {
       "type": "string",
       "description": "The node ID of the test case."
     },
-    "event_type": {
-      "const": "case_finished",
-      "description": "The event type. Always set to 'case_finished'."
-    },
-    "outcome": {
-      "$ref": "https://charbonnierg.github.io/pytest-broadcaster/latest/schemas/outcome.json",
-      "description": "Outcome of the test case."
-    },
-    "duration": {
-      "type": "number",
-      "description": "Duration of the test case in seconds (including setup and teardown)."
-    },
-    "start": {
+    "start_timestamp": {
       "type": "string",
       "format": "date-time",
       "description": "Start time of the test case (including setup)."
     },
-    "stop": {
+    "stop_timestamp": {
       "type": "string",
       "format": "date-time",
       "description": "Stop time of the test case (including teardown)."
+    },
+    "total_duration": {
+      "type": "number",
+      "description": "Total duration of the test case in seconds (including setup and teardown)."
+    },
+    "outcome": {
+      "$ref": "https://charbonnierg.github.io/pytest-broadcaster/latest/schemas/outcome.json",
+      "description": "Outcome of the test case."
     }
   }
 }

@@ -3,7 +3,7 @@
 
 !!! example "JSON Schema"
 
-    https://charbonnierg.github.io/pytest-broadcaster/schemas/test_module.json
+    https://charbonnierg.github.io/pytest-broadcaster/latest/schemas/test_module.json
 
 ::: pytest_broadcaster.models.test_module.TestModule
 
