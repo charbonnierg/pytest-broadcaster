@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import http
 from http.client import HTTPConnection, HTTPSConnection
+from typing import TYPE_CHECKING
 from urllib.parse import urlparse
 
 from ..interfaces import Destination
@@ -71,3 +72,8 @@ class HTTPWebhook(Destination):
             raise RuntimeError(
                 f"Failed to send webhook to {self.url}: {response.status} {response.reason}"
             )
+
+
+if TYPE_CHECKING:
+    # Make sure the class implements the Destination interface
+    HTTPWebhook("http://example.com")

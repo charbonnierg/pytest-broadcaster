@@ -62,11 +62,11 @@ def make_node_id(
     )
 
 
-def field_doc(item: pytest.Item | pytest.Module | pytest.Class) -> str:
+def make_doc(item: pytest.Item | pytest.Module | pytest.Class) -> str:
     return get_test_doc(item).strip()
 
 
-def field_markers(
+def make_markers(
     item: pytest.Item | pytest.Directory | pytest.Module | pytest.Class,
 ) -> list[str]:
     return list(
@@ -79,11 +79,11 @@ def field_markers(
     )
 
 
-def field_parameters(item: pytest.Item) -> dict[str, str]:
+def make_parameters(item: pytest.Item) -> dict[str, str]:
     return {k: type(v).__name__ for k, v in sorted(get_test_args(item).items())}
 
 
-def field_python() -> PythonDistribution:
+def make_python_distribution() -> PythonDistribution:
     packages = [
         Package(name=x.metadata.get("Name"), version=x.version)  # pyright: ignore[reportAttributeAccessIssue]
         for x in importlib.metadata.distributions()
@@ -122,7 +122,7 @@ def field_python() -> PythonDistribution:
     )
 
 
-def field_project() -> Project | None:
+def make_project() -> Project | None:
     pyproject_path = get_pyproject()
     if pyproject_path is None:
         return None

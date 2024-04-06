@@ -39,8 +39,8 @@ class DefaultReporter(Reporter):
     ) -> None:
         self._clock = clock or (lambda: datetime.datetime.now(tz=datetime.timezone.utc))
         self._session_id = session_id or api.make_session_id()
-        self._python = api.field_python()
-        self._project = api.field_project()
+        self._python = api.make_python_distribution()
+        self._project = api.make_project()
         self._roots: dict[str, str] = {}
         self._pending_report: TestCaseReport | None = None
         self._start_timestamp = api.make_timestamp_from_datetime(self._clock())
@@ -170,8 +170,8 @@ class DefaultReporter(Reporter):
                         node_id=result.nodeid,
                         name=result.name,
                         path=self._get_path(result.path.as_posix()),
-                        markers=api.field_markers(result),
-                        doc=api.field_doc(result),
+                        markers=api.make_markers(result),
+                        doc=api.make_doc(result),
                     )
                 )
                 continue
@@ -184,8 +184,8 @@ class DefaultReporter(Reporter):
                         name=result.name,
                         module=node_id.module,
                         path=self._get_path(result.path.as_posix()),
-                        doc=api.field_doc(result),
-                        markers=api.field_markers(result),
+                        doc=api.make_doc(result),
+                        markers=api.make_markers(result),
                     )
                 )
                 continue
@@ -198,9 +198,9 @@ class DefaultReporter(Reporter):
                     suite=node_id.suite(),
                     function=node_id.func,
                     path=self._get_path(result.path.as_posix()),
-                    doc=api.field_doc(result),
-                    markers=api.field_markers(result),
-                    parameters=api.field_parameters(result),
+                    doc=api.make_doc(result),
+                    markers=api.make_markers(result),
+                    parameters=api.make_parameters(result),
                 )
                 items.append(item)
         # Generate a collect report event.

@@ -95,7 +95,7 @@ class JSONLinesFile(Destination):
 
 
 if TYPE_CHECKING:
-    # Make sure the class implements the interface.
+    # Make sure the class implements the Destination interface
     JSONFile("fake.json")
-    # Make sure the class implements the interface.
+    # Make sure the class implements the Destination interface
     JSONLinesFile("fake.jsonl")
