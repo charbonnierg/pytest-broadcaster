@@ -262,9 +262,9 @@ class DefaultReporter(Reporter):
                 outcome=outcome,
                 error=error,
             )
-            assert (
-                self._pending_report
-            ), "pending report is missing, this is a bug in pytest-broadcaster plugin"
+            assert self._pending_report, (
+                "pending report is missing, this is a bug in pytest-broadcaster plugin"
+            )
             self._pending_report.call = step
 
         elif report.when == "teardown":
@@ -277,9 +277,9 @@ class DefaultReporter(Reporter):
                 start_timestamp=api.make_timestamp(report.start),
                 stop_timestamp=api.make_timestamp(report.stop),
             )
-            assert (
-                self._pending_report
-            ), "pending report is missing, this is a bug in pytest-broadcaster plugin"
+            assert self._pending_report, (
+                "pending report is missing, this is a bug in pytest-broadcaster plugin"
+            )
             self._pending_report.teardown = step
         else:
             raise ValueError(f"Unknown step {report.when}")
@@ -289,12 +289,12 @@ class DefaultReporter(Reporter):
         # Let's pop the pending report (we always have one)
         pending_report = self._pending_report
         self._pending_report = None
-        assert (
-            pending_report
-        ), "pending report is missing, this is a bug in pytest-broadcaster plugin"
-        assert (
-            pending_report.node_id == node_id
-        ), "node_id mismatch, this is a bug in pytest-broadcaster plugin"
+        assert pending_report, (
+            "pending report is missing, this is a bug in pytest-broadcaster plugin"
+        )
+        assert pending_report.node_id == node_id, (
+            "node_id mismatch, this is a bug in pytest-broadcaster plugin"
+        )
         # Get all reports
         reports = [
             report
