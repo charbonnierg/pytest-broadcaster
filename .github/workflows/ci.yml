@@ -5,9 +5,11 @@ on:
   pull_request:
     branches: ["main"]
 
+
 jobs:
   check-format:
     name: Check format
+    runs-on: ubuntu-latest
     steps:
       - name: Environment setup
         uses: ./.github/actions/env-setup
@@ -17,6 +19,7 @@ jobs:
 
   check-code:
     name: Check code
+    runs-on: ubuntu-latest
     steps:
       - name: Environment setup
         uses: ./.github/actions/env-setup
@@ -26,6 +29,7 @@ jobs:
 
   check-type:
     name: Check types
+    runs-on: ubuntu-latest
     steps:
       - name: Environment setup
         uses: ./.github/actions/env-setup
@@ -35,6 +39,7 @@ jobs:
 
   check-schemas:
     name: Check schemas
+    runs-on: ubuntu-latest
     steps:
       - name: Environment setup
         uses: ./.github/actions/env-setup
@@ -44,6 +49,7 @@ jobs:
 
   run-tests:
     name: Run tests
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
