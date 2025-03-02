@@ -16,6 +16,7 @@ runs:
       uses: extractions/setup-just@v2
 
     - name: Override python version required by project
+      shell: bash
       run: |
         echo "${{ matrix.python-version }}" > .python-version
         sed -i -e 's/pythonVersion = "3.9"/pythonVersion = "${{ matrix.python-version }}"/g' pyproject.toml
