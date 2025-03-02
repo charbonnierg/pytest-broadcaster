@@ -14,14 +14,14 @@ jobs:
       contents: write
 
     steps:
-      - name: Environment setup
-        uses: ./.github/actions/env-setup
-
       - name: Configure git user
         run: |
           git config user.name mkdocs-bot
           git config user.email mkdocs-bot@github.com
           git fetch origin gh-pages --depth=1
+
+      - name: Environment setup
+        uses: gcharbonnier/pytest-broadcaster/.github/actions/env-setup
 
       - name: Build the docs
         run: just docs
