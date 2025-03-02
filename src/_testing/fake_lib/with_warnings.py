@@ -1,4 +1,4 @@
 import warnings
 
-warnings.warn("Hey, you've been warned")
-warnings.warn("Hey, you've been warned twice !")
+warnings.warn("Hey, you've been warned", stacklevel=1)
+warnings.warn("Hey, you've been warned twice !", stacklevel=1)

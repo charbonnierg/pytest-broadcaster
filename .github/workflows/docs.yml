@@ -16,22 +16,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Uses the same action as rye
-      # See: https://github.com/astral-sh/rye/blob/main/.github/workflows/python-lint.yml
-      - name: Install the latest version of rye
-        uses: eifinger/setup-rye@v2
-        with:
-          enable-cache: true
-          cache-prefix: 'docs'
-
       - name: Configure git user
         run: |
           git config user.name mkdocs-bot
           git config user.email mkdocs-bot@github.com
           git fetch origin gh-pages --depth=1
 
+      - name: Environment setup
+        uses: ./.github/actions/env-setup
+
       - name: Build the docs
-        run: rye run ci-docs
+        run: just docs
         env:
           VERSION: "${{  github.ref_name }}"
           ALIAS: latest

@@ -4,22 +4,21 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional
+from typing import TYPE_CHECKING
 
-from . import traceback
+if TYPE_CHECKING:
+    from . import traceback
 
 
 @dataclass
 class TestCaseError:
-    """
-    An error which occured during the execution of a test case (either setup, call or teardown).
-    """
+    """An error which occured during the execution of a test case (either setup, call or teardown)."""
 
     message: str
     """
     Error message.
     """
-    traceback: Optional[traceback.Traceback] = None
+    traceback: traceback.Traceback | None = None
     """
     Error traceback.
     """

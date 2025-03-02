@@ -83,8 +83,8 @@ This schema is the union of the different events that can be emitted by the plug
 - [`TestCaseSetup` JSON Schema](https://github.com/charbonnierg/pytest-broadcaster/tree/main/schemas/test_case_setup.json)
 - [`TestCaseCall` JSON Schema](https://github.com/charbonnierg/pytest-broadcaster/tree/main/schemas/test_case_call.json)
 - [`TestCaseTeardown` JSON Schema](https://github.com/charbonnierg/pytest-broadcaster/tree/main/schemas/test_case_teardown.json)
-- [`TestCaseFinished` JSON Schema](https://github.com/charbonnierg/pytest-broadcaster/tree/main/schemas/test_case_finished.json)
-- [`SessionFinish` JSON Schema](https://github.com/charbonnierg/pytest-broadcaster/tree/main/schemas/session_finish.json)
+- [`TestCaseEnd` JSON Schema](https://github.com/charbonnierg/pytest-broadcaster/tree/main/schemas/test_case_end.json)
+- [`SessionEnd` JSON Schema](https://github.com/charbonnierg/pytest-broadcaster/tree/main/schemas/session_end.json)
 
 Python tools can also use the [`SessionEvent` dataclass](https://github.com/charbonnierg/pytest-broadcaster/tree/main/src/pytest_broadcaster/models/session_event.py) to parse the JSON lines file, as well as the differnt event classes:
 
@@ -95,8 +95,8 @@ Python tools can also use the [`SessionEvent` dataclass](https://github.com/char
 - [`TestCaseSetup` dataclass](https://github.com/charbonnierg/pytest-broadcaster/tree/main/src/pytest_broadcaster/models/test_case_setup.py)
 - [`TestCaseCall` dataclass](https://github.com/charbonnierg/pytest-broadcaster/tree/main/src/pytest_broadcaster/models/test_case_call.py)
 - [`TestCaseTeardown` dataclass](https://github.com/charbonnierg/pytest-broadcaster/tree/main/src/pytest_broadcaster/models/test_case_teardown.py)
-- [`TestCaseFinished` dataclass](https://github.com/charbonnierg/pytest-broadcaster/tree/main/src/pytest_broadcaster/models/test_case_finished.py)
-- [`SessionFinish` dataclass](https://github.com/charbonnierg/pytest-broadcaster/tree/main/src/pytest_broadcaster/models/session_finish.py)
+- [`TestCaseEnd` dataclass](https://github.com/charbonnierg/pytest-broadcaster/tree/main/src/pytest_broadcaster/models/test_case_end.py)
+- [`SessionEnd` dataclass](https://github.com/charbonnierg/pytest-broadcaster/tree/main/src/pytest_broadcaster/models/session_end.py)
 
 ## Hooks
 

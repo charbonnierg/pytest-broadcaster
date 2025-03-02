@@ -8,9 +8,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Location:
-    """
-    Location in code source.
-    """
+    """Location in code source."""
 
     filename: str
     """

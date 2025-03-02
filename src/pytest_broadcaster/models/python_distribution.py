@@ -5,13 +5,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import List, Optional
 
 
 class Releaselevel(Enum):
-    """
-    The release level of the python interpreter.
-    """
+    """The release level of the python interpreter."""
 
     alpha = "alpha"
     beta = "beta"
@@ -21,9 +18,7 @@ class Releaselevel(Enum):
 
 @dataclass
 class Version:
-    """
-    The version of the python interpreter being used to run the tests.
-    """
+    """The version of the python interpreter being used to run the tests."""
 
     major: int
     """
@@ -44,9 +39,7 @@ class Version:
 
 
 class Platform(Enum):
-    """
-    The platform of the python interpreter.
-    """
+    """The platform of the python interpreter."""
 
     linux = "linux"
     darwin = "darwin"
@@ -57,11 +50,11 @@ class Platform(Enum):
 
 @dataclass
 class Package:
-    name: Optional[str] = None
+    name: str | None = None
     """
     The name of the package.
     """
-    version: Optional[str] = None
+    version: str | None = None
     """
     The version of the package.
     """
@@ -69,9 +62,7 @@ class Package:
 
 @dataclass
 class PythonDistribution:
-    """
-    Metadata about the python interpreter being used to run the tests.
-    """
+    """Metadata about the python interpreter being used to run the tests."""
 
     version: Version
     """
@@ -85,7 +76,7 @@ class PythonDistribution:
     """
     The platform of the python interpreter.
     """
-    packages: List[Package]
+    packages: list[Package]
     """
     The packages installed in the python interpreter.
     """

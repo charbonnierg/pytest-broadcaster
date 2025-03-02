@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import sys
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -9,10 +9,13 @@ from _testing.http_server import EmbeddedTestServer, Spy
 from _testing.setup import CommonTestSetup
 from pytest_broadcaster import __version__
 
+if TYPE_CHECKING:
+    from pathlib import Path
+
 
 class TestHttpDestination(CommonTestSetup):
     @pytest.fixture(autouse=True)
-    def setup(
+    def setup(  # type: ignore[no-untyped-def]
         self, pytester: pytest.Pytester, tmp_path: Path, pytestconfig: pytest.Config
     ):
         self.tmp_path = tmp_path

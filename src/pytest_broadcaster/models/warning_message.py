@@ -5,15 +5,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Optional
+from typing import TYPE_CHECKING
 
-from . import location
+if TYPE_CHECKING:
+    from . import location
 
 
 class When(Enum):
-    """
-    When the warning message is emitted.
-    """
+    """When the warning message is emitted."""
 
     config = "config"
     collect = "collect"
@@ -22,9 +21,7 @@ class When(Enum):
 
 @dataclass
 class WarningMessage:
-    """
-    A warning message.
-    """
+    """A warning message."""
 
     when: When
     """
@@ -46,7 +43,7 @@ class WarningMessage:
     """
     The event type. Always 'warning_message'.
     """
-    category: Optional[str] = None
+    category: str | None = None
     """
     The category of the warning message.
     """

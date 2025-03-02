@@ -7,9 +7,7 @@ from enum import Enum
 
 
 class Outcome(Enum):
-    """
-    The outcome of a case step or a whole test case.
-    """
+    """The outcome of a case step or a whole test case."""
 
     passed = "passed"
     skipped = "skipped"

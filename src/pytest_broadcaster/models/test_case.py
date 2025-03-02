@@ -4,14 +4,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, List, Optional
 
 
 @dataclass
 class TestCase:
-    """
-    A collected test case.
-    """
+    """A collected test case."""
 
     node_id: str
     """
@@ -29,11 +26,11 @@ class TestCase:
     """
     The test docstring (optional).
     """
-    markers: List[str]
+    markers: list[str]
     """
     The test markers. Each marker is a string.
     """
-    parameters: Dict[str, str]
+    parameters: dict[str, str]
     """
     Test parameters names and types. Each key is a parameter name and each value is a parameter type as a string.
     """
@@ -41,15 +38,15 @@ class TestCase:
     """
     The node type. Always set to 'case'.
     """
-    module: Optional[str] = None
+    module: str | None = None
     """
     The module name where the test case is defined (optional).
     """
-    suite: Optional[str] = None
+    suite: str | None = None
     """
     The test suite name where the test case is defined (optional).
     """
-    function: Optional[str] = None
+    function: str | None = None
     """
     The function name (optional).
     """

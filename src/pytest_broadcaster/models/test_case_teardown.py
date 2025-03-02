@@ -4,16 +4,15 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional
+from typing import TYPE_CHECKING
 
-from . import outcome, test_case_error
+if TYPE_CHECKING:
+    from . import outcome, test_case_error
 
 
 @dataclass
 class TestCaseTeardown:
-    """
-    Pytest Test Case Teardown
-    """
+    """Pytest Test Case Teardown."""
 
     session_id: str
     """
@@ -43,7 +42,7 @@ class TestCaseTeardown:
     """
     The event type. Always set to 'case_teardown'.
     """
-    error: Optional[test_case_error.TestCaseError] = None
+    error: test_case_error.TestCaseError | None = None
     """
     Error details if the teardown step failed.
     """

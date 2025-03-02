@@ -8,9 +8,7 @@ from dataclasses import dataclass
 
 @dataclass
 class TestDirectory:
-    """
-    A collected test directory.
-    """
+    """A collected test directory."""
 
     node_id: str
     """

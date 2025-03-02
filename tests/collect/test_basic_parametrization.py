@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import sys
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
 from _testing.setup import CommonTestSetup
 from pytest_broadcaster import __version__
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 @pytest.mark.basic
@@ -28,7 +31,6 @@ class TestBasicParametrization(CommonTestSetup):
 
     def test_json(self):
         """Test JSON report for a test file with a single test case with parametrize."""
-
         directory = self.make_test_directory()
         result = self.test_dir.runpytest(
             "--collect-only", "--collect-report", self.json_file.as_posix()
@@ -144,8 +146,7 @@ class TestBasicParametrization(CommonTestSetup):
         }
 
     def test_jsonl(self):
-        """Test JSON Lines report for a test file with a single test case with parametrize."""
-
+        """Test JSON Lines report for a test file with one parametrized test case."""
         directory = self.make_test_directory()
         result = self.test_dir.runpytest(
             "--collect-only", "--collect-log", self.json_lines_file.as_posix()
@@ -256,7 +257,7 @@ class TestBasicParametrization(CommonTestSetup):
             },
             {
                 "exit_status": 0,
-                "event": "session_finish",
+                "event": "session_end",
                 "session_id": "omitted",
                 "timestamp": "omitted",
             },

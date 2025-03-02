@@ -1,17 +1,20 @@
 from __future__ import annotations
 
 import sys
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
 from _testing.setup import CommonTestSetup
 from pytest_broadcaster import __version__
 
+if TYPE_CHECKING:
+    from pathlib import Path
+
 
 @pytest.mark.basic
 class TestxFailWithinTest(CommonTestSetup):
-    """Scenario: A single test case within a single test file which calls xfail() during execution."""
+    """Test single test case within one file which calls xfail() during execution."""
 
     def make_test_directory(self) -> Path:
         return self.make_testfile(
@@ -29,7 +32,6 @@ class TestxFailWithinTest(CommonTestSetup):
 
     def test_json(self):
         """Test JSON report for single test case within single test file."""
-
         directory = self.make_test_directory()
         result = self.test_dir.runpytest("--collect-report", self.json_file.as_posix())
         assert result.ret == 0
@@ -91,7 +93,7 @@ class TestxFailWithinTest(CommonTestSetup):
                         "error": None,
                     },
                     "finished": {
-                        "event": "case_finished",
+                        "event": "case_end",
                         "session_id": "omitted",
                         "node_id": "test_xfail_within_test.py::test_xfail",
                         "outcome": "xfailed",
@@ -161,7 +163,6 @@ class TestxFailWithinTest(CommonTestSetup):
 
     def test_jsonl(self):
         """Test JSON Lines report for single test case within single test file."""
-
         directory = self.make_test_directory()
         result = self.test_dir.runpytest(
             "--collect-log", self.json_lines_file.as_posix()
@@ -273,7 +274,7 @@ class TestxFailWithinTest(CommonTestSetup):
                 "error": None,
             },
             {
-                "event": "case_finished",
+                "event": "case_end",
                 "session_id": "omitted",
                 "node_id": "test_xfail_within_test.py::test_xfail",
                 "outcome": "xfailed",
@@ -283,7 +284,7 @@ class TestxFailWithinTest(CommonTestSetup):
             },
             {
                 "exit_status": 0,
-                "event": "session_finish",
+                "event": "session_end",
                 "session_id": "omitted",
                 "timestamp": "omitted",
             },

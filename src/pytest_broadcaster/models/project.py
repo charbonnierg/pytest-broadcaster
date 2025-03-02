@@ -4,24 +4,21 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional
 
 
 @dataclass
 class Project:
-    """
-    Metadata about the project for which tests are run.
-    """
+    """Metadata about the project for which tests are run."""
 
     name: str
     """
     The name of the project. Project name is detected from pyproject.toml file if the file exits.
     """
-    version: Optional[str] = None
+    version: str | None = None
     """
     The version of the project. Project version is detected using importlib.metadata if pyproject.toml file if the file exits.
     """
-    repository_url: Optional[str] = None
+    repository_url: str | None = None
     """
     The URL of the project's repository.  Repositor URL is detected from pyproject.toml file if the file exits. The fields 'repository' and 'source' are looked for (case-insensitive) in respective order, and the first one found is used.
     """

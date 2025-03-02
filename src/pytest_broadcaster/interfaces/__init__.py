@@ -1,22 +1,28 @@
+"""pytest_brocaster interfaces."""
+
 from __future__ import annotations
 
 import abc
-import warnings
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
-import pytest
+from typing_extensions import Self
 
-from ..models.collect_report import CollectReport
-from ..models.error_message import ErrorMessage
-from ..models.session_event import SessionEvent
-from ..models.session_finish import SessionFinish
-from ..models.session_result import SessionResult
-from ..models.session_start import SessionStart
-from ..models.test_case_call import TestCaseCall
-from ..models.test_case_finished import TestCaseFinished
-from ..models.test_case_setup import TestCaseSetup
-from ..models.test_case_teardown import TestCaseTeardown
-from ..models.warning_message import WarningMessage
+if TYPE_CHECKING:
+    import warnings
+
+    import pytest
+
+    from pytest_broadcaster.models.collect_report import CollectReport
+    from pytest_broadcaster.models.error_message import ErrorMessage
+    from pytest_broadcaster.models.session_end import SessionEnd
+    from pytest_broadcaster.models.session_event import SessionEvent
+    from pytest_broadcaster.models.session_result import SessionResult
+    from pytest_broadcaster.models.session_start import SessionStart
+    from pytest_broadcaster.models.test_case_call import TestCaseCall
+    from pytest_broadcaster.models.test_case_end import TestCaseEnd
+    from pytest_broadcaster.models.test_case_setup import TestCaseSetup
+    from pytest_broadcaster.models.test_case_teardown import TestCaseTeardown
+    from pytest_broadcaster.models.warning_message import WarningMessage
 
 
 class Destination(metaclass=abc.ABCMeta):
@@ -34,17 +40,19 @@ class Destination(metaclass=abc.ABCMeta):
     def summary(self) -> str | None:
         """Return a summary of the destination."""
 
-    def open(self) -> None:
+    def open(self) -> None:  # noqa: B027
         """Open the destination. No-op by default."""
 
-    def close(self) -> None:
+    def close(self) -> None:  # noqa: B027
         """Close the destination. No-op by default."""
 
-    def __enter__(self) -> Destination:
+    def __enter__(self) -> Self:
+        """Enter destination context manager."""
         self.open()
         return self
 
     def __exit__(self, exc_type: object, exc_val: object, exc_tb: object) -> None:
+        """Exit destination context manager."""
         self.close()
 
 
@@ -60,8 +68,8 @@ class Reporter(metaclass=abc.ABCMeta):
         """Return a session start event."""
 
     @abc.abstractmethod
-    def make_session_finish(self, exit_status: int) -> SessionFinish:
-        """Return a session finish event."""
+    def make_session_end(self, exit_status: int) -> SessionEnd:
+        """Return a session env event."""
 
     @abc.abstractmethod
     def make_warning_message(
@@ -89,5 +97,5 @@ class Reporter(metaclass=abc.ABCMeta):
         """Return a test case step event."""
 
     @abc.abstractmethod
-    def make_test_case_finished(self, node_id: str) -> TestCaseFinished:
-        """Return a test case finished event."""
+    def make_test_case_end(self, node_id: str) -> TestCaseEnd:
+        """Return a test case end event."""

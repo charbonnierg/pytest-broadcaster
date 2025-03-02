@@ -38,7 +38,7 @@
       "description": "Teardown step of the test case."
     },
     "finished": {
-      "$ref": "https://charbonnierg.github.io/pytest-broadcaster/latest/schemas/test_case_finished.json",
+      "$ref": "https://charbonnierg.github.io/pytest-broadcaster/latest/schemas/test_case_end.json",
       "description": "View of the test case after it has finished."
     }
   }

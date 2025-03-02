@@ -4,16 +4,15 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional
+from typing import TYPE_CHECKING
 
-from . import project, python_distribution
+if TYPE_CHECKING:
+    from . import project, python_distribution
 
 
 @dataclass
 class SessionStart:
-    """
-    Event emitted when the test session is started.
-    """
+    """Event emitted when the test session is started."""
 
     session_id: str
     """
@@ -39,7 +38,7 @@ class SessionStart:
     """
     The event type. Always set to `session_start`.
     """
-    project: Optional[project.Project] = None
+    project: project.Project | None = None
     """
     The project that is being tested.
     """

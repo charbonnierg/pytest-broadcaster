@@ -1,15 +1,17 @@
+"""pytest_broadcaster pytest plugin hooks."""
+
 from __future__ import annotations
 
-from typing import Callable
+from typing import TYPE_CHECKING, Callable
 
-from ..interfaces import Destination, Reporter
+if TYPE_CHECKING:
+    from pytest_broadcaster.interfaces import Destination, Reporter
 
 
-def pytest_broadcaster_add_destination(add: Callable[[Destination], None]) -> None:
-    """
-    Called on plugin initialization.
+def pytest_broadcaster_add_destination(add: Callable[[Destination], None], /) -> None:
+    """Add your own destination.
 
-    Use it to add your own destination.
+    This function is called on plugin initialization.
 
     For instance, in `conftest.py`:
 
@@ -29,17 +31,16 @@ def pytest_broadcaster_add_destination(add: Callable[[Destination], None]) -> No
     """
 
 
-def pytest_broadcaster_set_reporter(set: Callable[[Reporter], None]) -> None:
-    """
-    Called on plugin initialization.
+def pytest_broadcaster_set_reporter(_set: Callable[[Reporter], None], /) -> None:
+    """Set your own reporter.
 
-    Use it to set your own reporter.
+    This funciton is called on plugin initialization.
 
     For instance, in `conftest.py`:
 
     ```python
     def pytest_broadcaster_set_reporter(set_reporter):
-        set(MyReporter())
+        set_reporter(MyReporter())
     ```
 
     Then run pytest without any option:

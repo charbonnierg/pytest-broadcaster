@@ -1,19 +1,24 @@
+"""pytest_broadcaster pytest plugin."""
+
 from __future__ import annotations
 
 import warnings
 from contextlib import ExitStack
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 import pytest
-from _pytest.terminal import TerminalReporter
 
 from pytest_broadcaster import hooks
 from pytest_broadcaster._internal._json_files import JSONFile, JSONLinesFile
 from pytest_broadcaster._internal._reporter import DefaultReporter
 from pytest_broadcaster._internal._webhook import HTTPWebhook
-from pytest_broadcaster.interfaces import Destination, Reporter
-from pytest_broadcaster.models.session_event import SessionEvent
-from pytest_broadcaster.models.session_result import SessionResult
+
+if TYPE_CHECKING:
+    from _pytest.terminal import TerminalReporter
+
+    from pytest_broadcaster.interfaces import Destination, Reporter
+    from pytest_broadcaster.models.session_event import SessionEvent
+    from pytest_broadcaster.models.session_result import SessionResult
 
 __PLUGIN_ATTR__ = "_broadcaster_plugin"
 
@@ -72,7 +77,7 @@ def pytest_configure(config: pytest.Config) -> None:
 
     This function is called once after command line options have been parsed.
 
-    Performs the following actions:
+    Perform the following actions:
 
     - Skip if workerinput is present, which means we are in a worker process.
     - Create a JSONFile destination if the JSON output file path is present.
@@ -115,7 +120,7 @@ def pytest_configure(config: pytest.Config) -> None:
     config.hook.pytest_broadcaster_add_destination(add=add_destination)
 
     # Create default reporter
-    reporter_to_use = DefaultReporter()
+    reporter_to_use: Reporter = DefaultReporter()
 
     def set_reporter(reporter: Reporter) -> None:
         nonlocal reporter_to_use
@@ -138,11 +143,14 @@ def pytest_configure(config: pytest.Config) -> None:
 
 
 def pytest_addhooks(pluginmanager: pytest.PytestPluginManager) -> None:
-    """Called at plugin registration time to allow adding new hooks via a call to [pytest.pluginmanager.add_hookspecs][_pytest.pluginmanager.add_hookspecs].
+    """Add the plugin hooks to the pytest plugin manager.
+
+    This function is called once at plugin registration time via a call to
+    [pytest.pluginmanager.add_hookspecs][_pytest.pluginmanager.add_hookspecs].
 
     See [pytest.hookspec.pytest_addhooks][_pytest.hookspec.pytest_addhooks].
 
-    Add the plugin hooks to the plugin manager:
+    Add the following hooks:
 
     - [pytest_broadcaster_add_destination][pytest_broadcaster.hooks.pytest_broadcaster_add_destination]: Add a destination to the plugin.
     - [pytest_broadcaster_set_reporter][pytest_broadcaster.hooks.pytest_broadcaster_set_reporter]: Set the reporter to use.
@@ -153,11 +161,12 @@ def pytest_addhooks(pluginmanager: pytest.PytestPluginManager) -> None:
 def pytest_unconfigure(config: pytest.Config) -> None:
     """Perform final plugin teardown.
 
-    This function is called once after all test are executed and before test process is exited.
+    This function is called once after all test are executed and before test process is
+    exited.
 
     See [pytest.hookspec.pytest_unconfigure][_pytest.hookspec.pytest_unconfigure].
 
-    Performs the following actions:
+    Perform the following actions:
 
     - Extract the plugin instance from the config object.
     - Close the plugin instance.
@@ -179,13 +188,16 @@ class PytestBroadcasterPlugin:
         reporter: Reporter,
         publishers: list[Destination],
     ) -> None:
+        """Create a new pytest broadcaster plugin."""
         self.config = config
         self.publishers = publishers
         self.reporter = reporter
         self.stack = ExitStack()
 
     def open(self) -> None:
-        """Open the plugin instance. It performs the following actions:
+        """Open the plugin instance.
+
+        Perform the following actions:
 
         - Skip if there is no JSON Lines output
         - Raise an error if the JSON Lines output file is already open.
@@ -195,11 +207,15 @@ class PytestBroadcasterPlugin:
         for publisher in self.publishers:
             try:
                 self.stack.enter_context(publisher)
-            except Exception as e:
-                warnings.warn(f"Failed to open publisher: {publisher} - {repr(e)}")
+            except Exception as e:  # noqa: PERF203, BLE001
+                warnings.warn(
+                    f"Failed to open publisher: {publisher} - {e!r}", stacklevel=1
+                )
 
     def close(self) -> None:
-        """Close the plugin instance. It performs the following actions:
+        """Close the plugin instance.
+
+        Perform the following actions:
 
         - Close the JSON Lines output file (if any).
         - Write the results to the JSON output file (if any)
@@ -209,18 +225,24 @@ class PytestBroadcasterPlugin:
         self.stack.close()
 
     def pytest_sessionstart(self) -> None:
-        """Called after the [Session object][pytest.Session] has been created and before performing collection and entering the run test loop.
+        """Write a session start event.
+
+        This function is called after the [Session object][pytest.Session] has been
+        created and before performing collection and entering the run test loop.
 
         See [pytest.hookspec.pytest_sessionstart][_pytest.hookspec.pytest_sessionstart].
         """
         self._write_event(self.reporter.make_session_start())
 
     def pytest_sessionfinish(self, exitstatus: int) -> None:
-        """Called after whole test run finished, right before returning the exit status to the system.
+        """Write a session end event.
 
-        See [pytest.hookspec.pytest_sessionfinish][_pytest.hookspec.pytest_sessionfinish].
+        This function is called after whole test run finished, right before returning
+        the exit status to the system.
+
+        See [pytest.hookspec.pytest_sessionfinish][_pytest.hookspec.pytest_sessionfinish]
         """
-        self._write_event(self.reporter.make_session_finish(exitstatus))
+        self._write_event(self.reporter.make_session_end(exitstatus))
 
     def pytest_warning_recorded(
         self,
@@ -228,7 +250,7 @@ class PytestBroadcasterPlugin:
         when: Literal["config", "collect", "runtest"],
         nodeid: str,
         location: tuple[str, int, str] | None,
-    ):
+    ) -> None:
         """Process a warning captured during the session.
 
         See [pytest.hookspec.pytest_warning_recorded][_pytest.hookspec.pytest_warning_recorded].
@@ -276,13 +298,13 @@ class PytestBroadcasterPlugin:
     def pytest_runtest_logfinish(
         self, nodeid: str, location: tuple[str, int | None, str]
     ) -> None:
-        """Called at the end of running the runtest protocol for a single item.
+        """Pytest calls this function after running the runtest protocol for a single item.
 
         See [pytest.hookspec.pytest_runtest_logfinish][_pytest.hookspec.pytest_runtest_logfinish].
         """
-        self._write_event(self.reporter.make_test_case_finished(nodeid))
+        self._write_event(self.reporter.make_test_case_end(nodeid))
 
-    def pytest_terminal_summary(self, terminalreporter: TerminalReporter):
+    def pytest_terminal_summary(self, terminalreporter: TerminalReporter) -> None:
         """Add a section to terminal summary reporting.
 
         See [pytest.hookspec.pytest_terminal_summary][_pytest.hookspec.pytest_terminal_summary].
@@ -296,9 +318,10 @@ class PytestBroadcasterPlugin:
         for publisher in self.publishers:
             try:
                 publisher.write_event(event)
-            except Exception as e:
+            except Exception as e:  # noqa: PERF203, BLE001
                 warnings.warn(
-                    f"Failed to write event to destination: {publisher} - {repr(e)}"
+                    f"Failed to write event to destination: {publisher} - {e!r}",
+                    stacklevel=2,
                 )
 
     def _write_result(self, result: SessionResult) -> None:
@@ -306,7 +329,8 @@ class PytestBroadcasterPlugin:
         for publisher in self.publishers:
             try:
                 publisher.write_result(result)
-            except Exception as e:
+            except Exception as e:  # noqa: PERF203, BLE001
                 warnings.warn(
-                    f"Failed to write result to destination: {publisher} - {repr(e)}",
+                    f"Failed to write result to destination: {publisher} - {e!r}",
+                    stacklevel=2,
                 )

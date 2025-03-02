@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import sys
-from importlib.metadata import version
+from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any
 
@@ -25,22 +25,24 @@ def get_pyproject() -> Path | None:
 
 
 def get_pyproject_data(path: Path) -> dict[str, Any]:
-    data = toml.loads(path.read_text())
-    return data
+    return toml.loads(path.read_text())
 
 
 def get_project_name(pyproject: dict[str, Any]) -> str:
     if "tool" in pyproject and "poetry" in pyproject["tool"]:
         # https://python-poetry.org/docs/pyproject/#name
-        return pyproject["tool"]["poetry"]["name"]
+        return str(pyproject["tool"]["poetry"]["name"])
     # https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#name
-    return pyproject["project"]["name"]
+    return str(pyproject["project"]["name"])
 
 
 def get_project_url(pyproject: dict[str, Any]) -> str | None:
     if "tool" in pyproject and "poetry" in pyproject["tool"]:
         # https://python-poetry.org/docs/pyproject/#repository
-        return pyproject["tool"]["poetry"].get("repository ")
+        if value := pyproject["tool"]["poetry"].get("repository"):
+            return str(value)
+        return None
+
     urls = pyproject["project"].get("urls")
     if urls is None:
         return None
@@ -48,14 +50,14 @@ def get_project_url(pyproject: dict[str, Any]) -> str | None:
     # https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#urls
     for key, value in urls.items():
         if key.lower() == "repository":
-            return value
+            return str(value)
         if key.lower() == "source":
-            return value
+            return str(value)
     return None
 
 
 def get_project_version(name: str) -> str | None:
     try:
         return version(name)
-    except Exception:
+    except PackageNotFoundError:
         return None

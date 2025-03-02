@@ -2,17 +2,19 @@ from __future__ import annotations
 
 import json
 from copy import deepcopy
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pytest
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 class CommonTestSetup:
     @pytest.fixture(autouse=True)
     def setup(
         self, pytester: pytest.Pytester, tmp_path: Path, pytestconfig: pytest.Config
-    ):
+    ) -> None:
         self.tmp_path = tmp_path
         self.test_dir = pytester
         self.pytestconfig = pytestconfig
@@ -33,17 +35,18 @@ class CommonTestSetup:
         if filename.endswith(".py"):
             filename = filename[:-3]
         else:
-            raise ValueError("Filename must end with '.py'")
+            msg = "Filename must end with '.py'"
+            raise ValueError(msg)
         kwargs = {filename: content}
         return self.test_dir.makepyfile(**kwargs)  # pyright: ignore[reportUnknownMemberType]
 
-    def sanitize(self, data: dict[str, Any] | list[Any]) -> dict[str, Any] | list[Any]:
+    def sanitize(self, data: object) -> object:
         return self._sanitize(deepcopy(data))
 
     def _sanitize(
         self,
-        data: Any,
-    ) -> Any:
+        data: object,
+    ) -> object:
         if isinstance(data, dict):
             for key, value in data.items():  # pyright: ignore[reportUnknownVariableType]
                 if key == "traceback":
@@ -58,30 +61,23 @@ class CommonTestSetup:
                             )
                         ],
                     }
-                elif key == "duration":
-                    data[key] = "omitted"
-                elif key == "total_duration":
-                    data[key] = "omitted"
-                elif key == "start_timestamp":
-                    data[key] = "omitted"
-                elif key == "stop_timestamp":
-                    data[key] = "omitted"
-                elif key == "timestamp":
-                    data[key] = "omitted"
-                elif key == "platform":
-                    data[key] = "omitted"
-                elif key == "processor":
-                    data[key] = "omitted"
-                elif key == "session_id":
+                elif key in (
+                    "duration",
+                    "total_duration",
+                    "start_timestamp",
+                    "stop_timestamp",
+                    "timestamp",
+                    "platform",
+                    "processor",
+                    "session_id",
+                ):
                     data[key] = "omitted"
                 elif key == "packages":
                     data[key] = {}
-                elif isinstance(value, dict):
-                    data[key] = self._sanitize(value)
-                elif isinstance(value, list):
+                elif isinstance(value, (dict, list)):
                     data[key] = self._sanitize(value)
         elif isinstance(data, list):
-            data = [self._sanitize(item) for item in data]  # pyright: ignore[reportUnknownVariableType]
+            data = [self._sanitize(item) for item in data]
         else:
             return data
         return data  # pyright: ignore[reportUnknownVariableType]

@@ -5,16 +5,20 @@ from http.client import HTTPConnection, HTTPSConnection
 from typing import TYPE_CHECKING
 from urllib.parse import urlparse
 
-from ..interfaces import Destination
-from ..models.session_event import SessionEvent
-from ..models.session_result import SessionResult
+from pytest_broadcaster.interfaces import Destination
+
 from ._json_files import encode
+
+if TYPE_CHECKING:
+    from pytest_broadcaster.models.session_event import SessionEvent
+    from pytest_broadcaster.models.session_result import SessionResult
 
 
 class HTTPWebhook(Destination):
     def __init__(
         self,
         url: str,
+        *,
         emit_events: bool = False,
         emit_result: bool = True,
         headers: dict[str, str] | None = None,
@@ -22,7 +26,8 @@ class HTTPWebhook(Destination):
         parsed_url = urlparse(url)
         host = parsed_url.hostname
         if not host:
-            raise ValueError(f"Invalid webhook URL: {url}")
+            msg = f"Invalid webhook URL: {url}"
+            raise ValueError(msg)
         self.url = url
         self.headers = headers or {}
         self.headers.setdefault("User-Agent", "pytest-broadcaster")
@@ -53,6 +58,7 @@ class HTTPWebhook(Destination):
             path_with_params = f"{self.parsed_url.path}?{self.parsed_url.query}"
         else:
             path_with_params = self.parsed_url.path
+        connection: HTTPConnection | HTTPSConnection
         if self.uses_https:
             connection = HTTPSConnection(host=self.host, port=self.parsed_url.port)
         else:
@@ -69,9 +75,9 @@ class HTTPWebhook(Destination):
         )
         response = connection.getresponse()
         if response.status != http.HTTPStatus.OK:
-            raise RuntimeError(
-                f"Failed to send webhook to {self.url}: {response.status} {response.reason}"
-            )
+            details = f"{response.status} {response.reason}"
+            msg = f"Failed to send webhook to {self.url}: {details}"
+            raise RuntimeError(msg)
 
 
 if TYPE_CHECKING:

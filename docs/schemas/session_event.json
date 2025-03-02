@@ -10,8 +10,8 @@
       "description": "A node was collected (directory, module or suite)."
     },
     {
-      "$ref": "https://charbonnierg.github.io/pytest-broadcaster/latest/schemas/test_case_finished.json",
-      "description": "A test case finished. Finished event is always emitted even if test is skipped or failed."
+      "$ref": "https://charbonnierg.github.io/pytest-broadcaster/latest/schemas/test_case_end.json",
+      "description": "A test case end. End event is always emitted even if test is skipped or failed."
     },
     {
       "$ref": "https://charbonnierg.github.io/pytest-broadcaster/latest/schemas/test_case_setup.json",
@@ -38,7 +38,7 @@
       "description": "The test session started. This is always the first event emitted."
     },
     {
-      "$ref": "https://charbonnierg.github.io/pytest-broadcaster/latest/schemas/session_finish.json",
+      "$ref": "https://charbonnierg.github.io/pytest-broadcaster/latest/schemas/session_end.json",
       "description": "The test session finished. This is always the last event emitted."
     }
   ]

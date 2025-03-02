@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 import flask
+from typing_extensions import Self
 from werkzeug.serving import make_server
 
 
@@ -40,10 +41,7 @@ class Spy:
         return len(self.received)
 
     def expect_request(self) -> SpyRequest:
-        if self.count_received() > 1:
-            raise AssertionError("Expected only one request")
-        if self.count_received() == 0:
-            raise AssertionError("Expected one request")
+        assert self.count_received() == 1, "Expected only one request"
         return self.received[0]
 
 
@@ -64,14 +62,14 @@ class EmbeddedTestServer:
     def stop(self) -> None:
         self.thread.shutdown()
 
-    def __enter__(self) -> "EmbeddedTestServer":
+    def __enter__(self) -> Self:
         self.start()
         return self
 
     def __exit__(self, *args: object, **kwargs: object) -> None:
         self.stop()
 
-    def create_app(self, spy: Spy, path: str):
+    def create_app(self, spy: Spy, path: str) -> flask.Flask:
         app = flask.Flask("test-app")
 
         @app.route(path, methods=["POST"])
@@ -82,14 +80,14 @@ class EmbeddedTestServer:
         return app
 
     class ServerThread(threading.Thread):
-        def __init__(self, app: flask.Flask, host: str, port: int):
+        def __init__(self, app: flask.Flask, host: str, port: int) -> None:
             threading.Thread.__init__(self)
             self.server = make_server(host, port, app)
             self.ctx = app.app_context()
             self.ctx.push()
 
-        def run(self):
+        def run(self) -> None:
             self.server.serve_forever()
 
-        def shutdown(self):
+        def shutdown(self) -> None:
             self.server.shutdown()

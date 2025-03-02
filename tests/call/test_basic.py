@@ -1,36 +1,49 @@
 from __future__ import annotations
 
 import sys
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
 from _testing.setup import CommonTestSetup
 from pytest_broadcaster import __version__
 
+if TYPE_CHECKING:
+    from pathlib import Path
+
 
 @pytest.mark.basic
 class TestBasic(CommonTestSetup):
     """Scenario: A single test case within a single test file."""
 
-    def test_omit_duration(self) -> None:
-        data = {}
-        assert self.sanitize(data) == {}
-        data = {"duration": 0.123}
-        assert self.sanitize(data) == {"duration": "omitted"}
-        data = {"test": {"duration": 0.123}}
-        assert self.sanitize(data) == {"test": {"duration": "omitted"}}
-        data = {"test": {"duration": 0.123, "nested": {"duration": 0.456}}}
-        assert self.sanitize(data) == {
-            "test": {"duration": "omitted", "nested": {"duration": "omitted"}}
-        }
-        data = [{"duration": 0.123}, {"duration": 0.456}]
-        assert self.sanitize(data) == [
-            {"duration": "omitted"},
-            {"duration": "omitted"},
-        ]
-        data = [{"test": {"nested": [{"duration": 0.123}]}}]
-        assert self.sanitize(data) == [{"test": {"nested": [{"duration": "omitted"}]}}]
+    @pytest.mark.parametrize(
+        ("data", "sanitized"),
+        [
+            ({}, {}),
+            (
+                {"duration": 0.123},
+                {"duration": "omitted"},
+            ),
+            (
+                {"test": {"duration": 0.123}},
+                {"test": {"duration": "omitted"}},
+            ),
+            (
+                {"test": {"duration": 0.123, "nested": {"duration": 0.456}}},
+                {"test": {"duration": "omitted", "nested": {"duration": "omitted"}}},
+            ),
+            (
+                [{"duration": 0.123}, {"duration": 0.456}],
+                [{"duration": "omitted"}, {"duration": "omitted"}],
+            ),
+            (
+                [{"test": {"nested": [{"duration": 0.123}]}}],
+                [{"test": {"nested": [{"duration": "omitted"}]}}],
+            ),
+        ],
+    )
+    def test_omit_duration(self, data: object, sanitized: object) -> None:
+        assert self.sanitize(data) == sanitized
 
     def make_test_directory(self) -> Path:
         return self.make_testfile(
@@ -46,7 +59,6 @@ class TestBasic(CommonTestSetup):
 
     def test_json(self):
         """Test JSON report for single test case within single test file."""
-
         directory = self.make_test_directory()
         result = self.test_dir.runpytest("--collect-report", self.json_file.as_posix())
         assert result.ret == 0
@@ -109,7 +121,7 @@ class TestBasic(CommonTestSetup):
                         "error": None,
                     },
                     "finished": {
-                        "event": "case_finished",
+                        "event": "case_end",
                         "session_id": "omitted",
                         "node_id": "test_basic.py::test_ok",
                         "outcome": "passed",
@@ -184,7 +196,6 @@ class TestBasic(CommonTestSetup):
 
     def test_jsonl_basic(self):
         """Test JSON Lines report for single test case within single test file."""
-
         directory = self.make_test_directory()
         result = self.test_dir.runpytest(
             "--collect-log", self.json_lines_file.as_posix()
@@ -297,7 +308,7 @@ class TestBasic(CommonTestSetup):
                 "error": None,
             },
             {
-                "event": "case_finished",
+                "event": "case_end",
                 "session_id": "omitted",
                 "node_id": "test_basic.py::test_ok",
                 "outcome": "passed",
@@ -307,7 +318,7 @@ class TestBasic(CommonTestSetup):
             },
             {
                 "exit_status": 0,
-                "event": "session_finish",
+                "event": "session_end",
                 "session_id": "omitted",
                 "timestamp": "omitted",
             },

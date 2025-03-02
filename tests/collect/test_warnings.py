@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import sys
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
 from _testing.setup import CommonTestSetup
 from pytest_broadcaster import __version__
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 @pytest.mark.basic
@@ -14,8 +17,7 @@ class TestWarnings(CommonTestSetup):
     """Warnings test suite."""
 
     def make_basic_test(self) -> Path:
-        """A helper function to make a test file which emits warnings on collection."""
-
+        """Make a test file which emits warnings on collection."""
         return self.make_testfile(
             "test_warnings.py",
             """
@@ -32,7 +34,6 @@ class TestWarnings(CommonTestSetup):
 
     def test_json(self):
         """Test JSON report for test file with emit warnings on collection."""
-
         directory = self.make_basic_test()
         result = self.test_dir.runpytest(
             "--collect-only", "--collect-report", self.json_file.as_posix()
@@ -148,7 +149,6 @@ class TestWarnings(CommonTestSetup):
 
     def test_jsonl(self):
         """Test JSON Lines report for test file which emits warnings on collection."""
-
         directory = self.make_basic_test()
         result = self.test_dir.runpytest(
             "--collect-only", "--collect-log", self.json_lines_file.as_posix()
@@ -257,7 +257,7 @@ class TestWarnings(CommonTestSetup):
             },
             {
                 "exit_status": 0,
-                "event": "session_finish",
+                "event": "session_end",
                 "session_id": "omitted",
                 "timestamp": "omitted",
             },
