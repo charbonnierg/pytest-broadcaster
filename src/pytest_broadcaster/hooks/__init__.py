@@ -31,7 +31,7 @@ def pytest_broadcaster_add_destination(add: Callable[[Destination], None], /) ->
     """
 
 
-def pytest_broadcaster_set_reporter(_set: Callable[[Reporter], None], /) -> None:
+def pytest_broadcaster_set_reporter(set: Callable[[Reporter], None], /) -> None:  # noqa: A002
     """Set your own reporter.
 
     This funciton is called on plugin initialization.
@@ -39,8 +39,8 @@ def pytest_broadcaster_set_reporter(_set: Callable[[Reporter], None], /) -> None
     For instance, in `conftest.py`:
 
     ```python
-    def pytest_broadcaster_set_reporter(set_reporter):
-        set_reporter(MyReporter())
+    def pytest_broadcaster_set_reporter(set):
+        set(MyReporter())
     ```
 
     Then run pytest without any option:
