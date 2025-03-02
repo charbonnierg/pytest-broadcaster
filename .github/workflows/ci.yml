@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Environment setup
-        uses: gcharbonnier/pytest-broadcaster/.github/actions/env-setup
+        uses: ./.github/actions/env-setup
 
       - name: Run validation
         run: just check-format
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Environment setup
-        uses: gcharbonnier/pytest-broadcaster/.github/actions/env-setup
+        uses: ./.github/actions/env-setup
 
       - name: Run validation
         run: just check-code
@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Environment setup
-        uses: gcharbonnier/pytest-broadcaster/.github/actions/env-setup
+        uses: ./.github/actions/env-setup
 
       - name: Run validation
         run: just check-types
@@ -42,7 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Environment setup
-        uses: gcharbonnier/pytest-broadcaster/.github/actions/env-setup
+        uses: ./.github/actions/env-setup
 
       - name: Run validation
         run: just check-schemas
@@ -55,7 +55,7 @@ jobs:
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
     steps:
       - name: Environment setup
-        uses: gcharbonnier/pytest-broadcaster/.github/actions/env-setup
+        uses: ./.github/actions/env-setup
 
       - name: Run tests
         run: just test

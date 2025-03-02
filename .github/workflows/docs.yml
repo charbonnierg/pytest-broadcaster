@@ -21,7 +21,7 @@ jobs:
           git fetch origin gh-pages --depth=1
 
       - name: Environment setup
-        uses: gcharbonnier/pytest-broadcaster/.github/actions/env-setup
+        uses: ./.github/actions/env-setup
 
       - name: Build the docs
         run: just docs
