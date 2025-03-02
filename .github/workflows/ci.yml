@@ -11,6 +11,8 @@ jobs:
     name: Check format
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - name: Environment setup
         uses: ./.github/actions/env-setup
 
@@ -21,6 +23,8 @@ jobs:
     name: Check code
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - name: Environment setup
         uses: ./.github/actions/env-setup
 
@@ -31,6 +35,8 @@ jobs:
     name: Check types
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - name: Environment setup
         uses: ./.github/actions/env-setup
 
@@ -41,6 +47,8 @@ jobs:
     name: Check schemas
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - name: Environment setup
         uses: ./.github/actions/env-setup
 
@@ -54,6 +62,8 @@ jobs:
       matrix:
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
     steps:
+      - uses: actions/checkout@v4
+
       - name: Environment setup
         uses: ./.github/actions/env-setup
 

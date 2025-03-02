@@ -14,6 +14,8 @@ jobs:
       contents: write
 
     steps:
+      - uses: actions/checkout@v4
+
       - name: Configure git user
         run: |
           git config user.name mkdocs-bot
