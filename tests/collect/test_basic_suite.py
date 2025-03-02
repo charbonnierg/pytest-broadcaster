@@ -1,18 +1,21 @@
 from __future__ import annotations
 
 import sys
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
 from _testing.setup import CommonTestSetup
 from pytest_broadcaster import __version__
 
+if TYPE_CHECKING:
+    from pathlib import Path
+
 
 @pytest.mark.suites
 @pytest.mark.basic
 class TestBasicSuite(CommonTestSetup):
-    """Scenario: several tests cases within a single test suite within a single test file."""
+    """Test several tests cases within a single test suite within a single test file."""
 
     def make_test_directory(self) -> Path:
         return self.make_testfile(
@@ -32,7 +35,6 @@ class TestBasicSuite(CommonTestSetup):
 
     def test_json(self):
         """Test JSON report for single test suite within a single test file."""
-
         directory = self.make_test_directory()
         result = self.test_dir.runpytest(
             "--collect-only", "--collect-report", self.json_file.as_posix()
@@ -154,7 +156,6 @@ class TestBasicSuite(CommonTestSetup):
 
     def test_jsonl(self):
         """Test JSON Lines report for single test suite within a single test file."""
-
         directory = self.make_test_directory()
         result = self.test_dir.runpytest(
             "--collect-only", "--collect-log", self.json_lines_file.as_posix()
@@ -270,7 +271,7 @@ class TestBasicSuite(CommonTestSetup):
             },
             {
                 "exit_status": 0,
-                "event": "session_finish",
+                "event": "session_end",
                 "session_id": "omitted",
                 "timestamp": "omitted",
             },

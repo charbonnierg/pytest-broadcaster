@@ -1,1 +1,2 @@
-raise RuntimeError("BOOM")
+msg = "BOOM"
+raise RuntimeError(msg)

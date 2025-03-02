@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List
 
 
 @dataclass
@@ -25,11 +24,9 @@ class Entry:
 
 @dataclass
 class Traceback:
-    """
-    An error traceback.
-    """
+    """An error traceback."""
 
-    entries: List[Entry]
+    entries: list[Entry]
     """
     Traceback frame entries.
     """

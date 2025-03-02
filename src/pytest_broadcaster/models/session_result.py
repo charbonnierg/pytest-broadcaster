@@ -4,23 +4,22 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import TYPE_CHECKING
 
-from . import (
-    collect_report,
-    error_message,
-    project,
-    python_distribution,
-    test_case_report,
-    warning_message,
-)
+if TYPE_CHECKING:
+    from . import (
+        collect_report,
+        error_message,
+        project,
+        python_distribution,
+        test_case_report,
+        warning_message,
+    )
 
 
 @dataclass
 class SessionResult:
-    """
-    Result of a pytest session, including collect reports and test reports.
-    """
+    """Result of a pytest session, including collect reports and test reports."""
 
     session_id: str
     """
@@ -50,23 +49,23 @@ class SessionResult:
     """
     The exit status of the pytest run. 0 indicates success, non-zero indicates failure.
     """
-    errors: List[error_message.ErrorMessage]
+    errors: list[error_message.ErrorMessage]
     """
     Errors generated during the session.
     """
-    warnings: List[warning_message.WarningMessage]
+    warnings: list[warning_message.WarningMessage]
     """
     Warnings generated during the session.
     """
-    collect_reports: List[collect_report.CollectReport]
+    collect_reports: list[collect_report.CollectReport]
     """
     Collect reports generated during the session.
     """
-    test_reports: List[test_case_report.TestCaseReport]
+    test_reports: list[test_case_report.TestCaseReport]
     """
     Test reports generated during the session.
     """
-    project: Optional[project.Project] = None
+    project: project.Project | None = None
     """
     The project that is being tested.
     """

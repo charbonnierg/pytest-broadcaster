@@ -4,11 +4,8 @@ import datetime
 import importlib.metadata
 import platform
 import sys
+from typing import TYPE_CHECKING
 from uuid import uuid4
-from warnings import WarningMessage
-
-import pytest
-from _pytest._code.code import ReprTraceback
 
 from pytest_broadcaster.models.project import Project
 from pytest_broadcaster.models.python_distribution import (
@@ -38,6 +35,12 @@ from ._utils import (
     parse_node_id,
 )
 
+if TYPE_CHECKING:
+    from warnings import WarningMessage
+
+    import pytest
+    from _pytest._code.code import ReprTraceback
+
 
 def make_session_id() -> str:
     return str(uuid4())
@@ -47,7 +50,7 @@ def make_node_id(
     item: pytest.Item | pytest.Directory | pytest.Module | pytest.Class,
 ) -> NodeID:
     mod, cls, func, params = parse_node_id(item.nodeid)
-    name = "%s[%s]" % (func, params) if params else func
+    name = f"{func}[{params}]" if params else func
     filename = mod.split("/")[-1] if mod else None
     module = filename.replace(".py", "") if filename else None
     classes = cls.split("::") if cls else None
@@ -70,12 +73,10 @@ def make_markers(
     item: pytest.Item | pytest.Directory | pytest.Module | pytest.Class,
 ) -> list[str]:
     return list(
-        set(
-            [
-                format_mark(mark)
-                for mark in sorted(get_test_markers(item), key=lambda mark: mark.name)
-            ]
-        )
+        {
+            format_mark(mark)
+            for mark in sorted(get_test_markers(item), key=lambda mark: mark.name)
+        }
     )
 
 
@@ -88,24 +89,24 @@ def make_python_distribution() -> PythonDistribution:
         Package(name=x.metadata.get("Name"), version=x.version)  # pyright: ignore[reportAttributeAccessIssue]
         for x in importlib.metadata.distributions()
     ]
-    platform_os = platform.system()
-    if platform_os == "Linux":
+    raw_platform_os = platform.system()
+    if raw_platform_os == "Linux":
         platform_os = Platform.linux
-    elif platform_os == "Darwin":
+    elif raw_platform_os == "Darwin":
         platform_os = Platform.darwin
-    elif platform_os == "Windows":
+    elif raw_platform_os == "Windows":
         platform_os = Platform.windows
-    elif platform_os == "Java":
+    elif raw_platform_os == "Java":
         platform_os = Platform.java
     else:
         platform_os = Platform.unknown
     processor_architecture = platform.processor()
-    level = sys.version_info.releaselevel
-    if level == "final":
+    raw_level = sys.version_info.releaselevel
+    if raw_level == "final":
         level = Releaselevel.final
-    elif level == "beta":
+    elif raw_level == "beta":
         level = Releaselevel.beta
-    elif level == "alpha":
+    elif raw_level == "alpha":
         level = Releaselevel.alpha
     else:
         level = Releaselevel.candidate
@@ -140,7 +141,7 @@ def make_warning_message(warning: WarningMessage) -> str:
 
 
 def make_timestamp(epoch: float) -> str:
-    return datetime.datetime.fromtimestamp(epoch).isoformat()
+    return datetime.datetime.fromtimestamp(epoch, tz=datetime.timezone.utc).isoformat()
 
 
 def make_timestamp_from_datetime(dt: datetime.datetime) -> str:
@@ -148,14 +149,14 @@ def make_timestamp_from_datetime(dt: datetime.datetime) -> str:
 
 
 def make_traceback(report: pytest.TestReport) -> list[TracebackLine]:
-    return make_traceback_from_reprtraceback(report.longrepr.reprtraceback)  # type: ignore
+    return make_traceback_from_reprtraceback(report.longrepr.reprtraceback)  # type: ignore[union-attr]
 
 
 def make_traceback_from_reprtraceback(
     reprtraceback: ReprTraceback,
 ) -> list[TracebackLine]:
     return [
-        make_traceback_line(line.reprfileloc)  # type: ignore
+        make_traceback_line(line.reprfileloc)  # type: ignore[union-attr, arg-type]
         for line in reprtraceback.reprentries
-        if filter_traceback(line.reprfileloc.path)  # type: ignore
+        if filter_traceback(line.reprfileloc.path)  # type: ignore[union-attr]
     ]

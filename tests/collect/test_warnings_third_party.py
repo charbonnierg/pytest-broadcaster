@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import sys
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -9,14 +9,16 @@ from _testing.fake_lib import filename
 from _testing.setup import CommonTestSetup
 from pytest_broadcaster import __version__
 
+if TYPE_CHECKING:
+    from pathlib import Path
+
 
 @pytest.mark.basic
 class TestWarningsThirdParty(CommonTestSetup):
     """Warnings from third party module test suite."""
 
     def make_basic_test(self) -> Path:
-        """A helper function to make a test file which import modules emitting warnings on collection."""
-
+        """Make a test file which import modules emitting warnings on collection."""
         return self.make_testfile(
             "test_warnings.py",
             """
@@ -30,7 +32,6 @@ class TestWarningsThirdParty(CommonTestSetup):
 
     def test_json(self):
         """Test JSON report for test file with warnings."""
-
         directory = self.make_basic_test()
         result = self.test_dir.runpytest(
             "--collect-only", "--collect-report", self.json_file.as_posix()
@@ -142,7 +143,6 @@ class TestWarningsThirdParty(CommonTestSetup):
 
     def test_jsonl(self):
         """Test JSON Lines report for basic test file."""
-
         directory = self.make_basic_test()
         result = self.test_dir.runpytest(
             "--collect-only", "--collect-log", self.json_lines_file.as_posix()
@@ -247,7 +247,7 @@ class TestWarningsThirdParty(CommonTestSetup):
             },
             {
                 "exit_status": 0,
-                "event": "session_finish",
+                "event": "session_end",
                 "session_id": "omitted",
                 "timestamp": "omitted",
             },

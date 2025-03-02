@@ -24,10 +24,7 @@ jobs:
           enable-cache: true
           cache-prefix: 'pypi'
 
-      - name: Build the docs
-        run: rye run bootstrap
-
       - name: Build and publish the packag on pypi
         run: |
-          rye build --clean
-          rye publish --yes --token ${{ secrets.PYPI_TOKEN }}
+          uv build --clean
+          uv publish --token ${{ secrets.PYPI_TOKEN }}

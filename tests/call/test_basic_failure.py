@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import sys
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
 from _testing.setup import CommonTestSetup
 from pytest_broadcaster import __version__
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 @pytest.mark.basic
@@ -27,7 +30,6 @@ class TestBasicFailure(CommonTestSetup):
 
     def test_json(self):
         """Test JSON report for single test case within single test file."""
-
         directory = self.make_test_directory()
         result = self.test_dir.runpytest("--collect-report", self.json_file.as_posix())
         assert result.ret == 1
@@ -77,7 +79,7 @@ class TestBasicFailure(CommonTestSetup):
                         "start_timestamp": "omitted",
                         "stop_timestamp": "omitted",
                         "error": {
-                            "message": "def test_failure():\n        '''This is a test docstring.'''\n>       raise ValueError(\"BOOM\")\nE       ValueError: BOOM\n\ntest_basic_failure.py:5: ValueError",
+                            "message": "def test_failure():\n        '''This is a test docstring.'''\n>       raise ValueError(\"BOOM\")\nE       ValueError: BOOM\n\ntest_basic_failure.py:5: ValueError",  # noqa: E501
                             "traceback": {
                                 "entries": [
                                     {
@@ -100,7 +102,7 @@ class TestBasicFailure(CommonTestSetup):
                         "error": None,
                     },
                     "finished": {
-                        "event": "case_finished",
+                        "event": "case_end",
                         "session_id": "omitted",
                         "node_id": "test_basic_failure.py::test_failure",
                         "outcome": "failed",
@@ -170,7 +172,6 @@ class TestBasicFailure(CommonTestSetup):
 
     def test_jsonl_basic(self):
         """Test JSON Lines report for single test case within single test file."""
-
         directory = self.make_test_directory()
         result = self.test_dir.runpytest(
             "--collect-log", self.json_lines_file.as_posix()
@@ -270,7 +271,7 @@ class TestBasicFailure(CommonTestSetup):
                 "start_timestamp": "omitted",
                 "stop_timestamp": "omitted",
                 "error": {
-                    "message": "def test_failure():\n        '''This is a test docstring.'''\n>       raise ValueError(\"BOOM\")\nE       ValueError: BOOM\n\ntest_basic_failure.py:5: ValueError",
+                    "message": "def test_failure():\n        '''This is a test docstring.'''\n>       raise ValueError(\"BOOM\")\nE       ValueError: BOOM\n\ntest_basic_failure.py:5: ValueError",  # noqa: E501
                     "traceback": {
                         "entries": [
                             {
@@ -293,7 +294,7 @@ class TestBasicFailure(CommonTestSetup):
                 "error": None,
             },
             {
-                "event": "case_finished",
+                "event": "case_end",
                 "session_id": "omitted",
                 "node_id": "test_basic_failure.py::test_failure",
                 "outcome": "failed",
@@ -303,7 +304,7 @@ class TestBasicFailure(CommonTestSetup):
             },
             {
                 "exit_status": 1,
-                "event": "session_finish",
+                "event": "session_end",
                 "session_id": "omitted",
                 "timestamp": "omitted",
             },

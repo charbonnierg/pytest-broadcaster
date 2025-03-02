@@ -8,10 +8,10 @@ from typing import Union
 from . import (
     collect_report,
     error_message,
-    session_finish,
+    session_end,
     session_start,
     test_case_call,
-    test_case_finished,
+    test_case_end,
     test_case_setup,
     test_case_teardown,
     warning_message,
@@ -19,12 +19,12 @@ from . import (
 
 SessionEvent = Union[
     collect_report.CollectReport,
-    test_case_finished.TestCaseFinished,
+    test_case_end.TestCaseEnd,
     test_case_setup.TestCaseSetup,
     test_case_teardown.TestCaseTeardown,
     test_case_call.TestCaseCall,
     error_message.ErrorMessage,
     warning_message.WarningMessage,
     session_start.SessionStart,
-    session_finish.SessionFinish,
+    session_end.SessionEnd,
 ]

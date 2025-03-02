@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "session_finish.json",
-  "title": "Session Finish",
+  "$id": "https://charbonnierg.github.io/pytest-broadcaster/latest/schemas/session_end.json",
+  "title": "Session End",
   "description": "Event emitted when the session is finished.",
   "type": "object",
   "required": [
@@ -12,8 +12,8 @@
   ],
   "properties": {
     "event": {
-      "const": "session_finish",
-      "description": "The event type. Always set to 'session_finish'."
+      "const": "session_end",
+      "description": "The event type. Always set to 'session_end'."
     },
     "session_id": {
       "type": "string",

@@ -4,11 +4,13 @@ import json
 from dataclasses import asdict
 from enum import Enum
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, TextIO
+from typing import TYPE_CHECKING, TextIO
 
-from ..interfaces import Destination
-from ..models.session_event import SessionEvent
-from ..models.session_result import SessionResult
+from pytest_broadcaster.interfaces import Destination
+
+if TYPE_CHECKING:
+    from pytest_broadcaster.models.session_event import SessionEvent
+    from pytest_broadcaster.models.session_result import SessionResult
 
 
 def _default_serializer(obj: object) -> object:
@@ -17,9 +19,9 @@ def _default_serializer(obj: object) -> object:
     return obj
 
 
-def encode(obj: Any) -> str:
+def encode(obj: object) -> str:
     return json.dumps(
-        asdict(obj),
+        asdict(obj),  # type: ignore[call-overload]
         default=_default_serializer,
     )
 
@@ -60,7 +62,8 @@ class JSONLinesFile(Destination):
 
     def _open(self) -> None:
         if self._file is not None:
-            raise RuntimeError("JSON Lines output file is already opened")
+            msg = "JSON Lines output file is already opened"
+            raise RuntimeError(msg)
         # Ensure the directory exists.
         self.filepath.parent.mkdir(parents=True, exist_ok=True)
         # Open the text file in write mode.
@@ -82,7 +85,7 @@ class JSONLinesFile(Destination):
     ) -> None:
         if self._file is None:
             self._open()
-            assert self._file is not None
+        assert self._file, "file expected to be opened"
         json_data = json.dumps(
             asdict(event),
             default=_default_serializer,

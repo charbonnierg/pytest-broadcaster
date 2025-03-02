@@ -3,15 +3,17 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-import pytest
 from _pytest._code.code import (
     _PLUGGY_DIR,  # pyright: ignore[reportPrivateUsage]
     _PYTEST_DIR,  # pyright: ignore[reportPrivateUsage]
     ReprFileLocation,
 )
 from _pytest.outcomes import Skipped
+
+if TYPE_CHECKING:
+    import pytest
 
 __NODE_ID__ = re.compile(
     r"(?P<module>.+)\.py(?:::(?P<class>[^:]+)(?:::.+)?)?::(?P<function>[^\[]+)(?:\[(?P<params>.*)\])?"
@@ -53,19 +55,20 @@ def parse_node_id(node_id: str) -> tuple[str, str, str, str]:
             match.group("function"),
             match.group("params") or "",
         )
-    raise Exception('Failed parsing pytest node id: "%s"' % node_id)
+    msg = f'Failed parsing pytest node id: "{node_id}"'
+    raise TypeError(msg)
 
 
 def get_test_doc(item: pytest.Item | pytest.Module | pytest.Class) -> str:
     try:
-        return item.obj.__doc__ or ""  # type: ignore
+        return item.obj.__doc__ or ""  # type: ignore[union-attr]
     except (AttributeError, Skipped):
         return ""
 
 
 def get_test_args(item: pytest.Item) -> dict[str, Any]:
     try:
-        return item.callspec.params  # type: ignore
+        return item.callspec.params  # type: ignore[attr-defined, no-any-return]
     except AttributeError:
         return {}
 
@@ -97,10 +100,7 @@ def filter_traceback(raw_filename: str) -> bool:
     parents = p.parents
     if _PLUGGY_DIR in parents:
         return False
-    if _PYTEST_DIR in parents:
-        return False
-
-    return True
+    return _PYTEST_DIR not in parents
 
 
 def make_traceback_line(loc: ReprFileLocation) -> TracebackLine:

@@ -4,22 +4,21 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional
+from typing import TYPE_CHECKING
 
-from . import (
-    outcome,
-    test_case_call,
-    test_case_finished,
-    test_case_setup,
-    test_case_teardown,
-)
+if TYPE_CHECKING:
+    from . import (
+        outcome,
+        test_case_call,
+        test_case_end,
+        test_case_setup,
+        test_case_teardown,
+    )
 
 
 @dataclass
 class TestCaseReport:
-    """
-    Report for a single test case.
-    """
+    """Report for a single test case."""
 
     node_id: str
     """
@@ -41,11 +40,11 @@ class TestCaseReport:
     """
     Teardown step of the test case.
     """
-    finished: test_case_finished.TestCaseFinished
+    finished: test_case_end.TestCaseEnd
     """
     View of the test case after it has finished.
     """
-    call: Optional[test_case_call.TestCaseCall] = None
+    call: test_case_call.TestCaseCall | None = None
     """
     Call step of the test case (optional).
     """

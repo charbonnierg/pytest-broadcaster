@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import sys
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -9,14 +9,16 @@ from _testing.fake_lib import filename
 from _testing.setup import CommonTestSetup
 from pytest_broadcaster import __version__
 
+if TYPE_CHECKING:
+    from pathlib import Path
+
 
 @pytest.mark.basic
 class TestErrorsThirdParty(CommonTestSetup):
     """Errors test suite."""
 
     def make_basic_test(self) -> Path:
-        """A helper function to make a test file which emits errors on collection."""
-
+        """Make a test file which emits errors on collection."""
         return self.make_testfile(
             "test_errors.py",
             """
@@ -27,7 +29,6 @@ class TestErrorsThirdParty(CommonTestSetup):
 
     def test_json(self):
         """Test JSON report for test file with emit warnings on collection."""
-
         directory = self.make_basic_test()
         result = self.test_dir.runpytest(
             "--collect-only", "--collect-report", self.json_file.as_posix()
@@ -60,14 +61,14 @@ class TestErrorsThirdParty(CommonTestSetup):
                     "when": "collect",
                     "location": {
                         "filename": filename("with_errors.py"),
-                        "lineno": 1,
+                        "lineno": 2,
                     },
                     "traceback": {
                         "entries": [
                             {"path": "test_errors.py", "lineno": 2, "message": ""},
                             {
                                 "path": filename("with_errors.py"),
-                                "lineno": 1,
+                                "lineno": 2,
                                 "message": "RuntimeError",
                             },
                         ]
@@ -97,7 +98,6 @@ class TestErrorsThirdParty(CommonTestSetup):
 
     def test_jsonl(self):
         """Test JSON Lines report for test file which emits warnings on collection."""
-
         directory = self.make_basic_test()
         result = self.test_dir.runpytest(
             "--collect-only", "--collect-log", self.json_lines_file.as_posix()
@@ -143,14 +143,14 @@ class TestErrorsThirdParty(CommonTestSetup):
                 "when": "collect",
                 "location": {
                     "filename": filename("with_errors.py"),
-                    "lineno": 1,
+                    "lineno": 2,
                 },
                 "traceback": {
                     "entries": [
                         {"path": "test_errors.py", "lineno": 2, "message": ""},
                         {
                             "path": filename("with_errors.py"),
-                            "lineno": 1,
+                            "lineno": 2,
                             "message": "RuntimeError",
                         },
                     ]
@@ -160,7 +160,7 @@ class TestErrorsThirdParty(CommonTestSetup):
             },
             {
                 "exit_status": 3,
-                "event": "session_finish",
+                "event": "session_end",
                 "session_id": "omitted",
                 "timestamp": "omitted",
             },

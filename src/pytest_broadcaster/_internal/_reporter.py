@@ -1,34 +1,37 @@
 from __future__ import annotations
 
 import datetime
-import warnings
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Callable, Literal
 
 import pytest
 
-from ..__about__ import __version__
-from ..interfaces import Reporter
-from ..models.collect_report import CollectReport
-from ..models.error_message import ErrorMessage
-from ..models.location import Location
-from ..models.outcome import Outcome
-from ..models.session_finish import SessionFinish
-from ..models.session_result import SessionResult
-from ..models.session_start import SessionStart
-from ..models.test_case import TestCase
-from ..models.test_case_call import TestCaseCall
-from ..models.test_case_error import TestCaseError
-from ..models.test_case_finished import TestCaseFinished
-from ..models.test_case_report import TestCaseReport
-from ..models.test_case_setup import TestCaseSetup
-from ..models.test_case_teardown import TestCaseTeardown
-from ..models.test_directory import TestDirectory
-from ..models.test_module import TestModule
-from ..models.test_suite import TestSuite
-from ..models.traceback import Entry, Traceback
-from ..models.warning_message import WarningMessage
+from pytest_broadcaster.__about__ import __version__
+from pytest_broadcaster.interfaces import Reporter
+from pytest_broadcaster.models.collect_report import CollectReport
+from pytest_broadcaster.models.error_message import ErrorMessage
+from pytest_broadcaster.models.location import Location
+from pytest_broadcaster.models.outcome import Outcome
+from pytest_broadcaster.models.session_end import SessionEnd
+from pytest_broadcaster.models.session_result import SessionResult
+from pytest_broadcaster.models.session_start import SessionStart
+from pytest_broadcaster.models.test_case import TestCase
+from pytest_broadcaster.models.test_case_call import TestCaseCall
+from pytest_broadcaster.models.test_case_end import TestCaseEnd
+from pytest_broadcaster.models.test_case_error import TestCaseError
+from pytest_broadcaster.models.test_case_report import TestCaseReport
+from pytest_broadcaster.models.test_case_setup import TestCaseSetup
+from pytest_broadcaster.models.test_case_teardown import TestCaseTeardown
+from pytest_broadcaster.models.test_directory import TestDirectory
+from pytest_broadcaster.models.test_module import TestModule
+from pytest_broadcaster.models.test_suite import TestSuite
+from pytest_broadcaster.models.traceback import Entry, Traceback
+from pytest_broadcaster.models.warning_message import WarningMessage, When
+
 from . import _fields as api
+
+if TYPE_CHECKING:
+    import warnings
 
 
 class DefaultReporter(Reporter):
@@ -60,7 +63,7 @@ class DefaultReporter(Reporter):
         )
         self._done = False
 
-    def _get_path(self, path: str, is_error_or_warning: bool = False) -> str:
+    def _get_path(self, path: str, *, is_error_or_warning: bool = False) -> str:
         for root in self._roots:
             if path.startswith(root):
                 return self._roots[root] + "/" + path[len(root) + 1 :]
@@ -68,10 +71,9 @@ class DefaultReporter(Reporter):
         if pathobj.is_dir():
             self._roots[path] = pathobj.name
             return pathobj.name
-        if pathobj.is_file():
-            if not is_error_or_warning:
-                self._roots[path] = pathobj.parent.name
-                return f"{pathobj.parent.name}/{pathobj.name}"
+        if pathobj.is_file() and not is_error_or_warning:
+            self._roots[path] = pathobj.parent.name
+            return f"{pathobj.parent.name}/{pathobj.name}"
         return path
 
     def make_session_result(self) -> SessionResult | None:
@@ -89,12 +91,12 @@ class DefaultReporter(Reporter):
             project=self._project,
         )
 
-    def make_session_finish(self, exit_status: int) -> SessionFinish:
+    def make_session_end(self, exit_status: int) -> SessionEnd:
         stop_timestamp = api.make_timestamp_from_datetime(self._clock())
         self._result.stop_timestamp = stop_timestamp
         self._result.exit_status = exit_status
         self._done = True
-        return SessionFinish(
+        return SessionEnd(
             session_id=self._session_id,
             timestamp=stop_timestamp,
             exit_status=exit_status,
@@ -111,11 +113,13 @@ class DefaultReporter(Reporter):
             if warning_message.category
             else None,
             location=Location(
-                filename=self._get_path(warning_message.filename, True),
+                filename=self._get_path(
+                    warning_message.filename, is_error_or_warning=True
+                ),
                 lineno=warning_message.lineno,
             ),
             message=api.make_warning_message(warning_message),
-            when=when,  # type: ignore[arg-type],
+            when=When(when),
             node_id=nodeid,
         )
         self._result.warnings.append(msg)
@@ -132,7 +136,9 @@ class DefaultReporter(Reporter):
         msg = ErrorMessage(
             when=call.when,  # type: ignore[arg-type]
             location=Location(
-                filename=self._get_path(exc_repr.reprcrash.path, True),
+                filename=self._get_path(
+                    exc_repr.reprcrash.path, is_error_or_warning=True
+                ),
                 lineno=exc_repr.reprcrash.lineno,
             ),
             traceback=Traceback(
@@ -152,7 +158,7 @@ class DefaultReporter(Reporter):
         return msg
 
     def make_collect_report(self, report: pytest.CollectReport) -> CollectReport:
-        items: list[TestCase | TestDirectory | TestModule | TestSuite] = []  # noqa: F821
+        items: list[TestCase | TestDirectory | TestModule | TestSuite] = []
         # Format all test items reported
         for result in report.result:
             if isinstance(result, pytest.Directory):
@@ -247,8 +253,8 @@ class DefaultReporter(Reporter):
                 outcome=outcome,
                 duration=step.duration,
                 setup=step,
-                teardown=...,  # type: ignore (will be set later)
-                finished=...,  # type: ignore (will be set later)
+                teardown=...,  # type: ignore[arg-type]
+                finished=...,  # type: ignore[arg-type]
             )
         elif report.when == "call":
             if outcome == Outcome.skipped and hasattr(report, "wasxfail"):
@@ -282,10 +288,11 @@ class DefaultReporter(Reporter):
             )
             self._pending_report.teardown = step
         else:
-            raise ValueError(f"Unknown step {report.when}")
+            msg = f"Unknown step {report.when}"
+            raise ValueError(msg)
         return step
 
-    def make_test_case_finished(self, node_id: str) -> TestCaseFinished:
+    def make_test_case_end(self, node_id: str) -> TestCaseEnd:
         # Let's pop the pending report (we always have one)
         pending_report = self._pending_report
         self._pending_report = None
@@ -318,7 +325,7 @@ class DefaultReporter(Reporter):
             outcome = Outcome.passed
         duration = sum(report.duration for report in reports)
         # Create the finished event
-        finished = TestCaseFinished(
+        finished = TestCaseEnd(
             session_id=self._session_id,
             node_id=node_id,
             start_timestamp=pending_report.setup.start_timestamp,

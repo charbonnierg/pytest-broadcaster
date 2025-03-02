@@ -5,14 +5,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
+from typing import TYPE_CHECKING
 
-from . import location, traceback
+if TYPE_CHECKING:
+    from . import location, traceback
 
 
 class When(Enum):
-    """
-    When the error message is emitted.
-    """
+    """When the error message is emitted."""
 
     config = "config"
     collect = "collect"
@@ -21,9 +21,7 @@ class When(Enum):
 
 @dataclass
 class ErrorMessage:
-    """
-    An error message.
-    """
+    """An error message."""
 
     when: When
     """

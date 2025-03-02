@@ -4,14 +4,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List
 
 
 @dataclass
 class TestModule:
-    """
-    A collected test module (test file).
-    """
+    """A collected test module (test file)."""
 
     node_id: str
     """
@@ -29,7 +26,7 @@ class TestModule:
     """
     The module docstring.
     """
-    markers: List[str]
+    markers: list[str]
     """
     Test markers. Each marker is a string.
     """

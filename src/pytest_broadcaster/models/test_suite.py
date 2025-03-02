@@ -4,14 +4,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List
 
 
 @dataclass
 class TestSuite:
-    """
-    A collected test suite (test class).
-    """
+    """A collected test suite (test class)."""
 
     node_id: str
     """
@@ -33,7 +30,7 @@ class TestSuite:
     """
     The suite docstring.
     """
-    markers: List[str]
+    markers: list[str]
     """
     Test markers. Each marker is a string.
     """
